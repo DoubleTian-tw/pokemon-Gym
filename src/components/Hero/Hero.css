@@ -1,0 +1,251 @@
+.hero {
+    display: grid;
+    grid-template-rows: 1fr;
+    gap: 1rem;
+}
+.col .group-info {
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+/* Title和Icon */
+
+.col .setting-icon {
+    padding: 0.2rem;
+    border-radius: 0.2rem;
+    font-size: 1.5rem;
+    color: var(--primary-200);
+    transition: var(--transition-500-ease);
+}
+.col .setting-icon:hover {
+    background-color: var(--primary-200);
+    color: white;
+}
+.thumb-icon {
+    color: var(--primary-300);
+    animation: thumbUp 1s linear infinite;
+    transform-origin: left;
+}
+@keyframes thumbUp {
+    0% {
+        rotate: -10deg;
+    }
+    50% {
+        rotate: 10deg;
+    }
+    100% {
+        rotate: -10deg;
+    }
+}
+/* .col .dropdown, */
+.col .title {
+    position: absolute;
+    top: 2px;
+    left: 2rem;
+    font-size: 1rem;
+}
+.col .search-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+}
+/* === character Groups === */
+.hero .groups {
+    display: block;
+    height: 30vh;
+    box-shadow: var(--shadow);
+    padding: 1rem 0.5rem;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    border: 1px solid grey;
+    border-radius: 0.5rem;
+}
+#DamageGroup {
+    padding-bottom: 0;
+}
+.hero .group-img {
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    gap: 1rem 0.1rem;
+}
+
+.group-onlyText {
+    grid-template-columns: repeat(3, 1fr);
+}
+.group-onlyImage {
+    grid-template-columns: repeat(3, 1fr);
+}
+.group-imageText {
+    grid-template-columns: repeat(2, 1fr);
+}
+@media screen and (min-width: 768px) {
+    .group-onlyImage {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+@media screen and (min-width: 992px) {
+    .hero {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .hero .col {
+        padding: 0;
+    }
+    .hero .groups {
+        height: 50vh;
+    }
+    .group-onlyText {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .group-onlyImage {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .group-imageText {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+/* === character 顯示方式 === */
+.characterImg,
+.characterImgText,
+.characterText,
+.type span {
+    transition: var(--transition-500-ease);
+    cursor: pointer;
+}
+.characterImgText {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 0.5rem;
+    align-items: center;
+    border-radius: 0.5rem;
+    width: 95%;
+    padding: 0.2rem 0.5rem;
+}
+.characterImgText div {
+    font-size: 0.8rem;
+}
+.characterImg,
+.characterImgText img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+.characterText {
+    width: 90%;
+    text-align: center;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.5rem;
+}
+.characterImg:hover,
+.characterText:hover,
+.characterImgText:hover,
+.type a:hover span {
+    box-shadow: var(--shadow);
+    transform: scale(1.1);
+}
+.hero-active {
+    border: 2px solid rgb(255, 120, 120);
+}
+
+.characterName {
+    color: var(--primary-200);
+}
+/* 塞選屬性 */
+.dropdown-type {
+    transition: var(--transition-400-ease);
+    font-size: 0.8rem;
+    color: white;
+}
+.dropdown-type:hover {
+    opacity: 0.8;
+    color: black;
+}
+
+.dropdown-type span {
+    transition: var(--transition-400-ease);
+}
+.dropdown-type:hover span {
+    margin-left: 0.8rem;
+}
+
+/* === 屬性 === */
+.type-container {
+    position: absolute;
+    z-index: 0;
+    top: -0.5rem;
+    right: -1.5rem;
+}
+.type {
+    display: block;
+    font-size: 0.1rem;
+    padding: 0.1rem 0.4rem;
+    color: white;
+    font-weight: bold;
+    border-radius: 1rem;
+    text-align: center;
+}
+
+.search-more-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.search-more-container p {
+    margin-top: 1rem;
+}
+/* === 最佳屬性攻擊 === */
+.best-damage-container {
+    padding-left: 0.5rem;
+    position: sticky;
+    bottom: 0;
+    background-color: white;
+}
+
+.best-damage-container li {
+    display: inline-block;
+}
+/* === ButtonGroup.jsx === */
+
+.buttonImage {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background-color: var(--grey-100);
+    padding: 0.2rem;
+    transition: var(--transition-500-ease);
+}
+.button-hover {
+    font-size: 0.8rem;
+}
+.buttonImageText {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.button-hover:hover {
+    text-shadow: 0px 0px 5px white;
+    color: white;
+}
+
+.button-hover:hover img {
+    box-shadow: var(--shadow);
+    background-color: var(--grey-100);
+}
+
+.button-type-color span {
+    font-size: 0.1rem;
+    padding: 0.1rem 0.5rem;
+    color: white;
+    font-weight: bold;
+    border-radius: 1rem;
+}
+
+.button-type-colorText {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}

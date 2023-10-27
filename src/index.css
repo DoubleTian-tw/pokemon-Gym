@@ -1,15 +1,32 @@
 :root {
+    /* primary color */
+    --primary-100: #b1d4e0;
+    --primary-200: #2e8bc0;
+    --primary-300: #145da0;
+    --primary-400: #0c2d48;
+
+    --grey-100: #eeede7;
+    --grey-200: #bebeb9;
+    --grey-300: #8f8e8b;
+    --grey-400: #5f5f5c;
+    --grey-500: #302f2e;
+
     --bg-dark: #333333;
     --shadow: 0 0 0.5rem #9c9c9c;
     --hero-height: 70vh;
     --breakpoint-lg: 992px;
     --breakpoint-sm: 768px;
+    --transition-400-ease: all 0.4s ease;
+    --transition-500-ease: all 0.5s ease;
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+a {
+    text-decoration: none;
 }
 html {
     height: 100%;
@@ -29,14 +46,35 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
         monospace;
 }
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
 .nav-link {
     font-size: 0.7rem;
 }
-
 section {
     margin: 1rem 1rem;
 }
-
+.loading-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.2rem;
+}
+.loading {
+    width: 3rem;
+    height: 3rem;
+    border: 5px solid var(--primary-100);
+    border-top-color: var(--primary-200);
+    border-radius: 50%;
+    animation: spinner 0.3s linear infinite;
+}
+@keyframes spinner {
+    to {
+        rotate: 360deg;
+    }
+}
 @media screen and (min-width: 768px) {
     section {
         margin: 1rem auto;

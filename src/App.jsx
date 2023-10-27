@@ -1,13 +1,9 @@
-import Navbar from "./components/Navbar";
-import Heros from "./components/Heros";
-import Footer from "./components/Footer";
+import Gym from "./pages/GymPage";
 
 function App() {
     return (
         <>
-            <Navbar />
-            <Heros />
-            <Footer />
+            <Gym />
         </>
     );
 }

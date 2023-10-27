@@ -1,5 +1,5 @@
-import logo from "../images/logo.png";
-import { navLinks } from "../data";
+import logo from "../../images/logo.png";
+import { navLinks } from "../../data";
 
 const Navbar = () => {
     return (
