@@ -42,7 +42,7 @@
     position: absolute;
     top: 2px;
     left: 2rem;
-    font-size: 1rem;
+    /* font-size: 1rem; */
 }
 .col .search-btn {
     position: absolute;
@@ -178,7 +178,7 @@
 }
 .type {
     display: block;
-    /* font-size: 0.8rem; */
+    font-size: 0.8rem;
     padding: 0.1rem 0.4rem;
     color: white;
     font-weight: bold;
@@ -236,7 +236,7 @@
 }
 
 .button-type-color span {
-    font-size: 0.1rem;
+    font-size: 0.5rem;
     padding: 0.1rem 0.5rem;
     color: white;
     font-weight: bold;

@@ -13,7 +13,7 @@ const Navbar = () => {
                         className="d-inline-block align-top"
                         alt="pokemon go"
                     />
-                    <span className="text-capitalize">pokemon go</span>
+                    <span className="text-capitalize">pokemon gym</span>
                 </a>
                 <button
                     className="navbar-toggler"
