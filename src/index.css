@@ -41,6 +41,7 @@ body {
     position: relative;
     min-height: 100%;
     padding-bottom: 6rem;
+    transition: var(--transition-400-ease);
 }
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",

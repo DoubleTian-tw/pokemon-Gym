@@ -1,0 +1,33 @@
+/* .navbar-light .navbar-toggler-icon {
+    background-image: url("../../images/logo.png");
+    border-color: white;
+} */
+.navbar-toggler {
+    border-color: transparent !important;
+    padding: 5px 10px !important;
+}
+.login {
+    color: #68e873;
+}
+.theme-toggle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2rem;
+    height: 2rem;
+    color: white;
+    border-radius: 50%;
+    transition: var(--transition-400-ease);
+}
+.theme-toggle:hover {
+    background-color: var(--grey-300);
+}
+/*.navbar {
+    background-color: #354698 !important;
+}
+.nav-link {
+    color: #f5f4c0 !important;
+}
+.active {
+    color: #68bee8 !important;
+} */

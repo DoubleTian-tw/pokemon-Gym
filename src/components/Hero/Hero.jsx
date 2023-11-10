@@ -1,12 +1,16 @@
 import "./Hero.css";
 import Dropdowns from "./Dropdowns";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ID_DAMAGE, ID_SELECT } from "../../data";
 import { useHeroContext } from "./useHeroContext";
 import { nanoid } from "nanoid";
 import { FaRegThumbsUp } from "react-icons/fa";
 import { ShowType_ColorText } from "./CharacterShowInfo";
+import { useThemeContext } from "../contexts/useTheme";
 const Hero = ({ title, typeClass, children, id }) => {
+    const { isDarkMode } = useThemeContext();
+    const textColor = isDarkMode ? "white-50" : "primary";
+    const bgColor = isDarkMode ? "darkBg" : "white";
     //
     // ========= Loading =========
     //
@@ -44,10 +48,10 @@ const Hero = ({ title, typeClass, children, id }) => {
         return () => {
             scrollContainer.removeEventListener("scroll", scrollDown);
         };
-    }, []);
+    }, [searchPokemon, filterType]);
 
     return (
-        <div className="col">
+        <div className="group-col">
             {/* 下拉選單 */}
             <Dropdowns title={title} id={id} />
             {/* 角色選擇群組 */}
@@ -63,7 +67,9 @@ const Hero = ({ title, typeClass, children, id }) => {
                 {id === ID_SELECT &&
                     (searchPokemon !== "" || filterType.enType !== "all") && (
                         <div className="search-more-container">
-                            <p>沒找到你要的嗎?</p>
+                            <p className={`text-${textColor}`}>
+                                沒找到你要的嗎?
+                            </p>
                             <button
                                 type="button"
                                 className="btn btn-primary btn-sm"
@@ -77,9 +83,13 @@ const Hero = ({ title, typeClass, children, id }) => {
                     )}
                 {/* 顯示推薦傷害的屬性 */}
                 {id === ID_DAMAGE && bestDamage.length > 0 && (
-                    <div className="best-damage-container">
+                    <div className={`best-damage-container bg-${bgColor}`}>
                         <FaRegThumbsUp className="thumb-icon" />
-                        <span style={{ paddingLeft: "0.5rem" }}>推薦屬性</span>
+                        <span
+                            className={`text-${textColor}`}
+                            style={{ paddingLeft: "0.5rem" }}>
+                            推薦屬性
+                        </span>
                         <ul>
                             {bestDamage.map((type) => {
                                 return (

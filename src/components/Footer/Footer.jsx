@@ -1,11 +1,15 @@
+import { useThemeContext } from "../contexts/useTheme";
 import "./Footer.css";
 const Footer = () => {
     const date = new Date().getFullYear();
-    console.log(date);
+    const { theme, isDarkMode } = useThemeContext();
+    const textColor = isDarkMode ? "white-50" : "gray";
     return (
-        <footer className="text-white bg-secondary p-3">
+        <footer className={`text-${textColor} bg-${theme} p-3`}>
             <div className="container">
-                <p>Copyright © {date} Pokemon Gym. All Rights Reserved.</p>
+                <p className="text-center">
+                    Copyright © {date} Pokemon Gym. All Rights Reserved.
+                </p>
             </div>
         </footer>
     );

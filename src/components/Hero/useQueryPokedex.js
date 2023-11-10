@@ -19,8 +19,12 @@ export const axiosDataByUrl = (url) => {
 };
 
 export const useFetchPokemon = () => {
-    const { page, handleStorePokemon, handleIsLoadingPokemon } =
-        useHeroContext();
+    const {
+        page,
+        handleStorePokemon,
+        handleIsLoadingPokemon,
+        isLoadingPokemon,
+    } = useHeroContext();
     const queryClient = useQueryClient();
     // 第一次fetching pokemon species data
     const {
@@ -153,6 +157,8 @@ export const useFetchPokemon = () => {
             });
             handleStorePokemon([...Array.from(pokemonMap.values())]);
         }
+        console.log("isLoadingPokemon", isLoadingPokemon);
+        console.log("isDataReady", isDataReady);
         handleIsLoadingPokemon(!isDataReady);
     }, [isDataReady]);
 };
