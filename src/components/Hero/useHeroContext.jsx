@@ -10,6 +10,13 @@ const HeroContext = createContext();
 
 export const HeroProvider = ({ children }) => {
     // ===================================================
+    // Show Dialog
+    // ===================================================
+    const [showTypeDialog, setTypeDialog] = useState(false);
+    const handleCloseTypeDialog = () => setTypeDialog(false);
+    const handleShowTypeDialog = () => setTypeDialog(true);
+
+    // ===================================================
     // Searching pokemon
     // ===================================================
     const [searchPokemon, setSearchPokemon] = useState("");
@@ -85,7 +92,13 @@ export const HeroProvider = ({ children }) => {
     const handleBestDamage = (item) => {
         setBestDamage(() => item);
     };
-
+    // ===================================================
+    // 取得 All屬性
+    // ===================================================
+    const [storeAllTypes, setStoreAllTypes] = useState([]);
+    const handleStoreAllTypes = (item) => {
+        setStoreAllTypes(() => item.map((data) => data.data));
+    };
     // ===================================================
     // Image、text顯示方式
     // ===================================================
@@ -166,6 +179,12 @@ export const HeroProvider = ({ children }) => {
         <HeroContext.Provider
             value={{
                 //=============
+                //Show Type Dialog
+                //=============
+                showTypeDialog,
+                handleCloseTypeDialog,
+                handleShowTypeDialog,
+                //=============
                 //Searching pokemon
                 //=============
                 searchPokemon,
@@ -191,6 +210,8 @@ export const HeroProvider = ({ children }) => {
                 // handleHalfDamage,
                 bestDamage,
                 handleBestDamage,
+                storeAllTypes,
+                handleStoreAllTypes,
                 //=============
                 // Image、text顯示方式
                 //=============

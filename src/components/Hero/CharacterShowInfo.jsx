@@ -1,9 +1,12 @@
+import { Link } from "react-router-dom";
+import { useHeroContext } from "./useHeroContext";
+
 const DEFAULT_TEXT = "error";
 const DEFAULT_COLOR = "white";
 const DEFAULT_BG_COLOR = "black";
 
 //屬性 - 單純文字
-export const ShowType_Text = ({ color, text }) => {
+export const ShowType_Text = ({ bgColor, zhText }) => {
     return (
         <a href="#">
             <span
@@ -31,17 +34,19 @@ export const ShowType_Color = ({ bgColor }) => {
     );
 };
 //屬性 - 顏色+文字
-export const ShowType_ColorText = ({ bgColor, text }) => {
+export const ShowType_ColorText = ({ bgColor, zhType, enType }) => {
     return (
-        <a href="#">
+        // <a href="#">
+        <Link to={`type/${enType}`}>
             <span
                 className="type"
                 style={{
                     backgroundColor: bgColor ?? DEFAULT_BG_COLOR,
                 }}>
-                {text ?? DEFAULT_TEXT}
+                {zhType ?? DEFAULT_TEXT}
             </span>
-        </a>
+        </Link>
+        // </a>
     );
 };
 

@@ -24,6 +24,7 @@ export const useFetchPokemon = () => {
         handleStorePokemon,
         handleIsLoadingPokemon,
         isLoadingPokemon,
+        handleStoreAllTypes,
     } = useHeroContext();
     const queryClient = useQueryClient();
     // 第一次fetching pokemon species data
@@ -102,7 +103,6 @@ export const useFetchPokemon = () => {
         pokemonAllTypes.every(
             (result) => !result.isLoading && !result.isError && result.data
         );
-
     useEffect(() => {
         if (isDataReady) {
             // console.log("資料準備好準備設定setPokemon");
@@ -114,9 +114,10 @@ export const useFetchPokemon = () => {
                 const damageRelations = data.damage_relations;
                 typesMap.set(enType, damageRelations);
             });
+            handleStoreAllTypes(pokemonAllTypes);
 
-            let pokemonMap = new Map();
             // Set pokemon state
+            let pokemonMap = new Map();
             pokemonSpecies.map((item) => {
                 const { data } = item;
                 //get pokemon id
@@ -157,8 +158,6 @@ export const useFetchPokemon = () => {
             });
             handleStorePokemon([...Array.from(pokemonMap.values())]);
         }
-        console.log("isLoadingPokemon", isLoadingPokemon);
-        console.log("isDataReady", isDataReady);
         handleIsLoadingPokemon(!isDataReady);
     }, [isDataReady]);
 };
