@@ -18,16 +18,16 @@
 ## Instructions
 
 1. 在左側方框中點擊神奇寶貝
-   ![選擇](instruction-1.png)
+   ![選擇](src/images/instruction-1.png)
 2. 在中間方框，會自動帶出你目前選擇的
-   ![目前選擇](instruction-2.png)
+   ![目前選擇](src/images/instruction-2.png)
 3. 在右側方框，會自動帶出推薦相剋的神奇寶貝及屬性
-   ![推薦相剋](instruction-3.png)
+   ![推薦相剋](src/images/instruction-3.png)
 4. 取消選中的神奇寶貝，可以透過左側及中間方框再次進行點擊，即可取消選擇
 5. 每個標題旁有設定，提供不同的顯示方式，名稱、屬性、塞選等功能
-   ![設定功能](instruction-5.png)
+   ![設定功能](src/images/instruction-5.png)
 6. 如果目前沒有你想要的神奇寶貝，可以利用搜尋欄位來操作
-   ![搜尋功能](instruction-6.png)
+   ![搜尋功能](src/images/instruction-6.png)
 
 ## Skills
 
