@@ -17,6 +17,7 @@ import Pokedex from "./routes/Pokedex";
 import Login from "./routes/Login";
 import About from "./routes/About";
 import TypeView from "./components/Hero/typeView";
+import ComingSoon from "./routes/ComingSoon";
 const router = createBrowserRouter([
     {
         path: "/Pokemon-Gym/",
@@ -44,11 +45,11 @@ const router = createBrowserRouter([
                     },
                     {
                         path: "/Pokemon-Gym/Pokedex",
-                        element: <Pokedex />,
+                        element: <ComingSoon />,
                     },
                     {
                         path: "/Pokemon-Gym/Login",
-                        element: <Login />,
+                        element: <ComingSoon />,
                     },
                     {
                         path: "*",

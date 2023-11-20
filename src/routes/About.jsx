@@ -1,14 +1,17 @@
 import { Col, Container, Row } from "react-bootstrap";
 import avatar from "../images/personal-avatar.jpg";
+import { useThemeContext } from "../components/contexts/useTheme";
 const About = () => {
+    const { themeColor } = useThemeContext();
     return (
         <section className="text-center">
-            <h1>關於</h1>
-            <hr />
-            {/* <div className="pt-5 d-none d-md-block">
+            <Container className={`text-${themeColor}`}>
+                <h1>關於</h1>
+                <hr />
+                {/* <h1 className={`text-${themeColor}`}>關於</h1> */}
+                {/* <div className="pt-5 d-none d-md-block">
                 <h1>About us</h1>
             </div> */}
-            <Container>
                 <Row className="justify-content-md-center">
                     <Col md="5">
                         <p>
@@ -22,15 +25,15 @@ const About = () => {
                         </p>
                     </Col>
                 </Row>
-                <Row className="justify-content-md-center ">
+                <Row className="justify-content-md-center align-items-end">
                     <Col md="auto">
                         <img id="avatar" src={avatar} alt="personal avatar" />
                     </Col>
                     <Col md="6">
-                        <p>
+                        <div style={{ fontSize: "0.8rem" }}>
                             本網頁由PaddyTian獨立開發，使用JavaScript,
                             React開發，了解更多可以留言私訊。
-                        </p>
+                        </div>
                     </Col>
                 </Row>
 

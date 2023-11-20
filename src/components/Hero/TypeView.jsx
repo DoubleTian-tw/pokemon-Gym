@@ -22,7 +22,7 @@ const DamageDetail = ({ title, detail_item }) => {
                           return (
                               <span
                                   key={nanoid()}
-                                  data-bs-theme="light"
+                                  //   data-bs-theme="light"
                                   className="ps-2 pe-2 ms-1 me-1 rounded-3  text-light"
                                   style={{
                                       backgroundColor: bgColor,

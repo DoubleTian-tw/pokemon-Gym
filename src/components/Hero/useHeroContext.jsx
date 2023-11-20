@@ -12,9 +12,9 @@ export const HeroProvider = ({ children }) => {
     // ===================================================
     // Show Dialog
     // ===================================================
-    const [showTypeDialog, setTypeDialog] = useState(false);
-    const handleCloseTypeDialog = () => setTypeDialog(false);
-    const handleShowTypeDialog = () => setTypeDialog(true);
+    // const [showTypeDialog, setTypeDialog] = useState(false);
+    // const handleCloseTypeDialog = () => setTypeDialog(false);
+    // const handleShowTypeDialog = () => setTypeDialog(true);
 
     // ===================================================
     // Searching pokemon
@@ -181,9 +181,9 @@ export const HeroProvider = ({ children }) => {
                 //=============
                 //Show Type Dialog
                 //=============
-                showTypeDialog,
-                handleCloseTypeDialog,
-                handleShowTypeDialog,
+                // showTypeDialog,
+                // handleCloseTypeDialog,
+                // handleShowTypeDialog,
                 //=============
                 //Searching pokemon
                 //=============
