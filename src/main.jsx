@@ -20,7 +20,7 @@ import TypeView from "./components/Hero/typeView";
 import ComingSoon from "./routes/ComingSoon";
 const router = createBrowserRouter([
     {
-        path: "/Pokemon-Gym/",
+        path: "/Pokemon-Gym",
         element: <Root />,
         errorElement: <ErrorPage />,
         children: [
@@ -28,7 +28,20 @@ const router = createBrowserRouter([
                 errorElement: <ErrorPage />,
                 children: [
                     //Make <Outlet /> has default value
-                    { index: true, element: <Gym /> },
+                    {
+                        index: true,
+                        element: <Gym />,
+                    },
+                    {
+                        path: "/Pokemon-Gym/",
+                        element: <Gym />,
+                        children: [
+                            {
+                                path: "type/:type",
+                                element: <TypeView />,
+                            },
+                        ],
+                    },
                     {
                         path: "/Pokemon-Gym/Gym",
                         element: <Gym />,
