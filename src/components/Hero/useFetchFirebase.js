@@ -163,20 +163,5 @@ export const filterPopularPokemon = () => {
             if (isReturn) return pokemon;
         });
         handleFilterBestPokemon(newArr);
-        // handleFilterBestPokemon((oldValue) => {
-        //     if (!bestDamage) return oldValue;
-        //     const newValue = pokemonOrders.filter((pokemon) => {
-        //         // pokemon = 每個腳色
-        //         let isReturn = false;
-        //         pokemon.Types.forEach((type) => {
-        //             bestDamage.forEach((best) => {
-        //                 if (best.zhType === type.zhType) isReturn = true;
-        //             });
-        //         });
-        //         if (isReturn) return pokemon;
-        //         // console.log(result);
-        //     });
-        //     return newValue;
-        // });
     }, [bestDamage]);
 };

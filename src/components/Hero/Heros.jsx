@@ -27,10 +27,12 @@ const Heros = () => {
     //get best damage
     getBestDamage();
 
-    //fetch firebase data
-    fetchPopularPokemon();
-    //filter popular pokemon
-    filterPopularPokemon();
+    if (process.env.NODE_ENV === "deploy") {
+        //fetch firebase data
+        fetchPopularPokemon();
+        //filter popular pokemon
+        filterPopularPokemon();
+    }
     return (
         <main>
             <section className="hero">
@@ -74,7 +76,9 @@ const Heros = () => {
                                 handleClick={() => {}}
                             />
                         ) : (
-                            <p>Oops! 看起來推薦屬性還沒有pokemon被選擇呢!</p>
+                            <p className="">
+                                Oops! 看起來推薦屬性還沒有pokemon被選擇呢!
+                            </p>
                         ))}
                 </Hero>
             </section>

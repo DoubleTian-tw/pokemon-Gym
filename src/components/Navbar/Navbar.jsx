@@ -15,18 +15,17 @@ import { useThemeContext } from "../contexts/useTheme";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
-    const { theme, isDarkMode, handleTheme, handleIsDarkMode } =
-        useThemeContext();
-    useEffect(() => {
-        if (isDarkMode) {
-            document.querySelector("body").classList.add("bg-darkBg");
-            document.querySelector("body").classList.remove("bg-white");
-        }
-        if (!isDarkMode) {
-            document.querySelector("body").classList.add("bg-white");
-            document.querySelector("body").classList.remove("bg-darkBg");
-        }
-    }, [theme]);
+    const { isDarkMode, handleIsDarkMode } = useThemeContext();
+    // useEffect(() => {
+    //     if (isDarkMode) {
+    //         document.querySelector("body").classList.add("bg-darkBg");
+    //         document.querySelector("body").classList.remove("bg-white");
+    //     }
+    //     if (!isDarkMode) {
+    //         document.querySelector("body").classList.add("bg-white");
+    //         document.querySelector("body").classList.remove("bg-darkBg");
+    //     }
+    // }, [isDarkMode]);
     return (
         <>
             <BsNavbar expand="md" data-bs-theme="dark" className="bg-primary">
@@ -52,10 +51,10 @@ const Navbar = () => {
                             <div
                                 className="theme-toggle"
                                 onClick={() => {
-                                    handleTheme();
+                                    // handleTheme();
                                     handleIsDarkMode();
                                 }}>
-                                {theme === "light" ? <GoSun /> : <GoMoon />}
+                                {isDarkMode ? <GoMoon /> : <GoSun />}
                             </div>
                             <Nav.Link as={Link} to={`About`}>
                                 關於
@@ -73,46 +72,6 @@ const Navbar = () => {
                     </BsNavbar.Collapse>
                 </Container>
             </BsNavbar>
-            {/* <nav className="navbar navbar-expand-md navbar-dark bg-dark">
-                <div className="container-md">
-                    <a className="navbar-brand" href="#">
-                        <img
-                            src={logo}
-                            width="30"
-                            height="30"
-                            className="d-inline-block align-top"
-                            alt="pokemon go"
-                        />
-                        <span className="text-capitalize">pokemon gym</span>
-                    </a>
-                    <button
-                        className="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#collapsibleNavbar">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-
-                    <div
-                        className="collapse navbar-collapse justify-content-end"
-                        id="collapsibleNavbar">
-                        <ul className="navbar-nav ">
-                            {navLinks.map((link) => {
-                                const { id, href, title, myclass } = link;
-                                return (
-                                    <li key={id} className="nav-item">
-                                        <a
-                                            className={`nav-link ${myclass}`}
-                                            href={href}>
-                                            {title}
-                                        </a>
-                                    </li>
-                                );
-                            })}
-                        </ul>
-                    </div>
-                </div>
-            </nav> */}
         </>
     );
 };

@@ -41,6 +41,10 @@ body {
     position: relative;
     min-height: 100%;
     padding-bottom: 6rem;
+    color: #525e99;
+    transition: var(--transition-400-ease);
+}
+footer {
     transition: var(--transition-400-ease);
 }
 code {

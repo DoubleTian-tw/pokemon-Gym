@@ -2,10 +2,11 @@ import { Col, Container, Row } from "react-bootstrap";
 import avatar from "../images/personal-avatar.jpg";
 import { useThemeContext } from "../components/contexts/useTheme";
 const About = () => {
-    const { themeColor } = useThemeContext();
+    const { textColor } = useThemeContext();
     return (
         <section className="text-center">
-            <Container className={`text-${themeColor}`}>
+            <Container>
+                {/* <Container className={`text-${textColor}`}> */}
                 <h1>關於</h1>
                 <hr />
                 {/* <h1 className={`text-${themeColor}`}>關於</h1> */}

@@ -205,6 +205,7 @@
     position: sticky;
     bottom: 0;
     background-color: white;
+    transition: var(--transition-400-ease);
 }
 
 .best-damage-container li {

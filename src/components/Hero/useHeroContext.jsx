@@ -10,13 +10,6 @@ const HeroContext = createContext();
 
 export const HeroProvider = ({ children }) => {
     // ===================================================
-    // Show Dialog
-    // ===================================================
-    // const [showTypeDialog, setTypeDialog] = useState(false);
-    // const handleCloseTypeDialog = () => setTypeDialog(false);
-    // const handleShowTypeDialog = () => setTypeDialog(true);
-
-    // ===================================================
     // Searching pokemon
     // ===================================================
     const [searchPokemon, setSearchPokemon] = useState("");
@@ -51,7 +44,6 @@ export const HeroProvider = ({ children }) => {
     // 目前選中的Image
     // ===================================================
     const [selectImg, setSelectImg] = useState([]);
-    const [damageRelation, setDamageRelation] = useState([]);
     //當Image點擊時移除或加入selectImg
     const AddRemoveImg = (item) => {
         setSelectImg((currentItem) => {
@@ -65,8 +57,10 @@ export const HeroProvider = ({ children }) => {
                 //移除目前已存在的pokemon
                 return newSelectImg.filter((img) => img.enName !== item.enName);
             } else {
-                //POST點擊次數
-                postFirebase(item);
+                if (process.env.NODE_ENV === "deploy") {
+                    //POST點擊次數
+                    postFirebase(item);
+                }
                 //追加新的pokemon
                 return [...newSelectImg, item];
             }
@@ -83,12 +77,6 @@ export const HeroProvider = ({ children }) => {
     // const [halfDamage, setHalfDamage] = useState([]); //攻擊 X 0.5
     const [bestDamage, setBestDamage] = useState([]); //最佳攻擊組合
 
-    // const handleDoubleDamage = (item) => {
-    //     setDoubleDamage(() => item);
-    // };
-    // const handleHalfDamage = (item) => {
-    //     setHalfDamage(() => item);
-    // };
     const handleBestDamage = (item) => {
         setBestDamage(() => item);
     };
@@ -178,12 +166,6 @@ export const HeroProvider = ({ children }) => {
     return (
         <HeroContext.Provider
             value={{
-                //=============
-                //Show Type Dialog
-                //=============
-                // showTypeDialog,
-                // handleCloseTypeDialog,
-                // handleShowTypeDialog,
                 //=============
                 //Searching pokemon
                 //=============

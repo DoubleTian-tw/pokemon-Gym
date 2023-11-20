@@ -67,9 +67,10 @@ const Hero = ({ title, typeClass, children, id }) => {
                 {id === ID_SELECT &&
                     (searchPokemon !== "" || filterType.enType !== "all") && (
                         <div className="search-more-container">
-                            <p className={`text-${textColor}`}>
+                            <p>沒找到你要的嗎?</p>
+                            {/* <p className={`text-${textColor}`}>
                                 沒找到你要的嗎?
-                            </p>
+                            </p> */}
                             <button
                                 type="button"
                                 className="btn btn-primary btn-sm"
@@ -85,22 +86,19 @@ const Hero = ({ title, typeClass, children, id }) => {
                 {id === ID_DAMAGE && bestDamage.length > 0 && (
                     <div className={`best-damage-container bg-${bgColor}`}>
                         <FaRegThumbsUp className="thumb-icon" />
-                        <span
+                        <span style={{ paddingLeft: "0.5rem" }}>推薦屬性</span>
+                        {/* <span
                             className={`text-${textColor}`}
                             style={{ paddingLeft: "0.5rem" }}>
                             推薦屬性
-                        </span>
+                        </span> */}
                         <ul>
                             {bestDamage.map((type) => {
                                 return (
                                     <li
                                         key={nanoid()}
                                         style={{ margin: "0 0.1rem" }}>
-                                        <ShowType_ColorText
-                                            {...type}
-                                            // bgColor={type?.bgColor}
-                                            // text={type?.zhType}
-                                        />
+                                        <ShowType_ColorText {...type} />
                                     </li>
                                 );
                             })}
