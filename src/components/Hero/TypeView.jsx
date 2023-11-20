@@ -1,14 +1,16 @@
-import { Button, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { useHeroContext } from "./useHeroContext";
 import { allType } from "../../data";
-import { useEffect } from "react";
 import { nanoid } from "nanoid";
+
+// 透過屬性名稱，取得data.js中allType的資訊 - 顏色、中文屬性等等
 const getDamageDetail = (item) => {
     return item.map(
         ({ name }) => allType.filter(({ enType }) => name === enType)[0]
     );
 };
+// 顯示Modal內詳細屬性資訊
 const DamageDetail = ({ title, detail_item }) => {
     return (
         <>
@@ -34,19 +36,15 @@ const DamageDetail = ({ title, detail_item }) => {
     );
 };
 const TypeView = () => {
-    const {
-        showTypeDialog,
-        handleCloseTypeDialog,
-        handleShowTypeDialog,
-        storeAllTypes,
-    } = useHeroContext();
+    const { storeAllTypes } = useHeroContext();
     let navigate = useNavigate();
     let { type } = useParams();
+    //取得目前顯示屬性的資訊
     let typeFromData = allType.filter((t) => t.enType === type)[0];
     let zhType = typeFromData?.zhType;
     let bgColor = typeFromData?.bgColor;
+    //取得目前屬性的傷害關係表
     let typeInfo = storeAllTypes.filter((t) => t.name === type)[0];
-
     let { damage_relations } = typeInfo || {};
     let {
         double_damage_from,
@@ -62,17 +60,10 @@ const TypeView = () => {
     let detail_half_damage_to = getDamageDetail(half_damage_to);
     let detail_no_damage_from = getDamageDetail(no_damage_from);
     let detail_no_damage_to = getDamageDetail(no_damage_to);
-    // console.log(typeInfo, detail_double_damage_from);
-
-    //   let image = getImageById(Number(id));
-    //   let buttonRef = React.useRef<HTMLButtonElement>(null);
+    //回前一頁
     function onDismiss() {
         navigate(-1);
     }
-    // console.log(storeAllTypes, type);
-    // if (!image) {
-    //     throw new Error(`No image found with id: ${id}`);
-    // }
     return (
         <Modal
             show={true}
@@ -98,26 +89,18 @@ const TypeView = () => {
                     detail_item={detail_no_damage_to}
                 />
                 <DamageDetail
-                    title="小心雙倍傷害"
+                    title="遭受效果絕佳"
                     detail_item={detail_double_damage_from}
                 />
                 <DamageDetail
-                    title="小心普通傷害"
-                    detail_item={detail_half_damage_to}
+                    title="遭受效果不好"
+                    detail_item={detail_half_damage_from}
                 />
                 <DamageDetail
-                    title="不會受傷"
-                    detail_item={detail_no_damage_to}
+                    title="沒有傷害"
+                    detail_item={detail_no_damage_from}
                 />
             </Modal.Body>
-            <Modal.Footer>
-                <Button variant="secondary" onClick={onDismiss}>
-                    Close
-                </Button>
-                {/* <Button variant="primary" onClick={handleClose}>
-                    Save Changes
-                </Button> */}
-            </Modal.Footer>
         </Modal>
     );
 };

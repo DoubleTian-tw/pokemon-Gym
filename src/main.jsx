@@ -16,7 +16,7 @@ import ErrorPage from "./routes/ErrorPage";
 import Pokedex from "./routes/Pokedex";
 import Login from "./routes/Login";
 import About from "./routes/About";
-import TypeView from "./components/Hero/TypeView";
+import TypeView from "./components/Hero/typeView";
 const router = createBrowserRouter([
     {
         path: "/Pokemon-Gym/",
