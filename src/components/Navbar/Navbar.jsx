@@ -12,6 +12,7 @@ import { HiMiniBars3BottomLeft } from "react-icons/hi2";
 import { GoSun, GoMoon } from "react-icons/go";
 import { useEffect } from "react";
 import { useThemeContext } from "../contexts/useTheme";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
     const { theme, isDarkMode, handleTheme, handleIsDarkMode } =
@@ -30,7 +31,7 @@ const Navbar = () => {
         <>
             <BsNavbar expand="md" data-bs-theme="dark" className="bg-primary">
                 <Container expand="md">
-                    <BsNavbar.Brand href="#home">
+                    <BsNavbar.Brand as={Link} to={`Gym`}>
                         <img
                             src={logo}
                             width="30"
@@ -56,10 +57,16 @@ const Navbar = () => {
                                 }}>
                                 {theme === "light" ? <GoSun /> : <GoMoon />}
                             </div>
-                            <Nav.Link href="#Home">Home</Nav.Link>
-                            <Nav.Link href="#Pokedex">圖鑑</Nav.Link>
-                            <Nav.Link href="#Gym">道館</Nav.Link>
-                            <Nav.Link href="#Login" className="login">
+                            <Nav.Link as={Link} to={`About`}>
+                                關於
+                            </Nav.Link>
+                            <Nav.Link as={Link} to={`Pokedex`}>
+                                圖鑑
+                            </Nav.Link>
+                            <Nav.Link as={Link} to={`Gym`}>
+                                道館
+                            </Nav.Link>
+                            <Nav.Link as={Link} to={`Login`}>
                                 登入/註冊
                             </Nav.Link>
                         </Nav>

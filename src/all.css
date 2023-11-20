@@ -12350,4 +12350,8 @@ textarea.form-control-lg {
   .d-print-none {
     display: none !important;
   }
+}
+#avatar {
+  width: 5rem;
+  border-radius: 50%;
 }/*# sourceMappingURL=all.css.map */

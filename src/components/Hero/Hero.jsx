@@ -97,8 +97,9 @@ const Hero = ({ title, typeClass, children, id }) => {
                                         key={nanoid()}
                                         style={{ margin: "0 0.1rem" }}>
                                         <ShowType_ColorText
-                                            bgColor={type?.bgColor}
-                                            text={type?.zhType}
+                                            {...type}
+                                            // bgColor={type?.bgColor}
+                                            // text={type?.zhType}
                                         />
                                     </li>
                                 );

@@ -184,6 +184,11 @@
     font-weight: bold;
     border-radius: 1rem;
     text-align: center;
+    transform: scale(1);
+    transition: var(--transition-400-ease);
+}
+.type:hover {
+    transform: scale(1.1);
 }
 
 .search-more-container {

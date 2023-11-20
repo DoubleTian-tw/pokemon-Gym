@@ -27,15 +27,21 @@ const CharacterShowType = ({ item, showType_select, styleObj }) => {
                     case DROPDOWN_SHOW_COLOR: //只顯示顏色
                         return (
                             <li key={nanoid()}>
-                                <ShowType_Color bgColor={type?.bgColor} />
+                                <ShowType_Color
+                                    {...type}
+                                    // bgColor={type?.bgColor}
+                                    // enType={type?.enType}
+                                />
                             </li>
                         );
                     case DROPDOWN_SHOW_TEXT: //只顯示文字
                         return (
                             <li key={nanoid()}>
                                 <ShowType_Text
-                                    color={type?.bgColor}
-                                    text={type?.zhType}
+                                    {...type}
+                                    // color={type?.bgColor}
+                                    // text={type?.zhType}
+                                    // enType={type?.enType}
                                 />
                             </li>
                         );
@@ -44,8 +50,10 @@ const CharacterShowType = ({ item, showType_select, styleObj }) => {
                         return (
                             <li key={nanoid()}>
                                 <ShowType_ColorText
-                                    bgColor={type?.bgColor}
-                                    text={type?.zhType}
+                                    {...type}
+                                    // bgColor={type?.bgColor}
+                                    // text={type?.zhType}
+                                    // enType={type?.enType}
                                 />
                             </li>
                         );

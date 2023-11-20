@@ -39,8 +39,7 @@ const SearchPokemon = () => {
     );
 };
 const Dropdowns = ({ title, id }) => {
-    const { isDarkMode, theme } = useThemeContext();
-    const textColor = isDarkMode ? "white-50" : "mySecondary";
+    const { theme, themeColor } = useThemeContext();
     const [open, setOpen] = useState(false);
 
     return (
@@ -71,7 +70,7 @@ const Dropdowns = ({ title, id }) => {
                 </div> */}
             </div>
             {/* Title */}
-            <span className={`title text-${textColor}`}>{title}</span>
+            <span className={`title text-${themeColor}`}>{title}</span>
             {id === ID_SELECT && <SearchPokemon />}
         </div>
     );

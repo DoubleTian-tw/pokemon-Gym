@@ -9,9 +9,16 @@ export const ThemeProvider = ({ children }) => {
     const handleTheme = () =>
         setTheme((oldTheme) => (oldTheme === "light" ? "dark" : "light"));
 
+    const themeColor = isDarkMode ? "white-50" : "mySecondary";
     return (
         <ThemeContext.Provider
-            value={{ isDarkMode, handleIsDarkMode, theme, handleTheme }}>
+            value={{
+                isDarkMode,
+                handleIsDarkMode,
+                theme,
+                handleTheme,
+                themeColor,
+            }}>
             {children}
         </ThemeContext.Provider>
     );
