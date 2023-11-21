@@ -16,16 +16,6 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
     const { isDarkMode, handleIsDarkMode } = useThemeContext();
-    // useEffect(() => {
-    //     if (isDarkMode) {
-    //         document.querySelector("body").classList.add("bg-darkBg");
-    //         document.querySelector("body").classList.remove("bg-white");
-    //     }
-    //     if (!isDarkMode) {
-    //         document.querySelector("body").classList.add("bg-white");
-    //         document.querySelector("body").classList.remove("bg-darkBg");
-    //     }
-    // }, [isDarkMode]);
     return (
         <>
             <BsNavbar expand="md" data-bs-theme="dark" className="bg-primary">

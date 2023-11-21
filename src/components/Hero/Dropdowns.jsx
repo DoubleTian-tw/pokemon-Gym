@@ -20,7 +20,6 @@ const SearchPokemon = () => {
                     aria-label="Search"
                     value={searchPokemon}
                     onChange={(e) => {
-                        console.log(e.target.value);
                         handleSearchPokemon(e.target.value);
                     }}
                 />

@@ -26,13 +26,6 @@ const BtnGroup = ({ children }) => {
                 style={{ marginBottom: "0.5rem" }}>
                 {children}
             </ButtonGroup>
-            {/* <div
-                className="btn-group btn-group-sm"
-                role="group"
-                aria-label="Setting text and image"
-                style={{ marginBottom: "0.5rem" }}>
-                {children}
-            </div> */}
         </>
     );
 };
@@ -50,16 +43,6 @@ const BtnContainer = ({ children, selectType, handleOnClick, types }) => {
                 }}>
                 {children}
             </Button>
-            {/* <button
-                type="button"
-                className={`btn btn-outline-info button-hover ${
-                    selectType.type === type ? "active" : ""
-                }`}
-                onClick={() => {
-                    handleOnClick(type, title);
-                }}>
-                {children}
-            </button> */}
         </>
     );
 };
@@ -286,54 +269,6 @@ const DropdownFilterType = () => {
                     })}
                 </Dropdown.Menu>
             </Dropdown>
-            {/* <div className="dropdown">
-                <button
-                    className="btn btn-outline-info dropdown-toggle button-hover"
-                    type="button"
-                    id="dropdownBtnFilterType"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false">
-                    <span>塞選屬性 : {filterType.zhType || "error"}</span>
-                </button>
-                <div
-                    className="dropdown-menu "
-                    aria-labelledby="dropdownBtnFilterType"
-                    style={{
-                        width: "auto",
-                        height: "150px",
-                        overflowY: "auto",
-                    }}>
-                    <ul>
-                        <li>
-                            <button
-                                className="dropdown-item dropdown-type"
-                                type="button"
-                                style={{ backgroundColor: "#17CCF0" }}
-                                onClick={() =>
-                                    handleFilterType(defaultFilterType)
-                                }>
-                                <span>全部</span>
-                            </button>
-                        </li>
-                        {allType.map((type) => {
-                            const { zhType, bgColor } = type;
-                            return (
-                                <li key={nanoid()}>
-                                    <button
-                                        type="button"
-                                        className="dropdown-item dropdown-type"
-                                        style={{
-                                            backgroundColor: bgColor,
-                                        }}
-                                        onClick={() => handleFilterType(type)}>
-                                        <span>{zhType}</span>
-                                    </button>
-                                </li>
-                            );
-                        })}
-                    </ul>
-                </div>
-            </div> */}
         </>
     );
 };

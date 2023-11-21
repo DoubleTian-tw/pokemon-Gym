@@ -1,6 +1,6 @@
 import "./Hero.css";
 import Dropdowns from "./Dropdowns";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { ID_DAMAGE, ID_SELECT } from "../../data";
 import { useHeroContext } from "./useHeroContext";
 import { nanoid } from "nanoid";
@@ -9,8 +9,7 @@ import { ShowType_ColorText } from "./CharacterShowInfo";
 import { useThemeContext } from "../contexts/useTheme";
 const Hero = ({ title, typeClass, children, id }) => {
     const { isDarkMode } = useThemeContext();
-    const textColor = isDarkMode ? "white-50" : "primary";
-    const bgColor = isDarkMode ? "darkBg" : "white";
+    const bgColor = isDarkMode ? "darkBg" : "white-50";
     //
     // ========= Loading =========
     //
@@ -68,9 +67,6 @@ const Hero = ({ title, typeClass, children, id }) => {
                     (searchPokemon !== "" || filterType.enType !== "all") && (
                         <div className="search-more-container">
                             <p>沒找到你要的嗎?</p>
-                            {/* <p className={`text-${textColor}`}>
-                                沒找到你要的嗎?
-                            </p> */}
                             <button
                                 type="button"
                                 className="btn btn-primary btn-sm"
@@ -87,11 +83,6 @@ const Hero = ({ title, typeClass, children, id }) => {
                     <div className={`best-damage-container bg-${bgColor}`}>
                         <FaRegThumbsUp className="thumb-icon" />
                         <span style={{ paddingLeft: "0.5rem" }}>推薦屬性</span>
-                        {/* <span
-                            className={`text-${textColor}`}
-                            style={{ paddingLeft: "0.5rem" }}>
-                            推薦屬性
-                        </span> */}
                         <ul>
                             {bestDamage.map((type) => {
                                 return (

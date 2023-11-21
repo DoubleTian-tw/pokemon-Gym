@@ -1,20 +1,19 @@
 import { Link } from "react-router-dom";
-import { useHeroContext } from "./useHeroContext";
 
 const DEFAULT_TEXT = "error";
 const DEFAULT_COLOR = "white";
 const DEFAULT_BG_COLOR = "black";
 
 //屬性 - 單純文字
-export const ShowType_Text = ({ bgColor, zhText }) => {
+export const ShowType_Text = ({ bgColor, zhType }) => {
     return (
         <a href="#">
             <span
                 style={{
-                    color: color ?? DEFAULT_COLOR,
+                    color: bgColor ?? DEFAULT_COLOR,
                     // marginBottom: "0.1rem",
                 }}>
-                {text ?? DEFAULT_TEXT}
+                {zhType ?? DEFAULT_TEXT}
             </span>
         </a>
     );
@@ -88,6 +87,7 @@ export const CharacterShowImage = ({
                 className={`characterImg ${isActive}`}
                 onClick={() => handleClick(item)}
             />
+            {/* <p>{item?.pokeId ?? "none"}</p> */}
         </div>
     );
 };

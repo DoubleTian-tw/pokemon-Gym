@@ -5,6 +5,7 @@ import {
     heroDropdownItem_showType,
 } from "../../data";
 import { postFirebase } from "./useFetchFirebase";
+import { NEXT_LIMIT } from "./useQueryPokedex";
 
 const HeroContext = createContext();
 
@@ -33,8 +34,8 @@ export const HeroProvider = ({ children }) => {
     const handleIsLoadingPokemon = (state) => {
         setIsLoadingPokemon(() => state ?? isLoadingPokemon);
     };
-    const handleNextPage = (offset = 20) => {
-        setPage((currentValue) => currentValue + offset);
+    const handleNextPage = () => {
+        setPage((currentValue) => currentValue + NEXT_LIMIT);
     };
     const handleSearchMorePokemon = (state) => {
         setSearchMorePokemon(() => state);

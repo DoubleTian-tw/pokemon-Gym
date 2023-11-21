@@ -15,14 +15,11 @@ const getInitialDarkMode = () => {
 
 export const ThemeProvider = ({ children }) => {
     const [isDarkMode, setIsDarkMode] = useState(getInitialDarkMode);
-    // const [theme, setTheme] = useState("light");
     const handleIsDarkMode = () => {
         const newDarkMode = !isDarkMode;
         setIsDarkMode(newDarkMode);
         localStorage.setItem(DARK_THEME, newDarkMode);
     };
-    // const handleTheme = () =>
-    //     setTheme((oldTheme) => (oldTheme === "light" ? "dark" : "light"));
 
     const bgColor = isDarkMode ? "dark" : "light";
     const textColor = isDarkMode ? "white-50" : "mySecondary";
@@ -36,8 +33,6 @@ export const ThemeProvider = ({ children }) => {
             value={{
                 isDarkMode,
                 handleIsDarkMode,
-                // theme,
-                // handleTheme,
                 textColor,
                 bgColor,
             }}>

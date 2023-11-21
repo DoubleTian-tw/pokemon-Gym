@@ -6,9 +6,9 @@ import { useHeroContext } from "./useHeroContext";
 const URL = "https://pokeapi.co/api/v2/pokemon-species/";
 const URL_Types = "https://pokeapi.co/api/v2/type/";
 const ZH = "zh-Hant";
-const NEXT_PAGE = 20;
+export const NEXT_LIMIT = 50;
 
-export const axiosData = ({ offset = 0, limit = 20 }) => {
+export const axiosData = ({ offset = 0, limit = NEXT_LIMIT }) => {
     return axios({
         baseURL: URL,
         params: { offset, limit },
@@ -21,11 +21,13 @@ export const axiosDataByUrl = (url) => {
 export const useFetchPokemon = () => {
     const {
         page,
+        isLoadingPokemon,
         handleStorePokemon,
         handleIsLoadingPokemon,
-        isLoadingPokemon,
         handleStoreAllTypes,
+        searchPokemon,
     } = useHeroContext();
+
     const queryClient = useQueryClient();
     // 第一次fetching pokemon species data
     const {
@@ -42,11 +44,14 @@ export const useFetchPokemon = () => {
         staleTime: Infinity,
     });
     useEffect(() => {
-        // 非前一次Data 且 還有更多資料可載入
+        // 非前一次Data 且 還有更多資料可載入，可以預先取出下一頁的資料
         if (!isPreviousData && pokedexData?.hasMore) {
             queryClient.prefetchQuery({
-                queryKey: ["pokedex", page + NEXT_PAGE],
-                queryFn: () => axiosData({ offset: page + NEXT_PAGE }),
+                queryKey: ["pokedex", page + NEXT_LIMIT],
+                queryFn: () =>
+                    axiosData({
+                        offset: page + NEXT_LIMIT,
+                    }),
             });
         }
     }, [pokedexData, isPreviousData, page, queryClient]);
@@ -105,7 +110,7 @@ export const useFetchPokemon = () => {
         );
     useEffect(() => {
         if (isDataReady) {
-            // console.log("資料準備好準備設定setPokemon");
+            console.log("資料準備好準備設定setPokemon");
             // 將types資料組成Map
             let typesMap = new Map();
             pokemonAllTypes.forEach((types) => {
