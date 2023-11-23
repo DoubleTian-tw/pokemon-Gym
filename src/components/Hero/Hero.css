@@ -1,16 +1,16 @@
-.hero {
+/* .hero {
     display: grid;
     grid-template-rows: 1fr;
     gap: 1rem;
-}
-.group-col .group-info {
+} */
+/* .group-col .group-info {
     margin-bottom: 1rem;
     position: relative;
-}
+} */
 
 /* Title和Icon */
 
-.group-col .setting-icon {
+/* .group-col .setting-icon {
     padding: 0.2rem;
     border-radius: 0.2rem;
     font-size: 1.5rem;
@@ -20,8 +20,8 @@
 .group-col .setting-icon:hover {
     background-color: var(--primary-200);
     color: white;
-}
-.thumb-icon {
+} */
+/* .thumb-icon {
     color: var(--primary-300);
     animation: thumbUp 1s linear infinite;
     transform-origin: left;
@@ -36,22 +36,21 @@
     100% {
         rotate: -10deg;
     }
-}
+} */
 /* .group-col .dropdown, */
-.group-col .title {
+/* .group-col .title {
     position: absolute;
     top: 2px;
     left: 2rem;
-    /* font-size: 1rem; */
-}
-.group-col .search-btn {
+} */
+/* .group-col .search-btn {
     position: absolute;
     top: 0;
     right: 0;
     width: 50%;
-}
+} */
 /* === character Groups === */
-.hero .groups {
+/* .hero .groups {
     display: block;
     height: 30vh;
     box-shadow: var(--shadow);
@@ -60,18 +59,18 @@
     overflow-y: scroll;
     border: 1px solid grey;
     border-radius: 0.5rem;
-}
-#DamageGroup {
+} */
+/* #DamageGroup {
     padding-bottom: 0;
-}
-.hero .group-img {
+} */
+/* .hero .group-img {
     display: grid;
     justify-items: center;
     align-items: center;
     gap: 1rem 0.1rem;
-}
+} */
 
-.group-onlyText {
+/* .group-onlyText {
     grid-template-columns: repeat(3, 1fr);
 }
 .group-onlyImage {
@@ -79,23 +78,23 @@
 }
 .group-imageText {
     grid-template-columns: repeat(2, 1fr);
-}
+} */
 @media screen and (min-width: 768px) {
-    .group-onlyImage {
+    /* .group-onlyImage {
         grid-template-columns: repeat(5, 1fr);
-    }
+    } */
 }
 @media screen and (min-width: 992px) {
-    .hero {
+    /* .hero {
         grid-template-columns: repeat(3, 1fr);
-    }
-    .hero .group-col {
+    } */
+    /* .hero .group-col {
         padding: 0;
-    }
-    .hero .groups {
+    } */
+    /* .hero .groups {
         height: 50vh;
-    }
-    .group-onlyText {
+    } */
+    /* .group-onlyText {
         grid-template-columns: repeat(2, 1fr);
     }
     .group-onlyImage {
@@ -103,17 +102,17 @@
     }
     .group-imageText {
         grid-template-columns: repeat(1, 1fr);
-    }
+    } */
 }
 /* === character 顯示方式 === */
-.characterImg,
+/* .characterImg,
 .characterImgText,
 .characterText,
 .type span {
     transition: var(--transition-500-ease);
     cursor: pointer;
-}
-.characterImgText {
+} */
+/* .characterImgText {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 0.5rem;
@@ -136,23 +135,23 @@
     text-align: center;
     border-radius: 0.5rem;
     padding: 0.5rem 0.5rem;
-}
-.characterImg:hover,
+} */
+/* .characterImg:hover,
 .characterText:hover,
 .characterImgText:hover,
 .type a:hover span {
     box-shadow: var(--shadow);
     transform: scale(1.1);
-}
-.hero-active {
+} */
+/* .hero-active {
     border: 2px solid rgb(255, 120, 120);
-}
+} */
 
-.characterName {
+/* .characterName {
     color: var(--primary-200);
-}
+} */
 /* 塞選屬性 */
-.dropdown-type {
+/* .dropdown-type {
     transition: var(--transition-400-ease);
     font-size: 0.8rem;
     color: white;
@@ -167,16 +166,16 @@
 }
 .dropdown-type:hover span {
     margin-left: 0.8rem;
-}
+} */
 
 /* === 屬性 === */
-.type-container {
+/* .type-container {
     position: absolute;
     z-index: 0;
     top: -0.5rem;
     right: -1.5rem;
-}
-.type {
+} */
+/* .type {
     display: block;
     font-size: 0.8rem;
     padding: 0.1rem 0.4rem;
@@ -189,18 +188,18 @@
 }
 .type:hover {
     transform: scale(1.1);
-}
+} */
 
-.search-more-container {
+/* .search-more-container {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 .search-more-container p {
     margin-top: 1rem;
-}
+} */
 /* === 最佳屬性攻擊 === */
-.best-damage-container {
+/* .best-damage-container {
     padding-left: 0.5rem;
     position: sticky;
     bottom: 0;
@@ -210,26 +209,26 @@
 
 .best-damage-container li {
     display: inline-block;
-}
+} */
 /* === ButtonGroup.jsx === */
 
-.buttonImage {
+/* .buttonImage {
     width: 2rem;
     height: 2rem;
     border-radius: 50%;
     background-color: var(--grey-100);
     padding: 0.2rem;
     transition: var(--transition-500-ease);
-}
-.button-hover {
+} */
+/* .button-hover {
     font-size: 0.8rem;
-}
-.buttonImageText {
+} */
+/* .buttonImageText {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
-}
+} */
 
 /* .button-hover:active span,
 .button-hover:focus span, */
@@ -238,12 +237,12 @@
     color: white;
 } */
 
-.button-hover:hover img {
+/* .button-hover:hover img {
     box-shadow: var(--shadow);
     background-color: var(--grey-100);
-}
+} */
 
-.button-type-color span {
+/* .button-type-color span {
     font-size: 0.5rem;
     padding: 0.1rem 0.5rem;
     color: white;
@@ -256,7 +255,7 @@
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
-}
+} */
 
 /* .form-select-light::placeholder {
     color: var(--grey-200);

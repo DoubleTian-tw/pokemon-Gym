@@ -1,16 +1,8 @@
 import logo from "../../images/logo.png";
-import { navLinks } from "../../data";
-import "./Navbar.css";
-import {
-    Navbar as BsNavbar,
-    Container,
-    Nav,
-    Form,
-    Button,
-} from "react-bootstrap";
+// import "./Navbar.css";
+import { Navbar as BsNavbar, Container, Nav } from "react-bootstrap";
 import { HiMiniBars3BottomLeft } from "react-icons/hi2";
 import { GoSun, GoMoon } from "react-icons/go";
-import { useEffect } from "react";
 import { useThemeContext } from "../contexts/useTheme";
 import { Link } from "react-router-dom";
 

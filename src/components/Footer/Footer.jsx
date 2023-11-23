@@ -1,5 +1,4 @@
 import { useThemeContext } from "../contexts/useTheme";
-import "./Footer.css";
 const Footer = () => {
     const date = new Date().getFullYear();
     const { textColor, bgColor } = useThemeContext();

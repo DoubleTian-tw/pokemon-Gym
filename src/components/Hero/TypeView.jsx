@@ -36,7 +36,6 @@ const DamageDetail = ({ title, detail_item }) => {
     );
 };
 const TypeView = () => {
-    console.log("type view!");
     const { storeAllTypes } = useHeroContext();
     let navigate = useNavigate();
     let { type } = useParams();
