@@ -12354,4 +12354,22 @@ textarea.form-control-lg {
 #avatar {
   width: 5rem;
   border-radius: 50%;
+}
+
+#login-container {
+  max-width: 300px;
+}
+#login-container .input-group {
+  padding-bottom: 1rem;
+}
+#login-container button {
+  min-width: 300px;
+  margin-bottom: 1rem;
+}
+
+.membership {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+  text-align: center;
 }/*# sourceMappingURL=all.css.map */

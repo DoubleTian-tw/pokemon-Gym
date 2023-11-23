@@ -18,6 +18,7 @@ import Login from "./routes/Login";
 import About from "./routes/About";
 import TypeView from "./components/Hero/typeView";
 import ComingSoon from "./routes/ComingSoon";
+import SignUp from "./routes/SignUp";
 const router = createBrowserRouter([
     {
         path: "/Pokemon-Gym",
@@ -62,7 +63,11 @@ const router = createBrowserRouter([
                     },
                     {
                         path: "/Pokemon-Gym/Login",
-                        element: <ComingSoon />,
+                        element: <Login />,
+                    },
+                    {
+                        path: "/Pokemon-Gym/SignUp",
+                        element: <SignUp />,
                     },
                     {
                         path: "*",
