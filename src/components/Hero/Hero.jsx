@@ -1,4 +1,4 @@
-import "./Hero.css";
+// import "./Hero.css";
 import Dropdowns from "./Dropdowns";
 import { useEffect, useRef } from "react";
 import { ID_DAMAGE, ID_SELECT } from "../../data";
