@@ -18,6 +18,97 @@ export const axiosDataByUrl = (url) => {
     return axios(url).then((res) => res.data);
 };
 
+export const useGraphQL = () => {
+    const operationName = "pokemon_details";
+    const query = `query ${operationName} {
+            pokemon_v2_pokemonspecies(offset: 0, limit: 2) {
+                name
+                id
+                pokemon_v2_pokemonspeciesnames {
+                name
+                language_id
+                pokemon_v2_language {
+                    name
+                }
+                }
+            }
+        }`;
+    const data = axios({
+        method: "POST",
+        url: "https://beta.pokeapi.co/graphql/v1beta",
+        data: JSON.stringify({ query: query, operationName: operationName }),
+    });
+    data.then((res) => {
+        console.log(res.data);
+    });
+};
+
+export const useFetchAllPokemon = () => {
+    //一次撈出全部pokemon資料
+    const { data: pokemonData, isSuccess: allPokemonSuccess } = useQuery({
+        queryKey: ["allPokemon"],
+        queryFn: () => axiosDataByUrl("https://pokeapi.co/api/v2/pokedex/1"),
+        keepPreviousData: true,
+        staleTime: Infinity,
+    });
+
+    //取得所有pokemon Data
+    let allPokemon = null;
+    if (allPokemonSuccess && allPokemon === null)
+        allPokemon = pokemonData?.pokemon_entries;
+    //取得後依照url屬性去撈取個別資料
+    const pokemonSpecies = useQueries({
+        queries: (allPokemon ?? []).map((pokemon) => {
+            const url = pokemon?.pokemon_species?.url;
+            return {
+                queryKey: ["allSpecies", url],
+                queryFn: () => axiosDataByUrl(url),
+                enabled: !!url,
+            };
+        }),
+    });
+    // 第三次fetching 各 pokemon 的詳細資料
+    const pokemonVarieties = useQueries({
+        queries: (pokemonSpecies ?? []).map((item) => {
+            const { data } = item;
+            const url = data?.varieties[0]?.pokemon?.url ?? "";
+            return {
+                queryKey: ["allVarieties", url],
+                queryFn: () => axiosDataByUrl(url),
+                enabled: !!item.data,
+            };
+        }),
+    });
+    // 第四次fetching 各 pokemon 的屬性列表
+    const FetchAllTypes = useQuery({
+        queryKey: ["AllTypes"],
+        queryFn: () => axiosDataByUrl(URL_Types),
+    });
+    const pokemonAllTypes = useQueries({
+        queries: (FetchAllTypes?.data?.results ?? []).map((type) => {
+            const { url } = type;
+            return {
+                queryKey: ["TypeDetail", url],
+                queryFn: () => axiosDataByUrl(url),
+                enabled: !!url,
+            };
+        }),
+    });
+
+    const isDataReady =
+        allPokemon &&
+        pokemonSpecies.every(
+            (result) => !result.isLoading && !result.isError && result.data
+        ) &&
+        pokemonVarieties.every(
+            (result) => !result.isLoading && !result.isError && result.data
+        ) &&
+        pokemonAllTypes.every(
+            (result) => !result.isLoading && !result.isError && result.data
+        );
+    console.log(isDataReady);
+};
+
 export const useFetchPokemon = () => {
     const {
         page,
@@ -43,6 +134,7 @@ export const useFetchPokemon = () => {
         keepPreviousData: true,
         staleTime: Infinity,
     });
+
     useEffect(() => {
         // 非前一次Data 且 還有更多資料可載入，可以預先取出下一頁的資料
         if (!isPreviousData && pokedexData?.hasMore) {

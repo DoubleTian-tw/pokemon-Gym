@@ -1,10 +1,18 @@
 import Hero from "./Hero";
 import { ID_BEEN_SELECT, ID_DAMAGE, ID_SELECT, heroTitles } from "../../data";
 import CharacterGroups from "./CharacterGroups";
-import { useFetchPokemon } from "./useQueryPokedex";
+import {
+    useFetchPokemon,
+    useFetchAllPokemon,
+    useGraphQL,
+} from "./useQueryPokedex";
 import getBestDamage from "./useDamageHook";
 import { useHeroContext } from "./useHeroContext";
 import { fetchPopularPokemon, filterPopularPokemon } from "./useFetchFirebase";
+import { Suspense, lazy } from "react";
+import Loading from "../Loading";
+
+const CharacterGroupsLoading = lazy(() => import("./CharacterGroups.jsx"));
 
 const Heros = () => {
     const {
@@ -23,11 +31,13 @@ const Heros = () => {
     } = useHeroContext();
 
     //fetch pokemon data
-    useFetchPokemon();
+    // useFetchAllPokemon();
+    // useFetchPokemon();
+    useGraphQL();
     //get best damage
     getBestDamage();
 
-    if (process.env.NODE_ENV === "deploy") {
+    if (process.env.NODE_ENV === "production") {
         //fetch firebase data
         fetchPopularPokemon();
         //filter popular pokemon
@@ -41,13 +51,22 @@ const Heros = () => {
                     title={heroTitles[0].title}
                     typeClass={showInfo_select.type}
                     id={ID_SELECT}>
-                    <CharacterGroups
+                    <Suspense fallback={<Loading />}>
+                        <CharacterGroupsLoading
+                            showInfo_select={showInfo_select.type}
+                            showType_select={showType_select.type}
+                            displayCharacter={storePokemon}
+                            handleClick={AddRemoveImg}
+                            id={ID_SELECT}
+                        />
+                    </Suspense>
+                    {/* <CharacterGroups
                         showInfo_select={showInfo_select.type}
                         showType_select={showType_select.type}
                         displayCharacter={storePokemon}
                         handleClick={AddRemoveImg}
                         id={ID_SELECT}
-                    />
+                    /> */}
                 </Hero>
                 {/* Your choose */}
                 <Hero
