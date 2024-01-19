@@ -12574,6 +12574,10 @@ footer {
   box-shadow: var(--shadow);
   transform: scale(1.1);
 }
+.characterImg.defaultImg {
+  position: absolute;
+  transition: all 0.3s ease-in-out;
+}
 
 .characterImgText {
   transition: var(--transition-500-ease);

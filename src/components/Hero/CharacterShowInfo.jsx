@@ -1,9 +1,9 @@
+import { memo } from "react";
 import { Link } from "react-router-dom";
-
 const DEFAULT_TEXT = "error";
 const DEFAULT_COLOR = "white";
 const DEFAULT_BG_COLOR = "black";
-
+const defaultNotFound = "not found";
 //屬性 - 單純文字
 export const ShowType_Text = ({ bgColor, zhType }) => {
     return (
@@ -68,29 +68,29 @@ export const CharacterShowText = ({
     );
 };
 //Pokemon - 顯示圖片
-export const CharacterShowImage = ({
-    item,
-    isActive,
-    handleClick,
-    children,
-}) => {
-    return (
-        <div
-            style={{
-                display: "flex",
-            }}>
-            {children}
-            <img
-                src={item?.sprite ?? ""}
-                alt={item?.zhName ?? defaultNotFound}
-                title={item?.zhName ?? defaultNotFound}
-                className={`characterImg ${isActive}`}
-                onClick={() => handleClick(item)}
-            />
-            {/* <p>{item?.pokeId ?? "none"}</p> */}
-        </div>
-    );
-};
+export const CharacterShowImage = memo(
+    ({ item, isActive, handleClick, children }) => {
+        return (
+            <div
+                style={{
+                    display: "flex",
+                }}>
+                {children}
+                <div style={{ position: "relative" }}>
+                    <img
+                        src={item?.sprite ?? ""}
+                        alt={item?.zhName ?? defaultNotFound}
+                        title={item?.zhName ?? defaultNotFound}
+                        className={`characterImg ${isActive}`}
+                        onClick={() => handleClick(item)}
+                        loading="lazy"
+                    />
+                </div>
+                {/* <p>{item?.pokeId ?? "none"}</p> */}
+            </div>
+        );
+    }
+);
 //Pokemon - 顯示圖片和文字
 export const CharacterShowTextImage = ({
     item,

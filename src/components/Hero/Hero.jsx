@@ -33,21 +33,21 @@ const Hero = ({ title, typeClass, children, id }) => {
                 currentScroll.scrollHeight
         ) {
             handleIsLoadingPokemon(true);
-            handleNextPage();
+            // handleNextPage();
         }
     };
 
     //
     // ======= 設定scroll事件 =======
     //
-    useEffect(() => {
-        if (id != ID_SELECT) return;
-        const scrollContainer = document.getElementById(ID_SELECT);
-        scrollContainer.addEventListener("scroll", scrollDown);
-        return () => {
-            scrollContainer.removeEventListener("scroll", scrollDown);
-        };
-    }, [searchPokemon, filterType]);
+    // useEffect(() => {
+    //     if (id != ID_SELECT) return;
+    //     const scrollContainer = document.getElementById(ID_SELECT);
+    //     scrollContainer.addEventListener("scroll", scrollDown);
+    //     return () => {
+    //         scrollContainer.removeEventListener("scroll", scrollDown);
+    //     };
+    // }, [searchPokemon, filterType]);
 
     return (
         <div className="group-col">
@@ -57,13 +57,23 @@ const Hero = ({ title, typeClass, children, id }) => {
             <div id={id} ref={scrollRef} className="groups">
                 <div className={`group-img group-${typeClass}`}>{children}</div>
                 {/* 載入動畫 */}
-                {id === ID_SELECT && isLoadingPokemon && (
+                {/* {id === ID_SELECT && isLoadingPokemon && (
                     <div className="loading-container">
                         <div className="loading"></div>
                     </div>
-                )}
+                )} */}
                 {/* 當使用搜尋&塞選屬性功能時，顯示資訊 */}
-                {id === ID_SELECT &&
+                {id === ID_SELECT && searchPokemon !== "" && (
+                    <div className="search-more-container">
+                        <p>沒有你想要的!</p>
+                    </div>
+                )}
+                {id === ID_SELECT && filterType.enType !== "all" && (
+                    <div className="search-more-container">
+                        <p>沒有更多了</p>
+                    </div>
+                )}
+                {/* {id === ID_SELECT &&
                     (searchPokemon !== "" || filterType.enType !== "all") && (
                         <div className="search-more-container">
                             <p>沒找到你要的嗎?</p>
@@ -77,7 +87,7 @@ const Hero = ({ title, typeClass, children, id }) => {
                                 載入更多
                             </button>
                         </div>
-                    )}
+                    )} */}
                 {/* 顯示推薦傷害的屬性 */}
                 {id === ID_DAMAGE && bestDamage.length > 0 && (
                     <div className={`best-damage-container bg-${bgColor}`}>

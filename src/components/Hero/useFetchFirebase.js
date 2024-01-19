@@ -54,13 +54,13 @@ const createPokemon = (ref, num_shards, props) => {
 //
 // ============ 增加 pokemon 被選擇的次數 ============
 //
-const increasePokemon = (ref, num_shards) => {
+const increasePokemon = (ref, num_shards, count) => {
     const shard_id = Math.floor(Math.random() * num_shards).toString();
     const shard_ref = ref.collection("shards").doc(shard_id);
 
     return shard_ref.update(
         "count",
-        firebase.firestore.FieldValue.increment(1)
+        firebase.firestore.FieldValue.increment(count)
     );
 };
 //
@@ -110,10 +110,22 @@ export const getAllPokemonOrder = async () => {
     }
 };
 
+export const postFirebase_whenClose = (pokemon) => {
+    try {
+        pokemon.forEach((value, key) => {
+            // console.log("post", value, key);
+            postFirebase({ count: value, zhName: key });
+        });
+        console.log("post success");
+    } catch (error) {
+        console.log("post error", error);
+    }
+};
+
 // 將資料POST上Firebase
 export const postFirebase = async (props) => {
     console.log("post data to firebase");
-    const { zhName } = props;
+    const { zhName, count } = props;
     const num_shards = 10;
     const ref = db.collection("popular_pokemon").doc(zhName);
     const isExist = await checkPokemonIsExist(ref, zhName);
@@ -127,7 +139,7 @@ export const postFirebase = async (props) => {
                     `Something wrong when create pokemon, msg:${err.message}`
                 )
             );
-    await increasePokemon(ref, num_shards)
+    await increasePokemon(ref, num_shards, count)
         .then((result) => console.log(`${zhName} count is increase`))
         .catch((err) => console.log(err.message));
 };

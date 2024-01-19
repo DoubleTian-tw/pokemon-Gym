@@ -1,4 +1,4 @@
-import { useContext, createContext, useState } from "react";
+import { useContext, createContext, useState, useCallback } from "react";
 import {
     defaultFilterType,
     heroDropdownItem,
@@ -20,6 +20,12 @@ export const HeroProvider = ({ children }) => {
     // ===================================================
     // 載入的pokemon
     // ===================================================
+    // GraphQL一次取出所有pokemon
+    const [storeAllPokemon, setStoreAllPokemon] = useState([]);
+    const handleStoreAllPokemon = (pokemon) => {
+        setStoreAllPokemon(() => pokemon);
+    };
+
     //目前儲存的pokemon
     const [storePokemon, setStorePokemon] = useState([]);
     //目前是否在loading
@@ -44,6 +50,21 @@ export const HeroProvider = ({ children }) => {
     // ===================================================
     // 目前選中的Image
     // ===================================================
+    const [clickImg, setClickImg] = useState(new Map());
+    const handleClickImg = (item) => {
+        const { zhName } = item;
+        setClickImg((oldVal) => {
+            let newMap = new Map(oldVal);
+            let amount = 1;
+            if (newMap.has(zhName)) {
+                amount = newMap.get(zhName) + 1;
+            }
+            newMap.set(zhName, amount);
+            console.log(newMap);
+            return newMap;
+        });
+    };
+
     const [selectImg, setSelectImg] = useState([]);
     //當Image點擊時移除或加入selectImg
     const AddRemoveImg = (item) => {
@@ -60,8 +81,9 @@ export const HeroProvider = ({ children }) => {
             } else {
                 if (process.env.NODE_ENV === "deploy") {
                     //POST點擊次數
-                    postFirebase(item);
+                    // postFirebase(item);
                 }
+                handleClickImg(item);
                 //追加新的pokemon
                 return [...newSelectImg, item];
             }
@@ -167,6 +189,7 @@ export const HeroProvider = ({ children }) => {
     return (
         <HeroContext.Provider
             value={{
+                clickImg,
                 //=============
                 //Searching pokemon
                 //=============
@@ -175,6 +198,8 @@ export const HeroProvider = ({ children }) => {
                 //=============
                 //載入的pokemon
                 //=============
+                storeAllPokemon,
+                handleStoreAllPokemon,
                 storePokemon,
                 handleStorePokemon,
                 isLoadingPokemon,
