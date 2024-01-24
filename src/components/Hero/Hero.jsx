@@ -1,12 +1,14 @@
 // import "./Hero.css";
 import Dropdowns from "./Dropdowns";
-import { useEffect, useRef } from "react";
-import { ID_DAMAGE, ID_SELECT } from "../../data";
+import { useEffect, useRef, useState } from "react";
+import { DROPDOWN_SHOW_TEXT, ID_DAMAGE, ID_SELECT } from "../../data";
 import { useHeroContext } from "./useHeroContext";
 import { nanoid } from "nanoid";
 import { FaRegThumbsUp } from "react-icons/fa";
 import { ShowType_ColorText } from "./CharacterShowInfo";
 import { useThemeContext } from "../contexts/useTheme";
+import { Button, Modal } from "react-bootstrap";
+import { throttle } from "lodash";
 const Hero = ({ title, typeClass, children, id }) => {
     const { isDarkMode } = useThemeContext();
     const bgColor = isDarkMode ? "darkBg" : "white-50";
@@ -21,34 +23,47 @@ const Hero = ({ title, typeClass, children, id }) => {
         searchPokemon,
         bestDamage,
         filterType,
+        searchMorePokemon,
+        handleSearchMorePokemon,
+        storeAllPokemon,
+        page,
+        handleShowInfo_select,
     } = useHeroContext();
+
     const scrollDown = () => {
         const currentScroll = scrollRef.current;
         //當搜尋&塞選屬性 功能時，不使用下拉載入功能
         if (searchPokemon !== "" || filterType.enType !== "all") return;
-
         if (
             !isLoadingPokemon &&
-            currentScroll.scrollTop + currentScroll.offsetHeight >=
+            currentScroll.scrollTop + currentScroll.clientHeight >=
                 currentScroll.scrollHeight
         ) {
             handleIsLoadingPokemon(true);
-            // handleNextPage();
+            handleNextPage();
         }
     };
 
     //
     // ======= 設定scroll事件 =======
     //
-    // useEffect(() => {
-    //     if (id != ID_SELECT) return;
-    //     const scrollContainer = document.getElementById(ID_SELECT);
-    //     scrollContainer.addEventListener("scroll", scrollDown);
-    //     return () => {
-    //         scrollContainer.removeEventListener("scroll", scrollDown);
-    //     };
-    // }, [searchPokemon, filterType]);
+    useEffect(() => {
+        if (id != ID_SELECT) return;
+        const scrollContainer = document.getElementById(ID_SELECT);
+        const throttleFunction = throttle(scrollDown, 500);
+        scrollContainer.addEventListener("scroll", throttleFunction);
+        return () => {
+            scrollContainer.removeEventListener("scroll", throttleFunction);
+        };
+    }, []);
+    // }, [searchPokemon, filterType, storeAllPokemon, page, isLoadingPokemon]);
 
+    const handleLoadingModal = (ifShowTextOnly) => {
+        handleSearchMorePokemon();
+        handleNextPage(storeAllPokemon.length);
+        handleIsLoadingPokemon(true);
+        if (ifShowTextOnly) handleShowInfo_select(DROPDOWN_SHOW_TEXT, "");
+    };
     return (
         <div className="group-col">
             {/* 下拉選單 */}
@@ -63,17 +78,7 @@ const Hero = ({ title, typeClass, children, id }) => {
                     </div>
                 )} */}
                 {/* 當使用搜尋&塞選屬性功能時，顯示資訊 */}
-                {id === ID_SELECT && searchPokemon !== "" && (
-                    <div className="search-more-container">
-                        <p>沒有你想要的!</p>
-                    </div>
-                )}
-                {id === ID_SELECT && filterType.enType !== "all" && (
-                    <div className="search-more-container">
-                        <p>沒有更多了</p>
-                    </div>
-                )}
-                {/* {id === ID_SELECT &&
+                {id === ID_SELECT &&
                     (searchPokemon !== "" || filterType.enType !== "all") && (
                         <div className="search-more-container">
                             <p>沒找到你要的嗎?</p>
@@ -81,13 +86,41 @@ const Hero = ({ title, typeClass, children, id }) => {
                                 type="button"
                                 className="btn btn-primary btn-sm"
                                 onClick={() => {
-                                    handleIsLoadingPokemon(true);
-                                    handleNextPage();
+                                    handleSearchMorePokemon();
                                 }}>
-                                載入更多
+                                載入全部
                             </button>
+                            <Modal
+                                show={searchMorePokemon}
+                                onHide={handleSearchMorePokemon}
+                                animation={true}>
+                                <Modal.Header
+                                    className={`bg-${bgColor}`}
+                                    closeButton>
+                                    <Modal.Title>提示</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body className={`bg-${bgColor}`}>
+                                    自動切換為僅顯示角色名稱，以提高效能
+                                </Modal.Body>
+                                <Modal.Footer className={`bg-${bgColor}`}>
+                                    <Button
+                                        variant="secondary"
+                                        onClick={() => {
+                                            handleLoadingModal(false);
+                                        }}>
+                                        不用了
+                                    </Button>
+                                    <Button
+                                        variant="primary"
+                                        onClick={() => {
+                                            handleLoadingModal(true);
+                                        }}>
+                                        沒問題
+                                    </Button>
+                                </Modal.Footer>
+                            </Modal>
                         </div>
-                    )} */}
+                    )}
                 {/* 顯示推薦傷害的屬性 */}
                 {id === ID_DAMAGE && bestDamage.length > 0 && (
                     <div className={`best-damage-container bg-${bgColor}`}>

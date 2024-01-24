@@ -1,11 +1,12 @@
 import { memo } from "react";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 import { Link } from "react-router-dom";
 const DEFAULT_TEXT = "error";
 const DEFAULT_COLOR = "white";
 const DEFAULT_BG_COLOR = "black";
 const defaultNotFound = "not found";
 //屬性 - 單純文字
-export const ShowType_Text = ({ bgColor, zhType }) => {
+export const ShowType_Text = memo(({ bgColor, zhType }) => {
     return (
         <a href="#">
             <span
@@ -17,9 +18,9 @@ export const ShowType_Text = ({ bgColor, zhType }) => {
             </span>
         </a>
     );
-};
+});
 //屬性 - 單純顏色
-export const ShowType_Color = ({ bgColor }) => {
+export const ShowType_Color = memo(({ bgColor }) => {
     return (
         <a href="#">
             <span
@@ -31,9 +32,9 @@ export const ShowType_Color = ({ bgColor }) => {
             </span>
         </a>
     );
-};
+});
 //屬性 - 顏色+文字
-export const ShowType_ColorText = ({ bgColor, zhType, enType }) => {
+export const ShowType_ColorText = memo(({ bgColor, zhType, enType }) => {
     return (
         // <a href="#">
         <Link to={`type/${enType}`}>
@@ -47,26 +48,23 @@ export const ShowType_ColorText = ({ bgColor, zhType, enType }) => {
         </Link>
         // </a>
     );
-};
+});
 
 //Pokemon - 顯示文字
-export const CharacterShowText = ({
-    item,
-    isActive,
-    handleClick,
-    children,
-}) => {
-    return (
-        <div
-            className={`characterText ${isActive}`}
-            onClick={() => handleClick(item)}>
-            <span className="characterName">
-                {item?.zhName ?? defaultNotFound}
-            </span>
-            {children}
-        </div>
-    );
-};
+export const CharacterShowText = memo(
+    ({ item, isActive, handleClick, children }) => {
+        return (
+            <div
+                className={`characterText ${isActive}`}
+                onClick={() => handleClick(item)}>
+                <span className="characterName">
+                    {item?.zhName ?? defaultNotFound}
+                </span>
+                {children}
+            </div>
+        );
+    }
+);
 //Pokemon - 顯示圖片
 export const CharacterShowImage = memo(
     ({ item, isActive, handleClick, children }) => {
@@ -85,6 +83,14 @@ export const CharacterShowImage = memo(
                         onClick={() => handleClick(item)}
                         loading="lazy"
                     />
+                    {/* <LazyLoadImage
+                        src={item?.sprite ?? ""}
+                        alt={item?.zhName ?? defaultNotFound}
+                        title={item?.zhName ?? defaultNotFound}
+                        className={`characterImg ${isActive}`}
+                        onClick={() => handleClick(item)}
+                        effect="blur"
+                    /> */}
                 </div>
                 {/* <p>{item?.pokeId ?? "none"}</p> */}
             </div>

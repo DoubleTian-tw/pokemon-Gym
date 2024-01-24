@@ -13,13 +13,16 @@ import {
     filterPopularPokemon,
     postFirebase_whenClose,
 } from "./useFetchFirebase";
-import { Suspense, lazy, useEffect, useState } from "react";
+import { Suspense, lazy, useEffect, useMemo, useState } from "react";
 import Loading from "../Loading";
+import { Button, Modal } from "react-bootstrap";
+import { throttle } from "lodash";
 
 const CharacterGroupsLoading = lazy(() => import("./CharacterGroups.jsx"));
 
 const Heros = () => {
     const {
+        page,
         clickImg,
         selectImg,
         AddRemoveImg,
@@ -30,7 +33,6 @@ const Heros = () => {
         showType_beenSelect,
         showInfo_bestDamage,
         showType_bestDamage,
-        storePokemon,
         storeAllPokemon,
         bestDamage,
         filterBestPokemon,
@@ -42,15 +44,17 @@ const Heros = () => {
     //get best damage
     getBestDamage();
     if (process.env.NODE_ENV === "production") {
+        console.log("production");
         //fetch firebase data
         fetchPopularPokemon();
         //filter popular pokemon
         filterPopularPokemon();
     }
+
+    //判斷使用者關閉或重新整理頁面時，將資料上傳到firebase中
     useEffect(() => {
         const handleTabClose = (event) => {
             event.preventDefault();
-            // alert("beforeunload event triggered");
             if (clickImg.size > 0) postFirebase_whenClose(clickImg);
             return (event.returnValue = "Are you sure you want to exit?");
         };
@@ -59,6 +63,7 @@ const Heros = () => {
             window.removeEventListener("onbeforeunload", handleTabClose);
         };
     }, [clickImg]);
+
     return (
         <main>
             <section className="hero">
@@ -71,7 +76,7 @@ const Heros = () => {
                         <CharacterGroupsLoading
                             showInfo_select={showInfo_select.type}
                             showType_select={showType_select.type}
-                            displayCharacter={storeAllPokemon}
+                            displayCharacter={storeAllPokemon.slice(0, page)}
                             // displayCharacter={storePokemon}
                             handleClick={AddRemoveImg}
                             id={ID_SELECT}

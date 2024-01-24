@@ -32,6 +32,7 @@ const BtnGroup = ({ children }) => {
 
 const BtnContainer = ({ children, selectType, handleOnClick, types }) => {
     const { type, title } = types;
+
     return (
         <>
             <Button
@@ -238,7 +239,7 @@ const DropdownFilterType = () => {
                     variant="outline-myInfo"
                     className="button-hover"
                     id="t-dropdownBtnFilterType">
-                    <span>塞選屬性 : {filterType.zhType || "error"}</span>
+                    <span>篩選屬性 : {filterType.zhType || "error"}</span>
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu

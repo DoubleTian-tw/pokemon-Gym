@@ -6,7 +6,7 @@ import { useHeroContext } from "./useHeroContext";
 const URL = "https://pokeapi.co/api/v2/pokemon-species/";
 const URL_Types = "https://pokeapi.co/api/v2/type/";
 const ZH = "zh-Hant";
-export const NEXT_LIMIT = 50;
+export const NEXT_LIMIT = 100;
 
 export const axiosData = ({ offset = 0, limit = NEXT_LIMIT }) => {
     return axios({
@@ -181,7 +181,7 @@ export const useGraphQLFetchPokemon = () => {
                     damage_relations: 0,
                 };
             } catch (error) {
-                console.log(index, obj, error);
+                // console.log(index, obj, error.message);
             }
         });
         handleStoreAllPokemon(renameObj);

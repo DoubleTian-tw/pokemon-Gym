@@ -31,20 +31,25 @@ export const HeroProvider = ({ children }) => {
     //目前是否在loading
     const [isLoadingPokemon, setIsLoadingPokemon] = useState(false);
     //載入的頁數
-    const [page, setPage] = useState(0);
+    const [page, setPage] = useState(100);
+
     //搜尋不到pokemon是否載入更多?
     const [searchMorePokemon, setSearchMorePokemon] = useState(false);
+
     const handleStorePokemon = (newValue) => {
         setStorePokemon((currentValue) => [...currentValue, ...newValue]);
     };
     const handleIsLoadingPokemon = (state) => {
-        setIsLoadingPokemon(() => state ?? isLoadingPokemon);
+        setIsLoadingPokemon(() => state);
     };
-    const handleNextPage = () => {
-        setPage((currentValue) => currentValue + NEXT_LIMIT);
+    const handleNextPage = (page) => {
+        setPage((prev) => {
+            if (page) return page;
+            return prev + 100;
+        });
     };
-    const handleSearchMorePokemon = (state) => {
-        setSearchMorePokemon(() => state);
+    const handleSearchMorePokemon = () => {
+        setSearchMorePokemon((val) => !val);
     };
 
     // ===================================================

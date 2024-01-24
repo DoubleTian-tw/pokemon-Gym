@@ -60,7 +60,8 @@ const CharacterGroups = memo(
         handleClick,
         id,
     }) => {
-        const { selectImg, searchPokemon, filterType } = useHeroContext();
+        const { selectImg, searchPokemon, filterType, handleIsLoadingPokemon } =
+            useHeroContext();
 
         let mappingCharacter = displayCharacter;
         if (id === ID_SELECT) {
@@ -78,7 +79,6 @@ const CharacterGroups = memo(
                     );
                     return result.length > 0;
                 });
-            //優先顯示前N筆
         }
 
         return mappingCharacter.map((item) => {

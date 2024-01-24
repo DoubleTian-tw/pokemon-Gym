@@ -8,8 +8,8 @@ const getInitialDarkMode = () => {
         "(prefers-color-scheme:dark)"
     ).matches;
     const localDarkMode = localStorage.getItem(DARK_THEME) === "true";
-    console.log("preferTheme", preferDarkMode);
-    console.log("localTheme", localDarkMode);
+    // console.log("preferTheme", preferDarkMode);
+    // console.log("localTheme", localDarkMode);
     return localDarkMode || preferDarkMode;
 };
 
