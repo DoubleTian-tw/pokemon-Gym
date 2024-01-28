@@ -63,7 +63,31 @@ const Heros = () => {
             window.removeEventListener("beforeunload", handleTabClose);
         };
     }, [clickImg]);
-
+    const CheckBestDamage = () => {
+        if (selectImg.length === 0) return;
+        if (bestDamage.length === 0)
+            return <p className="best-damage-no-data">沒有共同相剋的屬性!</p>;
+        // return <p className="best-damage-no-data">沒有共同相剋的屬性!</p>;
+        if (filterBestPokemon.length > 0) {
+            return (
+                <CharacterGroups
+                    showInfo_select={showInfo_bestDamage.type}
+                    showType_select={showType_bestDamage.type}
+                    displayCharacter={filterBestPokemon}
+                />
+            );
+        } else {
+            return (
+                // <p className="best-damage-no-data">
+                <>
+                    <p></p>
+                    <p className="best-damage-no-data">
+                        目前沒有推薦屬性的神奇寶貝
+                    </p>
+                </>
+            );
+        }
+    };
     return (
         <main>
             <section className="hero">
@@ -101,17 +125,7 @@ const Heros = () => {
                     // typeClass="damageFrom"
                     typeClass={showInfo_bestDamage.type}
                     id={ID_DAMAGE}>
-                    {bestDamage.length > 0 &&
-                        (filterBestPokemon.length > 0 ? (
-                            <CharacterGroups
-                                showInfo_select={showInfo_bestDamage.type}
-                                showType_select={showType_bestDamage.type}
-                                displayCharacter={filterBestPokemon}
-                                handleClick={() => {}}
-                            />
-                        ) : (
-                            <p className="">目前沒有推薦屬性的神奇寶貝</p>
-                        ))}
+                    <CheckBestDamage></CheckBestDamage>
                 </Hero>
             </section>
         </main>

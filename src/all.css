@@ -12382,6 +12382,7 @@ footer {
   gap: 1rem;
 }
 .hero .groups {
+  position: relative;
   display: block;
   height: 30vh;
   box-shadow: var(--shadow);
@@ -12427,6 +12428,12 @@ footer {
 }
 
 /* === 最佳屬性攻擊 === */
+.best-damage-no-data {
+  position: absolute;
+  top: 10px;
+  left: 20px;
+}
+
 .best-damage-container {
   padding-left: 0.5rem;
   position: sticky;
