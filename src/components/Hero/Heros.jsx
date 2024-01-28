@@ -45,11 +45,11 @@ const Heros = () => {
     getBestDamage();
     if (process.env.NODE_ENV === "production") {
         console.log("production");
-        //fetch firebase data
-        fetchPopularPokemon();
-        //filter popular pokemon
-        filterPopularPokemon();
     }
+    //fetch firebase data
+    fetchPopularPokemon();
+    //filter popular pokemon
+    filterPopularPokemon();
 
     //判斷使用者關閉或重新整理頁面時，將資料上傳到firebase中
     useEffect(() => {
@@ -58,9 +58,9 @@ const Heros = () => {
             if (clickImg.size > 0) postFirebase_whenClose(clickImg);
             return (event.returnValue = "Are you sure you want to exit?");
         };
-        window.addEventListener("onbeforeunload", handleTabClose);
+        window.addEventListener("beforeunload", handleTabClose);
         return () => {
-            window.removeEventListener("onbeforeunload", handleTabClose);
+            window.removeEventListener("beforeunload", handleTabClose);
         };
     }, [clickImg]);
 
@@ -110,9 +110,7 @@ const Heros = () => {
                                 handleClick={() => {}}
                             />
                         ) : (
-                            <p className="">
-                                Oops! 看起來推薦屬性還沒有pokemon被選擇呢!
-                            </p>
+                            <p className="">目前沒有推薦屬性的神奇寶貝</p>
                         ))}
                 </Hero>
             </section>

@@ -62,9 +62,9 @@ export const HeroProvider = ({ children }) => {
             let newMap = new Map(oldVal);
             let amount = 1;
             if (newMap.has(zhName)) {
-                amount = newMap.get(zhName) + 1;
+                amount = newMap.get(zhName).amount + 1;
             }
-            newMap.set(zhName, amount);
+            newMap.set(zhName, { amount, ...item });
             console.log(newMap);
             return newMap;
         });

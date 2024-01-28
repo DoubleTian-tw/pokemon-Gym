@@ -34,12 +34,15 @@ const createPokemon = (ref, num_shards, props) => {
     const batch = db.batch();
     //初始化執行序數量
     batch.set(ref, {
-        sprite,
-        pokeId,
-        zhName,
         enName,
-        types: Types,
-        num_shards,
+        // details: {
+        //     zhName,
+        //     enName,
+        //     sprite,
+        //     pokeId,
+        //     types: Types,
+        // },
+        // num_shards,
     });
 
     //初始化各執行序 count = 0
@@ -85,14 +88,15 @@ const increasePokemon = (ref, num_shards, count) => {
 export const getAllPokemonOrder = async () => {
     console.log("get all pokemon order");
     try {
-        const allDocs = await db.collection("popular_pokemon").get();
+        // const allDocs = await db.collection("popular_pokemon").get();
+        const allDocs = await db.collection("popular_pokemon_v2").get();
         if (!allDocs) return;
         const allPromise = allDocs.docs.map(async (docs) => {
-            const zhName = docs.data().zhName;
             const enName = docs.data().enName;
-            const Types = docs.data().types;
-            const pokeId = docs.data().pokeId;
-            const sprite = docs.data().sprite;
+            // const zhName = docs.data().zhName;
+            // const Types = docs.data().types;
+            // const pokeId = docs.data().pokeId;
+            // const sprite = docs.data().sprite;
             const docsRef = docs.ref;
             const shards = await docsRef.collection("shards").get();
             if (!shards) return;
@@ -100,8 +104,9 @@ export const getAllPokemonOrder = async () => {
             shards.forEach((snap) => {
                 total += snap.data().count;
             });
-            // return { zhName, total };
-            return { total, Types, enName, zhName, pokeId, sprite };
+            // console.log(enName, total);
+            return { enName, total };
+            // return { total, Types, enName, zhName, pokeId, sprite };
         });
         const allTotal = await Promise.all(allPromise);
         return allTotal;
@@ -113,8 +118,7 @@ export const getAllPokemonOrder = async () => {
 export const postFirebase_whenClose = (pokemon) => {
     try {
         pokemon.forEach((value, key) => {
-            // console.log("post", value, key);
-            postFirebase({ count: value, zhName: key });
+            postFirebase({ value: value, zhName: key });
         });
         console.log("post success");
     } catch (error) {
@@ -125,12 +129,13 @@ export const postFirebase_whenClose = (pokemon) => {
 // 將資料POST上Firebase
 export const postFirebase = async (props) => {
     console.log("post data to firebase");
-    const { zhName, count } = props;
+    const { zhName, value } = props;
     const num_shards = 10;
-    const ref = db.collection("popular_pokemon").doc(zhName);
+    const ref = db.collection("popular_pokemon_v2").doc(zhName);
+    // const ref = db.collection("popular_pokemon").doc(zhName);
     const isExist = await checkPokemonIsExist(ref, zhName);
     if (!isExist)
-        createPokemon(ref, num_shards, props)
+        createPokemon(ref, num_shards, value)
             .then((result) =>
                 console.log(`Create new pokemon ${zhName} successful.`)
             )
@@ -139,7 +144,7 @@ export const postFirebase = async (props) => {
                     `Something wrong when create pokemon, msg:${err.message}`
                 )
             );
-    await increasePokemon(ref, num_shards, count)
+    await increasePokemon(ref, num_shards, value.amount)
         .then((result) => console.log(`${zhName} count is increase`))
         .catch((err) => console.log(err.message));
 };
@@ -162,10 +167,21 @@ export const fetchPopularPokemon = () => {
 };
 
 export const filterPopularPokemon = () => {
-    const { bestDamage, popularPokemon, handleFilterBestPokemon } =
-        useHeroContext();
+    const {
+        bestDamage,
+        popularPokemon,
+        storeAllPokemon,
+        handleFilterBestPokemon,
+    } = useHeroContext();
     useEffect(() => {
-        const newArr = (popularPokemon ?? []).filter((pokemon) => {
+        const filterPokemon = storeAllPokemon.filter((allItem) => {
+            if (allItem === undefined) return;
+            return popularPokemon.some(
+                (popularItem) => allItem.enName === popularItem.enName
+            );
+        });
+
+        const bestPokemon = (filterPokemon ?? []).filter((pokemon) => {
             let isReturn = false;
             pokemon.Types.forEach((type) => {
                 bestDamage.forEach((best) => {
@@ -174,6 +190,16 @@ export const filterPopularPokemon = () => {
             });
             if (isReturn) return pokemon;
         });
-        handleFilterBestPokemon(newArr);
+        handleFilterBestPokemon(bestPokemon);
+        // const newArr = (popularPokemon ?? []).filter((pokemon) => {
+        //     let isReturn = false;
+        //     pokemon.Types.forEach((type) => {
+        //         bestDamage.forEach((best) => {
+        //             if (best.zhType === type.zhType) isReturn = true;
+        //         });
+        //     });
+        //     if (isReturn) return pokemon;
+        // });
+        // handleFilterBestPokemon(newArr);
     }, [bestDamage]);
 };
