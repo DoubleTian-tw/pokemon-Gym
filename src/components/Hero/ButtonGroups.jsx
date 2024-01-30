@@ -9,12 +9,14 @@ import {
     ID_BEEN_SELECT,
     ID_DAMAGE,
     ID_SELECT,
+    allTier,
     allType,
     defaultFilterType,
 } from "../../data";
 import defaultImage from "../../images/25.png";
 import { useHeroContext } from "./useHeroContext";
 import { Dropdown, ButtonGroup, Button } from "react-bootstrap";
+import { memo } from "react";
 
 const BtnGroup = ({ children }) => {
     return (
@@ -239,7 +241,7 @@ const DropdownFilterType = () => {
                     variant="outline-myInfo"
                     className="button-hover"
                     id="t-dropdownBtnFilterType">
-                    <span>篩選屬性 : {filterType.zhType || "error"}</span>
+                    <span>篩選屬性 : {filterType.zhName || "error"}</span>
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu
@@ -256,7 +258,7 @@ const DropdownFilterType = () => {
                         <span>全部</span>
                     </Dropdown.Item>
                     {allType.map((type) => {
-                        const { zhType, bgColor } = type;
+                        const { zhName, bgColor } = type;
                         return (
                             <Dropdown.Item
                                 key={nanoid()}
@@ -264,7 +266,7 @@ const DropdownFilterType = () => {
                                 className="dropdown-type"
                                 style={{ backgroundColor: bgColor }}
                                 onClick={() => handleFilterType(type)}>
-                                <span>{zhType}</span>
+                                <span>{zhName}</span>
                             </Dropdown.Item>
                         );
                     })}
@@ -273,6 +275,70 @@ const DropdownFilterType = () => {
         </>
     );
 };
+
+const FilterTier = () => {
+    const { filterTier, handleFilterTier } = useHeroContext();
+    return (
+        <DropdownFilter
+            filterTitle="等級"
+            filterZh={filterTier.zhName}
+            handleOnClick={handleFilterTier}
+            data={allTier}
+        />
+    );
+};
+
+const DropdownFilter = memo(
+    ({ filterTitle, filterZh, handleOnClick, data }) => {
+        const defaultBgColor = { backgroundColor: "#17CCF0" };
+        return (
+            <>
+                <Dropdown>
+                    <Dropdown.Toggle
+                        variant="outline-myInfo"
+                        className="button-hover"
+                        id="t-dropdownBtnTier">
+                        <span>
+                            {filterTitle} : {filterZh || "error"}
+                        </span>
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu
+                        style={{
+                            width: "auto",
+                            height: "150px",
+                            overflowY: "auto",
+                        }}>
+                        <Dropdown.Item
+                            as="button"
+                            className="dropdown-type"
+                            style={defaultBgColor}
+                            onClick={() => handleOnClick(defaultFilterType)}>
+                            <span>全部</span>
+                        </Dropdown.Item>
+                        {data.map((type) => {
+                            const { zhName, bgColor } = type;
+                            return (
+                                <Dropdown.Item
+                                    key={nanoid()}
+                                    as="button"
+                                    className="dropdown-type"
+                                    onClick={() => handleOnClick(type)}
+                                    style={
+                                        bgColor === ""
+                                            ? defaultBgColor
+                                            : { backgroundColor: bgColor }
+                                    }>
+                                    <span>{zhName}</span>
+                                </Dropdown.Item>
+                            );
+                        })}
+                    </Dropdown.Menu>
+                </Dropdown>
+            </>
+        );
+    }
+);
 const ButtonGroups = ({ id }) => {
     return (
         <>
@@ -286,7 +352,8 @@ const ButtonGroups = ({ id }) => {
             </BtnGroup>
             {/* 塞選屬性 */}
             {id === ID_SELECT && <DropdownFilterType />}
-            {/* 道館常見排名 */}
+            {/* 推薦tier常見排名 */}
+            {id === ID_DAMAGE && <FilterTier />}
         </>
     );
 };

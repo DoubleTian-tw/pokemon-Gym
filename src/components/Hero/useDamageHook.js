@@ -34,7 +34,7 @@ const useBestDamage = () => {
         });
         //返回含有allType物件類型的值
         const result = allType.filter((type) => {
-            if (bestDamageSet.has(type.enType)) return type;
+            if (bestDamageSet.has(type.enName)) return type;
         });
         handleBestDamage(result);
         // handleBestDamage(Array.from(bestDamageSet));

@@ -4,12 +4,17 @@ import {
     heroDropdownItem,
     heroDropdownItem_showType,
 } from "../../data";
-import { postFirebase } from "./useFetchFirebase";
-import { NEXT_LIMIT } from "./useQueryPokedex";
 
 const HeroContext = createContext();
 
 export const HeroProvider = ({ children }) => {
+    // ===================================================
+    // Tier pokemon
+    // ===================================================
+    const [tierPokemon, setTierPokemon] = useState({});
+    const handleTierPokemon = (data) => {
+        setTierPokemon(() => data);
+    };
     // ===================================================
     // Searching pokemon
     // ===================================================
@@ -173,13 +178,21 @@ export const HeroProvider = ({ children }) => {
     const handleShowType_bestDamage = (type, title) => {
         setShowType_bestDamage({ type, title });
     };
-    //塞選屬性方式
+    //篩選屬性方式
     const [filterType, setFilterType] = useState(defaultFilterType);
-    const handleFilterType = ({ enType, zhType, bgColor }) => {
+    const handleFilterType = ({ enName, zhName, bgColor }) => {
         setFilterType(() => {
-            return { enType, zhType, bgColor };
+            return { enName, zhName, bgColor };
         });
     };
+    //篩選等級
+    const [filterTier, setFilterTier] = useState(defaultFilterType);
+    const handleFilterTier = ({ enName, zhName, bgColor }) => {
+        setFilterTier(() => {
+            return { enName, zhName, bgColor };
+        });
+    };
+
     // ===================================================
     // 從firebase讀取的資料
     // ===================================================
@@ -194,6 +207,11 @@ export const HeroProvider = ({ children }) => {
     return (
         <HeroContext.Provider
             value={{
+                //=============
+                //Tier pokemon
+                //=============
+                tierPokemon,
+                handleTierPokemon,
                 clickImg,
                 //=============
                 //Searching pokemon
@@ -235,6 +253,7 @@ export const HeroProvider = ({ children }) => {
                 showInfo_bestDamage,
                 showType_bestDamage,
                 filterType,
+                filterTier,
                 handleShowInfo_select,
                 handleShowType_select,
                 handleShowInfo_beenSelect,
@@ -242,6 +261,7 @@ export const HeroProvider = ({ children }) => {
                 handleShowInfo_bestDamage,
                 handleShowType_bestDamage,
                 handleFilterType,
+                handleFilterTier,
                 //=============
                 // Firebase data
                 //=============

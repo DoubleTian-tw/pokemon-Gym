@@ -5,6 +5,7 @@ import {
     DROPDOWN_SHOW_IMAGE_TEXT,
     DROPDOWN_SHOW_TEXT,
     ID_SELECT,
+    allTier,
 } from "../../data";
 import { nanoid } from "nanoid";
 import { useHeroContext } from "./useHeroContext";
@@ -51,6 +52,126 @@ const CharacterShowType = memo(({ item, showType_select, styleObj }) => {
     );
 });
 
+const ShowInfoSelect = ({
+    showInfo_select = DROPDOWN_SHOW_IMAGE,
+    showType_select,
+    item,
+    isActive = "",
+    handleClick = () => {},
+}) => {
+    switch (showInfo_select) {
+        case DROPDOWN_SHOW_TEXT: //只顯示文字
+            return (
+                <CharacterShowText
+                    // key={nanoid()}
+                    isActive={isActive}
+                    handleClick={handleClick}
+                    item={item}>
+                    <CharacterShowType
+                        styleObj={{
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "space-evenly",
+                        }}
+                        item={item}
+                        showType_select={showType_select}
+                        showInfo_select={showInfo_select}
+                    />
+                </CharacterShowText>
+            );
+        case DROPDOWN_SHOW_IMAGE_TEXT: //圖片加文字
+            return (
+                <CharacterShowTextImage
+                    isActive={isActive}
+                    item={item}
+                    // key={nanoid()}
+                    handleClick={handleClick}>
+                    <CharacterShowType
+                        styleObj={{
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "start",
+                            gap: "0.3rem",
+                        }}
+                        item={item}
+                        showType_select={showType_select}
+                        showInfo_select={showInfo_select}
+                    />
+                </CharacterShowTextImage>
+            );
+
+        case DROPDOWN_SHOW_IMAGE: //預設 : 只顯示圖片
+            return (
+                <CharacterShowImage
+                    isActive={isActive}
+                    handleClick={handleClick}
+                    // key={nanoid()}
+                    item={item}>
+                    <CharacterShowType
+                        styleObj={{
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-around",
+                            alignItems: "center",
+                        }}
+                        item={item}
+                        showType_select={showType_select}
+                        showInfo_select={showInfo_select}
+                    />
+                </CharacterShowImage>
+            );
+    }
+};
+
+export const TierGroups = memo(
+    ({ showInfo_select, showType_select, displayTier, bestDamage }) => {
+        const { filterTier } = useHeroContext();
+        //篩選等級，全部或各別等級
+        const currentTier =
+            filterTier.enName !== "all" ? [{ ...filterTier }] : allTier;
+        return (
+            <>
+                {currentTier.map((tier) => {
+                    const { enName, zhName } = tier;
+                    let characters = displayTier[enName];
+                    if (characters === undefined) return;
+
+                    //篩選角色屬性
+                    characters = characters.filter((character) => {
+                        const { Types } = character;
+                        return Types.some((characterType) =>
+                            bestDamage.some(
+                                (bestType) =>
+                                    characterType.enName === bestType.enName
+                            )
+                        );
+                    });
+                    return (
+                        <>
+                            <div key={nanoid()}>
+                                <div>=====</div>
+                                <div>以下是{zhName}</div>
+                                <div>=====</div>
+                            </div>
+                            {characters.map((item) => {
+                                if (item === undefined) return;
+                                return (
+                                    <ShowInfoSelect
+                                        item={item}
+                                        showInfo_select={showInfo_select}
+                                        showType_select={showType_select}
+                                        key={nanoid()}
+                                    />
+                                );
+                            })}
+                        </>
+                    );
+                })}
+            </>
+        );
+    }
+);
+
 //角色群組
 const CharacterGroups = memo(
     ({
@@ -60,8 +181,7 @@ const CharacterGroups = memo(
         handleClick,
         id,
     }) => {
-        const { selectImg, searchPokemon, filterType, handleIsLoadingPokemon } =
-            useHeroContext();
+        const { selectImg, searchPokemon, filterType } = useHeroContext();
 
         let mappingCharacter = displayCharacter;
         if (id === ID_SELECT) {
@@ -71,11 +191,11 @@ const CharacterGroups = memo(
                     return character?.zhName.includes(searchPokemon);
                 });
             }
-            //塞選屬性
-            if (filterType.enType !== "all")
+            // 塞選屬性;
+            if (filterType.enName !== "all")
                 mappingCharacter = mappingCharacter.filter((character) => {
                     const result = character.Types.filter(
-                        (type) => type.enType === filterType.enType
+                        (type) => type.enName === filterType.enName
                     );
                     return result.length > 0;
                 });
@@ -87,69 +207,78 @@ const CharacterGroups = memo(
                 (img) => img.enName === item.enName
             );
             const isActive = isSameImg ? "hero-active" : "";
+            return (
+                <ShowInfoSelect
+                    showInfo_select={showInfo_select}
+                    showType_select={showType_select}
+                    item={item}
+                    isActive={isActive}
+                    handleClick={handleClick}
+                    key={nanoid()}
+                />
+            );
+            // switch (showInfo_select) {
+            //     case DROPDOWN_SHOW_TEXT: //只顯示文字
+            //         return (
+            //             <CharacterShowText
+            //                 key={nanoid()}
+            //                 isActive={isActive}
+            //                 handleClick={handleClick}
+            //                 item={item}>
+            //                 <CharacterShowType
+            //                     styleObj={{
+            //                         display: "flex",
+            //                         flexDirection: "row",
+            //                         justifyContent: "space-evenly",
+            //                     }}
+            //                     item={item}
+            //                     showType_select={showType_select}
+            //                     showInfo_select={showInfo_select}
+            //                 />
+            //             </CharacterShowText>
+            //         );
+            //     case DROPDOWN_SHOW_IMAGE_TEXT: //圖片加文字
+            //         return (
+            //             <CharacterShowTextImage
+            //                 isActive={isActive}
+            //                 item={item}
+            //                 handleClick={handleClick}
+            //                 key={nanoid()}>
+            //                 <CharacterShowType
+            //                     styleObj={{
+            //                         display: "flex",
+            //                         flexDirection: "row",
+            //                         justifyContent: "start",
+            //                         gap: "0.3rem",
+            //                     }}
+            //                     item={item}
+            //                     showType_select={showType_select}
+            //                     showInfo_select={showInfo_select}
+            //                 />
+            //             </CharacterShowTextImage>
+            //         );
 
-            switch (showInfo_select) {
-                case DROPDOWN_SHOW_TEXT: //只顯示文字
-                    return (
-                        <CharacterShowText
-                            key={nanoid()}
-                            isActive={isActive}
-                            handleClick={handleClick}
-                            item={item}>
-                            <CharacterShowType
-                                styleObj={{
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    justifyContent: "space-evenly",
-                                }}
-                                item={item}
-                                showType_select={showType_select}
-                                showInfo_select={showInfo_select}
-                            />
-                        </CharacterShowText>
-                    );
-                case DROPDOWN_SHOW_IMAGE_TEXT: //圖片加文字
-                    return (
-                        <CharacterShowTextImage
-                            isActive={isActive}
-                            item={item}
-                            handleClick={handleClick}
-                            key={nanoid()}>
-                            <CharacterShowType
-                                styleObj={{
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    justifyContent: "start",
-                                    gap: "0.3rem",
-                                }}
-                                item={item}
-                                showType_select={showType_select}
-                                showInfo_select={showInfo_select}
-                            />
-                        </CharacterShowTextImage>
-                    );
-
-                case DROPDOWN_SHOW_IMAGE: //預設 : 只顯示圖片
-                    return (
-                        <CharacterShowImage
-                            isActive={isActive}
-                            handleClick={handleClick}
-                            item={item}
-                            key={nanoid()}>
-                            <CharacterShowType
-                                styleObj={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    justifyContent: "space-around",
-                                    alignItems: "center",
-                                }}
-                                item={item}
-                                showType_select={showType_select}
-                                showInfo_select={showInfo_select}
-                            />
-                        </CharacterShowImage>
-                    );
-            }
+            //     case DROPDOWN_SHOW_IMAGE: //預設 : 只顯示圖片
+            //         return (
+            //             <CharacterShowImage
+            //                 isActive={isActive}
+            //                 handleClick={handleClick}
+            //                 item={item}
+            //                 key={nanoid()}>
+            //                 <CharacterShowType
+            //                     styleObj={{
+            //                         display: "flex",
+            //                         flexDirection: "column",
+            //                         justifyContent: "space-around",
+            //                         alignItems: "center",
+            //                     }}
+            //                     item={item}
+            //                     showType_select={showType_select}
+            //                     showInfo_select={showInfo_select}
+            //                 />
+            //             </CharacterShowImage>
+            //         );
+            // }
         });
     }
 );

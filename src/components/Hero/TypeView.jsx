@@ -8,7 +8,7 @@ import { useThemeContext } from "../contexts/useTheme";
 // 透過屬性名稱，取得data.js中allType的資訊 - 顏色、中文屬性等等
 const getDamageDetail = (item) => {
     return item.map(
-        ({ name }) => allType.filter(({ enType }) => name === enType)[0]
+        ({ name }) => allType.filter(({ enName }) => name === enName)[0]
     );
 };
 // 顯示Modal內詳細屬性資訊
@@ -20,7 +20,7 @@ const DamageDetail = ({ title, detail_item, textColor }) => {
                 {detail_item.length === 0 ? (
                     <span className={`text-${textColor}`}>-</span>
                 ) : (
-                    detail_item.map(({ zhType, bgColor }) => {
+                    detail_item.map(({ zhName, bgColor }) => {
                         return (
                             <span
                                 key={nanoid()}
@@ -29,7 +29,7 @@ const DamageDetail = ({ title, detail_item, textColor }) => {
                                     backgroundColor: bgColor,
                                     cursor: "pointer",
                                 }}>
-                                {zhType}
+                                {zhName}
                             </span>
                         );
                     })
@@ -44,8 +44,8 @@ const TypeView = () => {
     let navigate = useNavigate();
     let { type } = useParams();
     //取得目前顯示屬性的資訊
-    let typeFromData = allType.filter((t) => t.enType === type)[0];
-    let zhType = typeFromData?.zhType;
+    let typeFromData = allType.filter((t) => t.enName === type)[0];
+    let zhName = typeFromData?.zhName;
     let color = typeFromData?.bgColor;
     //取得目前屬性的傷害關係表
     let typeInfo = storeAllTypes.filter((t) => t.name === type)[0];
@@ -86,7 +86,7 @@ const TypeView = () => {
                 closeButton
                 className={isDarkMode ? "bg-darkBg" : "text-white-50"}>
                 <Modal.Title>
-                    <span style={{ color: color }}>{zhType}</span>
+                    <span style={{ color: color }}>{zhName}</span>
                     <span className={`text-${textColor}`}>屬性</span>
                 </Modal.Title>
             </Modal.Header>

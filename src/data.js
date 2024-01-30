@@ -48,50 +48,58 @@ export const heroDropdownItem_showType = [
     { id: 4, default: false, type: DROPDOWN_SHOW_NOTHING, title: "都不顯示" },
 ];
 export const defaultFilterType = {
-    enType: "all",
-    zhType: "全部",
+    enName: "all",
+    zhName: "全部",
     bgColor: "#17CCF0",
 };
-export const defaultFilterType_test = [
-    {
-        id: ID_SELECT,
-        enType: "all",
-        zhType: "全部",
-        bgColor: "#17CCF0",
-    },
-    {
-        id: ID_BEEN_SELECT,
-        enType: "all",
-        zhType: "全部",
-        bgColor: "#17CCF0",
-    },
-    {
-        id: ID_DAMAGE,
-        enType: "all",
-        zhType: "全部",
-        bgColor: "#17CCF0",
-    },
-];
+// export const defaultFilterType_test = [
+//     {
+//         id: ID_SELECT,
+//         enType: "all",
+//         zhName: "全部",
+//         bgColor: "#17CCF0",
+//     },
+//     {
+//         id: ID_BEEN_SELECT,
+//         enType: "all",
+//         zhName: "全部",
+//         bgColor: "#17CCF0",
+//     },
+//     {
+//         id: ID_DAMAGE,
+//         enType: "all",
+//         zhName: "全部",
+//         bgColor: "#17CCF0",
+//     },
+// ];
 
 export const allType = [
-    { enType: "normal", zhType: "一般", bgColor: "#a8a8a8" },
-    { enType: "fighting", zhType: "格鬥", bgColor: "#c03028" },
-    { enType: "flying", zhType: "飛行", bgColor: "#9096f0" },
-    { enType: "poison", zhType: "毒", bgColor: "#a040a0" },
-    { enType: "ground", zhType: "地面", bgColor: "#e0b668" },
-    { enType: "rock", zhType: "岩石", bgColor: "#b8a038" },
-    { enType: "bug", zhType: "蟲", bgColor: "#9cb820" },
-    { enType: "ghost", zhType: "幽靈", bgColor: "#705898" },
-    { enType: "steel", zhType: "鋼", bgColor: "#6d8f9c" },
-    { enType: "fire", zhType: "火", bgColor: "#f08030" },
-    { enType: "water", zhType: "水", bgColor: "#6890f0" },
-    { enType: "grass", zhType: "草", bgColor: "#22c02a" },
-    { enType: "electric", zhType: "電", bgColor: "#f8d030" },
-    { enType: "psychic", zhType: "超能力", bgColor: "#f85888" },
-    { enType: "ice", zhType: "冰", bgColor: "#98d8d8" },
-    { enType: "dragon", zhType: "龍", bgColor: "#7038f8" },
-    { enType: "dark", zhType: "惡", bgColor: "#504843" },
-    { enType: "fairy", zhType: "妖精", bgColor: "#f09ad9" },
+    { enName: "normal", zhName: "一般", bgColor: "#a8a8a8" },
+    { enName: "fighting", zhName: "格鬥", bgColor: "#c03028" },
+    { enName: "flying", zhName: "飛行", bgColor: "#9096f0" },
+    { enName: "poison", zhName: "毒", bgColor: "#a040a0" },
+    { enName: "ground", zhName: "地面", bgColor: "#e0b668" },
+    { enName: "rock", zhName: "岩石", bgColor: "#b8a038" },
+    { enName: "bug", zhName: "蟲", bgColor: "#9cb820" },
+    { enName: "ghost", zhName: "幽靈", bgColor: "#705898" },
+    { enName: "steel", zhName: "鋼", bgColor: "#6d8f9c" },
+    { enName: "fire", zhName: "火", bgColor: "#f08030" },
+    { enName: "water", zhName: "水", bgColor: "#6890f0" },
+    { enName: "grass", zhName: "草", bgColor: "#22c02a" },
+    { enName: "electric", zhName: "電", bgColor: "#f8d030" },
+    { enName: "psychic", zhName: "超能力", bgColor: "#f85888" },
+    { enName: "ice", zhName: "冰", bgColor: "#98d8d8" },
+    { enName: "dragon", zhName: "龍", bgColor: "#7038f8" },
+    { enName: "dark", zhName: "惡", bgColor: "#504843" },
+    { enName: "fairy", zhName: "妖精", bgColor: "#f09ad9" },
+];
+export const allTier = [
+    { enName: "S_Tier", zhName: "S級", bgColor: "#1b1b1d" },
+    { enName: "A_plus_Tier", zhName: "A+級", bgColor: "#1b1b1d" },
+    { enName: "A_Tier", zhName: "A級", bgColor: "#1b1b1d" },
+    { enName: "B_plus_Tier", zhName: "B+級", bgColor: "#1b1b1d" },
+    { enName: "B_Tier", zhName: "B級", bgColor: "#1b1b1d" },
+    { enName: "C_Tier", zhName: "C級", bgColor: "#1b1b1d" },
 ];
 export const allCharacters = [
     {
@@ -99,13 +107,13 @@ export const allCharacters = [
         enName: "bulbasaur",
         Types: [
             {
-                enType: "grass",
-                zhType: "草",
+                enName: "grass",
+                zhName: "草",
                 bgColor: "#22c02a",
             },
             {
-                enType: "poison",
-                zhType: "毒",
+                enName: "poison",
+                zhName: "毒",
                 bgColor: "#a040a0",
             },
         ],
@@ -116,14 +124,14 @@ export const allCharacters = [
         enName: "ivysaur",
         Types: [
             {
-                enType: "grass",
-                zhType: "草",
+                enName: "grass",
+                zhName: "草",
                 bgColor: "#22c02a",
             },
 
             {
-                enType: "poison",
-                zhType: "毒",
+                enName: "poison",
+                zhName: "毒",
                 bgColor: "#a040a0",
             },
         ],

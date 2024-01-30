@@ -6,7 +6,7 @@ const DEFAULT_COLOR = "white";
 const DEFAULT_BG_COLOR = "black";
 const defaultNotFound = "not found";
 //屬性 - 單純文字
-export const ShowType_Text = memo(({ bgColor, zhType }) => {
+export const ShowType_Text = memo(({ bgColor, zhName }) => {
     return (
         <a href="#">
             <span
@@ -14,7 +14,7 @@ export const ShowType_Text = memo(({ bgColor, zhType }) => {
                     color: bgColor ?? DEFAULT_COLOR,
                     // marginBottom: "0.1rem",
                 }}>
-                {zhType ?? DEFAULT_TEXT}
+                {zhName ?? DEFAULT_TEXT}
             </span>
         </a>
     );
@@ -34,16 +34,16 @@ export const ShowType_Color = memo(({ bgColor }) => {
     );
 });
 //屬性 - 顏色+文字
-export const ShowType_ColorText = memo(({ bgColor, zhType, enType }) => {
+export const ShowType_ColorText = memo(({ bgColor, zhName, enName }) => {
     return (
         // <a href="#">
-        <Link to={`type/${enType}`}>
+        <Link to={`type/${enName}`}>
             <span
                 className="type"
                 style={{
                     backgroundColor: bgColor ?? DEFAULT_BG_COLOR,
                 }}>
-                {zhType ?? DEFAULT_TEXT}
+                {zhName ?? DEFAULT_TEXT}
             </span>
         </Link>
         // </a>

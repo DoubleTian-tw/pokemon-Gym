@@ -33,7 +33,7 @@ const Hero = ({ title, typeClass, children, id }) => {
     const scrollDown = () => {
         const currentScroll = scrollRef.current;
         //當搜尋&塞選屬性 功能時，不使用下拉載入功能
-        if (searchPokemon !== "" || filterType.enType !== "all") return;
+        if (searchPokemon !== "" || filterType.enName !== "all") return;
         if (
             !isLoadingPokemon &&
             currentScroll.scrollTop + currentScroll.clientHeight >=
@@ -79,7 +79,7 @@ const Hero = ({ title, typeClass, children, id }) => {
                 )} */}
                 {/* 當使用搜尋&塞選屬性功能時，顯示資訊 */}
                 {id === ID_SELECT &&
-                    (searchPokemon !== "" || filterType.enType !== "all") && (
+                    (searchPokemon !== "" || filterType.enName !== "all") && (
                         <div className="search-more-container">
                             <p>沒找到你要的嗎?</p>
                             <button

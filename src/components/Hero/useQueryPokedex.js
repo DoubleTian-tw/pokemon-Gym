@@ -156,12 +156,12 @@ export const useGraphQLFetchPokemon = () => {
                 const types = pokemon_v2_pokemontypes.map((type) => {
                     const { pokemon_v2_type } = type;
                     const typeWithBgColor = allType.filter(
-                        (type) => type.enType === pokemon_v2_type.name
+                        (type) => type.enName === pokemon_v2_type.name
                     )[0];
                     //傷害關係
                     const typeWithDamage = FetchDamageRelations.filter(
                         (damage) => {
-                            return damage.data.name === typeWithBgColor.enType;
+                            return damage.data.name === typeWithBgColor.enName;
                         }
                     )[0];
 
@@ -286,9 +286,9 @@ export const useFetchPokemon = () => {
             let typesMap = new Map();
             pokemonAllTypes.forEach((types) => {
                 const { data } = types;
-                const enType = data.name;
+                const enName = data.name;
                 const damageRelations = data.damage_relations;
-                typesMap.set(enType, damageRelations);
+                typesMap.set(enName, damageRelations);
             });
             handleStoreAllTypes(pokemonAllTypes);
 
@@ -318,7 +318,7 @@ export const useFetchPokemon = () => {
                 const resultTypes = types.map((item) => {
                     const enName = item.type.name;
                     const result = allType.filter(
-                        (type) => type.enType === enName
+                        (type) => type.enName === enName
                     )[0];
                     //設定屬性傷害關係
                     result.damage_relations = typesMap.get(enName);

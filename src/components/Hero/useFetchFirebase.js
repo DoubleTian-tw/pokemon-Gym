@@ -1,10 +1,89 @@
 import firebase from "../../utils/firebaseConfig";
 import "firebase/compat/firestore";
 import "firebase/compat/storage";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useHeroContext } from "./useHeroContext";
 
 const db = firebase.firestore();
+
+const getTierPokemon = async () => {
+    const docRef = await db.collection("tier_collections").get();
+    if (!docRef) {
+        console.log("tier collection is not exists.");
+        return;
+    }
+    const allData = docRef.docs.map((doc) => {
+        return { tier: doc.id, data: doc.data() };
+    });
+    const result = await Promise.all(allData);
+    return result;
+};
+export const fetchTierPokemon = () => {
+    const { handleTierPokemon, bestDamage, storeAllPokemon } = useHeroContext();
+
+    useEffect(() => {
+        getTierPokemon().then((data) => {
+            //重新升序tier
+            const newArr = data.sort((a, b) => a.data.Order - b.data.Order);
+            //重新組成tier結構 > key: tier, value: character
+            const newObj = {};
+            for (let i = 0; i < newArr.length; i++) {
+                const key = newArr[i].tier;
+                if (!newObj[key]) newObj[key] = [];
+                newObj[key].push(newArr[i].data.Names);
+            }
+            //將tier value替換成storeAllPokemon資料
+            const combinedObj = storeAllPokemon.reduce((result, item) => {
+                if (item === undefined) return result;
+                // 取得項目的 enName 和對應的 key
+                const { enName } = item;
+                const key = Object.keys(newObj).find((k) =>
+                    newObj[k][0].includes(enName)
+                );
+
+                // 將 enName 加入對應的 key 中
+                if (key) {
+                    if (!result[key]) {
+                        result[key] = [];
+                    }
+                    result[key].push(item);
+                }
+
+                return result;
+            }, {});
+            if (combinedObj) handleTierPokemon(combinedObj);
+        });
+    }, [bestDamage]);
+};
+
+export const filterTierPokemon = () => {
+    const {
+        bestDamage,
+        popularPokemon,
+        storeAllPokemon,
+        tierPokemon,
+        handleFilterBestPokemon,
+    } = useHeroContext();
+    useEffect(() => {
+        console.log(tierPokemon);
+        tierPokemon.forEach((value, key, map) => {
+            console.log(value, key, map);
+        });
+
+        // const bestPokemon = (filterPokemon ?? []).filter((pokemon) => {
+        //     let isReturn = false;
+        //     pokemon.Types.forEach((type) => {
+        //         bestDamage.forEach((best) => {
+        //             if (best.zhName === type.zhName) isReturn = true;
+        //         });
+        //     });
+        //     if (isReturn) return pokemon;
+        // });
+        // console.log(bestPokemon);
+        // handleFilterBestPokemon(bestPokemon);
+    }, [bestDamage]);
+};
+
 //
 // ============ 檢查 pokemon 是否存在 ============
 //
@@ -66,23 +145,6 @@ const increasePokemon = (ref, num_shards, count) => {
         firebase.firestore.FieldValue.increment(count)
     );
 };
-//
-// ============ 取得每個 pokemon 被點擊的總數 ============
-//
-// export const getPokemonOrder = async (ref) => {
-//     try {
-//         const result = await ref.collection("shards").get();
-//         if (!result) return;
-//         let total = 0;
-//         result.forEach((doc) => {
-//             total += doc.data().count;
-//         });
-//         return total;
-//     } catch (error) {
-//         throw error;
-//     }
-// };
-//
 // ============ 取得所有 pokemon 被點擊的總數 ============
 //
 export const getAllPokemonOrder = async () => {
@@ -185,7 +247,7 @@ export const filterPopularPokemon = () => {
             let isReturn = false;
             pokemon.Types.forEach((type) => {
                 bestDamage.forEach((best) => {
-                    if (best.zhType === type.zhType) isReturn = true;
+                    if (best.zhName === type.zhName) isReturn = true;
                 });
             });
             if (isReturn) return pokemon;
@@ -195,7 +257,7 @@ export const filterPopularPokemon = () => {
         //     let isReturn = false;
         //     pokemon.Types.forEach((type) => {
         //         bestDamage.forEach((best) => {
-        //             if (best.zhType === type.zhType) isReturn = true;
+        //             if (best.zhName === type.zhName) isReturn = true;
         //         });
         //     });
         //     if (isReturn) return pokemon;
