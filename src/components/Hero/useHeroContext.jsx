@@ -185,6 +185,19 @@ export const HeroProvider = ({ children }) => {
             return { enName, zhName, bgColor };
         });
     };
+    //篩選道館常見角色
+    const [filterPopular, setFilterPopular] = useState(false);
+    const handleFilterPopular = () => {
+        setFilterPopular((prev) => !prev);
+    };
+
+    //篩選進化階段
+    // const [filterEvo, setFilterEvo] = useState(defaultFilterType);
+    // const handleFilterEvo = ({ enName, zhName, bgColor }) => {
+    //     setFilterEvo(() => {
+    //         return { enName, zhName, bgColor };
+    //     });
+    // };
     //篩選等級
     const [filterTier, setFilterTier] = useState(defaultFilterType);
     const handleFilterTier = ({ enName, zhName, bgColor }) => {
@@ -254,6 +267,7 @@ export const HeroProvider = ({ children }) => {
                 showType_bestDamage,
                 filterType,
                 filterTier,
+                filterPopular,
                 handleShowInfo_select,
                 handleShowType_select,
                 handleShowInfo_beenSelect,
@@ -262,6 +276,7 @@ export const HeroProvider = ({ children }) => {
                 handleShowType_bestDamage,
                 handleFilterType,
                 handleFilterTier,
+                handleFilterPopular,
                 //=============
                 // Firebase data
                 //=============

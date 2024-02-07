@@ -37,6 +37,7 @@ const Heros = () => {
         bestDamage,
         filterBestPokemon,
         tierPokemon,
+        popularPokemon,
     } = useHeroContext();
 
     //fetch pokemon data
@@ -47,8 +48,8 @@ const Heros = () => {
     if (process.env.NODE_ENV === "production") {
         console.log("production");
     }
+    fetchPopularPokemon();
     //fetch firebase data
-    // fetchPopularPokemon();
     //filter popular pokemon
     // filterPopularPokemon();
     //fetch tier pokemon

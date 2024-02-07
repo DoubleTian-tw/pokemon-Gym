@@ -12659,6 +12659,10 @@ footer {
   width: 50%;
 }
 
+.card div {
+  margin-bottom: 0.5rem;
+}
+
 #avatar {
   width: 5rem;
   border-radius: 50%;

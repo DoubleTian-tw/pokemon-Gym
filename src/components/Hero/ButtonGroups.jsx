@@ -15,7 +15,7 @@ import {
 } from "../../data";
 import defaultImage from "../../images/25.png";
 import { useHeroContext } from "./useHeroContext";
-import { Dropdown, ButtonGroup, Button } from "react-bootstrap";
+import { Dropdown, ButtonGroup, Button, Form } from "react-bootstrap";
 import { memo } from "react";
 
 const BtnGroup = ({ children }) => {
@@ -230,6 +230,24 @@ const ShowTextImage = ({ text }) => {
         </div>
     );
 };
+
+//僅顯示常被選擇的pokemon
+const CheckboxShowPopular = () => {
+    const { handleFilterPopular } = useHeroContext();
+    return (
+        <div>
+            <Form>
+                <Form.Check
+                    type="switch"
+                    id="showPopular-switch"
+                    label="道館常見角色"
+                    onChange={handleFilterPopular}
+                />
+            </Form>
+        </div>
+    );
+};
+
 // 塞選屬性功能
 const DropdownFilterType = () => {
     const { filterType, handleFilterType } = useHeroContext();
@@ -276,7 +294,7 @@ const DropdownFilterType = () => {
     );
 };
 
-const FilterTier = () => {
+const DropdownFilterTier = () => {
     const { filterTier, handleFilterTier } = useHeroContext();
     return (
         <DropdownFilter
@@ -287,58 +305,61 @@ const FilterTier = () => {
         />
     );
 };
+const DropdownFilter = memo(function DropdownFilter({
+    filterTitle,
+    filterZh,
+    handleOnClick,
+    data,
+}) {
+    const defaultBgColor = { backgroundColor: "#17CCF0" };
+    return (
+        <>
+            <Dropdown>
+                <Dropdown.Toggle
+                    variant="outline-myInfo"
+                    className="button-hover"
+                    id="t-dropdownBtnTier">
+                    <span>
+                        {filterTitle} : {filterZh || "error"}
+                    </span>
+                </Dropdown.Toggle>
 
-const DropdownFilter = memo(
-    ({ filterTitle, filterZh, handleOnClick, data }) => {
-        const defaultBgColor = { backgroundColor: "#17CCF0" };
-        return (
-            <>
-                <Dropdown>
-                    <Dropdown.Toggle
-                        variant="outline-myInfo"
-                        className="button-hover"
-                        id="t-dropdownBtnTier">
-                        <span>
-                            {filterTitle} : {filterZh || "error"}
-                        </span>
-                    </Dropdown.Toggle>
+                <Dropdown.Menu
+                    style={{
+                        width: "auto",
+                        height: "150px",
+                        overflowY: "auto",
+                    }}>
+                    <Dropdown.Item
+                        as="button"
+                        className="dropdown-type"
+                        style={defaultBgColor}
+                        onClick={() => handleOnClick(defaultFilterType)}>
+                        <span>全部</span>
+                    </Dropdown.Item>
+                    {data.map((type) => {
+                        const { zhName, bgColor } = type;
+                        return (
+                            <Dropdown.Item
+                                key={nanoid()}
+                                as="button"
+                                className="dropdown-type"
+                                onClick={() => handleOnClick(type)}
+                                style={
+                                    bgColor === ""
+                                        ? defaultBgColor
+                                        : { backgroundColor: bgColor }
+                                }>
+                                <span>{zhName}</span>
+                            </Dropdown.Item>
+                        );
+                    })}
+                </Dropdown.Menu>
+            </Dropdown>
+        </>
+    );
+});
 
-                    <Dropdown.Menu
-                        style={{
-                            width: "auto",
-                            height: "150px",
-                            overflowY: "auto",
-                        }}>
-                        <Dropdown.Item
-                            as="button"
-                            className="dropdown-type"
-                            style={defaultBgColor}
-                            onClick={() => handleOnClick(defaultFilterType)}>
-                            <span>全部</span>
-                        </Dropdown.Item>
-                        {data.map((type) => {
-                            const { zhName, bgColor } = type;
-                            return (
-                                <Dropdown.Item
-                                    key={nanoid()}
-                                    as="button"
-                                    className="dropdown-type"
-                                    onClick={() => handleOnClick(type)}
-                                    style={
-                                        bgColor === ""
-                                            ? defaultBgColor
-                                            : { backgroundColor: bgColor }
-                                    }>
-                                    <span>{zhName}</span>
-                                </Dropdown.Item>
-                            );
-                        })}
-                    </Dropdown.Menu>
-                </Dropdown>
-            </>
-        );
-    }
-);
 const ButtonGroups = ({ id }) => {
     return (
         <>
@@ -352,8 +373,11 @@ const ButtonGroups = ({ id }) => {
             </BtnGroup>
             {/* 塞選屬性 */}
             {id === ID_SELECT && <DropdownFilterType />}
+            {/* 顯示玩家常查詢的角色 */}
+            {id === ID_SELECT && <CheckboxShowPopular />}
+
             {/* 推薦tier常見排名 */}
-            {id === ID_DAMAGE && <FilterTier />}
+            {id === ID_DAMAGE && <DropdownFilterTier />}
         </>
     );
 };

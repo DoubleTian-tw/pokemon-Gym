@@ -181,7 +181,13 @@ const CharacterGroups = memo(
         handleClick,
         id,
     }) => {
-        const { selectImg, searchPokemon, filterType } = useHeroContext();
+        const {
+            selectImg,
+            searchPokemon,
+            filterType,
+            filterPopular,
+            popularPokemon,
+        } = useHeroContext();
 
         let mappingCharacter = displayCharacter;
         if (id === ID_SELECT) {
@@ -199,6 +205,14 @@ const CharacterGroups = memo(
                     );
                     return result.length > 0;
                 });
+            //道館常見角色
+            if (filterPopular === true) {
+                mappingCharacter = mappingCharacter.filter((character) =>
+                    popularPokemon.some(
+                        (popular) => popular.enName === character.enName
+                    )
+                );
+            }
         }
 
         return mappingCharacter.map((item) => {
