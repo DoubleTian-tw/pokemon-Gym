@@ -1,4 +1,4 @@
-import { useContext, createContext, useState, useCallback } from "react";
+import { useContext, createContext, useState, useCallback, useMemo } from "react";
 import {
     defaultFilterType,
     heroDropdownItem,
@@ -210,13 +210,28 @@ export const HeroProvider = ({ children }) => {
     // 從firebase讀取的資料
     // ===================================================
     const [popularPokemon, setPopularPokemon] = useState([]);
-    const [filterBestPokemon, setFilterBestPokemon] = useState([]);
     const handlePopularPokemon = (pokemon) => {
         setPopularPokemon(() => pokemon);
     };
-    const handleFilterBestPokemon = (pokemon) => {
-        setFilterBestPokemon(() => pokemon);
-    };
+    const filterBestPokemon = useMemo(() => {
+        const filterPokemon = storeAllPokemon.filter((allItem) => {
+            if (allItem === undefined) return;
+            return popularPokemon.some(
+                (popularItem) => allItem.enName === popularItem.enName
+            );
+        });
+        return (filterPokemon ?? []).filter((pokemon) => {
+            let isReturn = false;
+            pokemon.Types.forEach((type) => {
+                bestDamage.forEach((best) => {
+                    if (best.zhName === type.zhName) isReturn = true;
+                });
+            });
+            if (isReturn) return pokemon;
+        });
+
+    }, [bestDamage, popularPokemon, storeAllPokemon])
+
     return (
         <HeroContext.Provider
             value={{
@@ -283,7 +298,6 @@ export const HeroProvider = ({ children }) => {
                 popularPokemon,
                 filterBestPokemon,
                 handlePopularPokemon,
-                handleFilterBestPokemon,
             }}>
             {children}
         </HeroContext.Provider>

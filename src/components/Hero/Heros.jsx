@@ -11,7 +11,6 @@ import { useHeroContext } from "./useHeroContext";
 import {
     fetchPopularPokemon,
     fetchTierPokemon,
-    filterPopularPokemon,
     filterTierPokemon,
     postFirebase_whenClose,
 } from "./useFetchFirebase";
@@ -51,7 +50,6 @@ const Heros = () => {
     fetchPopularPokemon();
     //fetch firebase data
     //filter popular pokemon
-    // filterPopularPokemon();
     //fetch tier pokemon
     fetchTierPokemon();
     // filterTierPokemon();
