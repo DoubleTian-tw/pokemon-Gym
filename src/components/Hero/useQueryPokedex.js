@@ -18,7 +18,7 @@ export const axiosDataByUrl = (url) => {
     return axios(url).then((res) => res.data);
 };
 
-const queryTypesInfo = () => {
+const useQueryTypesInfo = () => {
     // fetching 各 pokemon 的屬性列表
     const FetchAllTypes = useQuery({
         queryKey: ["AllTypes"],
@@ -38,7 +38,7 @@ const queryTypesInfo = () => {
     });
 };
 
-const queryPokemonInfo = () => {
+const useQueryPokemonInfo = () => {
     const operationName = "pokemon_details";
     const query = `query ${operationName} {
             pokemon_v2_pokemon(order_by: {id: asc}) {
@@ -81,7 +81,7 @@ const queryPokemonInfo = () => {
         staleTime: Infinity,
     });
 };
-const queryTypesDamageRelation = () => {
+const useQueryTypesDamageRelation = () => {
     //Fetching 各 pokemon 的屬性列表
     const FetchAllTypes = useQuery({
         queryKey: ["AllTypes"],
@@ -100,8 +100,8 @@ const queryTypesDamageRelation = () => {
 };
 export const useGraphQLFetchPokemon = () => {
     const { handleStoreAllPokemon, handleStoreAllTypes } = useHeroContext();
-    const FetchPokemonInfo = queryPokemonInfo();
-    const FetchDamageRelations = queryTypesDamageRelation();
+    const FetchPokemonInfo = useQueryPokemonInfo();
+    const FetchDamageRelations = useQueryTypesDamageRelation();
 
     const isReady =
         FetchPokemonInfo.data &&
@@ -118,7 +118,7 @@ export const useGraphQLFetchPokemon = () => {
         const {
             pokemon_v2_pokemon: pokemon,
             pokemon_v2_pokemonspecies: species,
-        } = FetchPokemonInfo.data?.data?.data;
+        } = FetchPokemonInfo.data?.data?.data ?? [];
         //設定各pokemon的屬性,姓名等資訊
         const mergeObj = pokemon.map((obj1) => {
             const matchObj = species.find((obj2) => {

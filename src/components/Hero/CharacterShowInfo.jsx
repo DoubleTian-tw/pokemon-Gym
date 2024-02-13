@@ -6,7 +6,7 @@ const DEFAULT_COLOR = "white";
 const DEFAULT_BG_COLOR = "black";
 const defaultNotFound = "not found";
 //屬性 - 單純文字
-export const ShowType_Text = memo(({ bgColor, zhName }) => {
+export const ShowType_Text = memo(function ShowType_Text({ bgColor, zhName }) {
     return (
         <a href="#">
             <span
@@ -20,7 +20,7 @@ export const ShowType_Text = memo(({ bgColor, zhName }) => {
     );
 });
 //屬性 - 單純顏色
-export const ShowType_Color = memo(({ bgColor }) => {
+export const ShowType_Color = memo(function ShowType_Color({ bgColor }) {
     return (
         <a href="#">
             <span
@@ -34,7 +34,11 @@ export const ShowType_Color = memo(({ bgColor }) => {
     );
 });
 //屬性 - 顏色+文字
-export const ShowType_ColorText = memo(({ bgColor, zhName, enName }) => {
+export const ShowType_ColorText = memo(function ShowType_ColorText({
+    bgColor,
+    zhName,
+    enName,
+}) {
     return (
         // <a href="#">
         <Link to={`type/${enName}`}>
@@ -51,39 +55,46 @@ export const ShowType_ColorText = memo(({ bgColor, zhName, enName }) => {
 });
 
 //Pokemon - 顯示文字
-export const CharacterShowText = memo(
-    ({ item, isActive, handleClick, children }) => {
-        return (
-            <div
-                className={`characterText ${isActive}`}
-                onClick={() => handleClick(item)}>
-                <span className="characterName">
-                    {item?.zhName ?? defaultNotFound}
-                </span>
-                {children}
-            </div>
-        );
-    }
-);
+export const CharacterShowText = memo(function CharacterShowText({
+    item,
+    isActive,
+    handleClick,
+    children,
+}) {
+    return (
+        <div
+            className={`characterText ${isActive}`}
+            onClick={() => handleClick(item)}>
+            <span className="characterName">
+                {item?.zhName ?? defaultNotFound}
+            </span>
+            {children}
+        </div>
+    );
+});
 //Pokemon - 顯示圖片
-export const CharacterShowImage = memo(
-    ({ item, isActive, handleClick, children }) => {
-        return (
-            <div
-                style={{
-                    display: "flex",
-                }}>
-                {children}
-                <div style={{ position: "relative" }}>
-                    <img
-                        src={item?.sprite ?? ""}
-                        alt={item?.zhName ?? defaultNotFound}
-                        title={item?.zhName ?? defaultNotFound}
-                        className={`characterImg ${isActive}`}
-                        onClick={() => handleClick(item)}
-                        loading="lazy"
-                    />
-                    {/* <LazyLoadImage
+export const CharacterShowImage = memo(function CharacterShowImage({
+    item,
+    isActive,
+    handleClick,
+    children,
+}) {
+    return (
+        <div
+            style={{
+                display: "flex",
+            }}>
+            {children}
+            <div style={{ position: "relative" }}>
+                <img
+                    src={item?.sprite ?? ""}
+                    alt={item?.zhName ?? defaultNotFound}
+                    title={item?.zhName ?? defaultNotFound}
+                    className={`characterImg ${isActive}`}
+                    onClick={() => handleClick(item)}
+                    loading="lazy"
+                />
+                {/* <LazyLoadImage
                         src={item?.sprite ?? ""}
                         alt={item?.zhName ?? defaultNotFound}
                         title={item?.zhName ?? defaultNotFound}
@@ -91,12 +102,11 @@ export const CharacterShowImage = memo(
                         onClick={() => handleClick(item)}
                         effect="blur"
                     /> */}
-                </div>
-                {/* <p>{item?.pokeId ?? "none"}</p> */}
             </div>
-        );
-    }
-);
+            {/* <p>{item?.pokeId ?? "none"}</p> */}
+        </div>
+    );
+});
 //Pokemon - 顯示圖片和文字
 export const CharacterShowTextImage = ({
     item,

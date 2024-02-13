@@ -125,7 +125,7 @@ const DisplayType = ({ id }) => {
     );
 };
 
-const ShowColorText = () => {
+const ShowColorText = ({ color, text }) => {
     return (
         <div className="button-type-colorText">
             <span style={{ backgroundColor: color }}>{text}</span>

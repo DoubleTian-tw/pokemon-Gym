@@ -18,7 +18,7 @@ const getTierPokemon = async () => {
     const result = await Promise.all(allData);
     return result;
 };
-export const fetchTierPokemon = () => {
+export const useFetchTierPokemon = () => {
     const { handleTierPokemon, bestDamage, storeAllPokemon } = useHeroContext();
 
     useEffect(() => {
@@ -56,7 +56,7 @@ export const fetchTierPokemon = () => {
     }, [bestDamage]);
 };
 
-export const filterTierPokemon = () => {
+export const useFilterTierPokemon = () => {
     const {
         bestDamage,
         popularPokemon,
@@ -88,17 +88,13 @@ export const filterTierPokemon = () => {
 // ============ 檢查 pokemon 是否存在 ============
 //
 const checkPokemonIsExist = async (ref, name) => {
-    try {
-        const doc = await ref.get();
-        if (doc.exists) {
-            console.log(`${name} is ready exist!`);
-            return true;
-        } else {
-            console.log(`${name} is not exist!`);
-            return false;
-        }
-    } catch (error) {
-        throw error;
+    const doc = await ref.get();
+    if (doc.exists) {
+        console.log(`${name} is ready exist!`);
+        return true;
+    } else {
+        console.log(`${name} is not exist!`);
+        return false;
     }
 };
 //
@@ -149,32 +145,28 @@ const increasePokemon = (ref, num_shards, count) => {
 //
 export const getAllPokemonOrder = async () => {
     console.log("get all pokemon order");
-    try {
-        // const allDocs = await db.collection("popular_pokemon").get();
-        const allDocs = await db.collection("popular_pokemon_v2").get();
-        if (!allDocs) return;
-        const allPromise = allDocs.docs.map(async (docs) => {
-            const enName = docs.data().enName;
-            // const zhName = docs.data().zhName;
-            // const Types = docs.data().types;
-            // const pokeId = docs.data().pokeId;
-            // const sprite = docs.data().sprite;
-            const docsRef = docs.ref;
-            const shards = await docsRef.collection("shards").get();
-            if (!shards) return;
-            let total = 0;
-            shards.forEach((snap) => {
-                total += snap.data().count;
-            });
-            // console.log(enName, total);
-            return { enName, total };
-            // return { total, Types, enName, zhName, pokeId, sprite };
+    // const allDocs = await db.collection("popular_pokemon").get();
+    const allDocs = await db.collection("popular_pokemon_v2").get();
+    if (!allDocs) return;
+    const allPromise = allDocs.docs.map(async (docs) => {
+        const enName = docs.data().enName;
+        // const zhName = docs.data().zhName;
+        // const Types = docs.data().types;
+        // const pokeId = docs.data().pokeId;
+        // const sprite = docs.data().sprite;
+        const docsRef = docs.ref;
+        const shards = await docsRef.collection("shards").get();
+        if (!shards) return;
+        let total = 0;
+        shards.forEach((snap) => {
+            total += snap.data().count;
         });
-        const allTotal = await Promise.all(allPromise);
-        return allTotal;
-    } catch (error) {
-        throw error;
-    }
+        // console.log(enName, total);
+        return { enName, total };
+        // return { total, Types, enName, zhName, pokeId, sprite };
+    });
+    const allTotal = await Promise.all(allPromise);
+    return allTotal;
 };
 
 export const postFirebase_whenClose = (pokemon) => {
@@ -211,7 +203,7 @@ export const postFirebase = async (props) => {
         .catch((err) => console.log(err.message));
 };
 
-export const fetchPopularPokemon = () => {
+export const useFetchPopularPokemon = () => {
     const { handlePopularPokemon } = useHeroContext();
     useEffect(() => {
         getAllPokemonOrder().then((result) => {
