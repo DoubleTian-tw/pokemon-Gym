@@ -9,9 +9,9 @@ import {
 import getBestDamage from "./useDamageHook";
 import { useHeroContext } from "./useHeroContext";
 import {
-    fetchPopularPokemon,
-    fetchTierPokemon,
-    filterTierPokemon,
+    useFetchPopularPokemon,
+    useFetchTierPokemon,
+    useFilterTierPokemon,
     postFirebase_whenClose,
 } from "./useFetchFirebase";
 import { Suspense, lazy, useEffect, useMemo, useState } from "react";
@@ -47,11 +47,11 @@ const Heros = () => {
     if (process.env.NODE_ENV === "production") {
         console.log("production");
     }
-    fetchPopularPokemon();
+    useFetchPopularPokemon();
     //fetch firebase data
     //filter popular pokemon
     //fetch tier pokemon
-    fetchTierPokemon();
+    useFetchTierPokemon();
     // filterTierPokemon();
     //判斷使用者關閉或重新整理頁面時，將資料上傳到firebase中
     useEffect(() => {
