@@ -1,6 +1,6 @@
 // import "./Hero.css";
 import Dropdowns from "./Dropdowns";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { DROPDOWN_SHOW_TEXT, ID_DAMAGE, ID_SELECT } from "../../data";
 import { useHeroContext } from "./useHeroContext";
 import { nanoid } from "nanoid";
@@ -30,7 +30,7 @@ const Hero = ({ title, typeClass, children, id }) => {
         handleShowInfo_select,
     } = useHeroContext();
 
-    const scrollDown = () => {
+    const scrollDown = useCallback(() => {
         const currentScroll = scrollRef.current;
         //當搜尋&塞選屬性 功能時，不使用下拉載入功能
         if (searchPokemon !== "" || filterType.enName !== "all") return;
@@ -41,8 +41,15 @@ const Hero = ({ title, typeClass, children, id }) => {
         ) {
             handleIsLoadingPokemon(true);
             handleNextPage();
+            handleIsLoadingPokemon(false);
         }
-    };
+    }, [
+        filterType.enName,
+        searchPokemon,
+        handleIsLoadingPokemon,
+        handleNextPage,
+        isLoadingPokemon,
+    ]);
 
     //
     // ======= 設定scroll事件 =======
@@ -55,8 +62,7 @@ const Hero = ({ title, typeClass, children, id }) => {
         return () => {
             scrollContainer.removeEventListener("scroll", throttleFunction);
         };
-    }, []);
-    // }, [searchPokemon, filterType, storeAllPokemon, page, isLoadingPokemon]);
+    }, [id, scrollDown]);
 
     const handleLoadingModal = (ifShowTextOnly) => {
         handleSearchMorePokemon();

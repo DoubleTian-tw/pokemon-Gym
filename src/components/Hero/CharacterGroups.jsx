@@ -155,8 +155,8 @@ export const TierGroups = memo(function TierGroups({
                     );
                 });
                 return (
-                    <>
-                        <div key={nanoid()}>
+                    <div key={nanoid()}>
+                        <div>
                             <div>=====</div>
                             <div>以下是{zhName}</div>
                             <div>=====</div>
@@ -172,7 +172,7 @@ export const TierGroups = memo(function TierGroups({
                                 />
                             );
                         })}
-                    </>
+                    </div>
                 );
             })}
         </>

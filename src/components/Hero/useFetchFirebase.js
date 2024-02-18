@@ -56,34 +56,6 @@ export const useFetchTierPokemon = () => {
     }, [bestDamage]);
 };
 
-export const useFilterTierPokemon = () => {
-    const {
-        bestDamage,
-        popularPokemon,
-        storeAllPokemon,
-        tierPokemon,
-        handleFilterBestPokemon,
-    } = useHeroContext();
-    useEffect(() => {
-        console.log(tierPokemon);
-        tierPokemon.forEach((value, key, map) => {
-            console.log(value, key, map);
-        });
-
-        // const bestPokemon = (filterPokemon ?? []).filter((pokemon) => {
-        //     let isReturn = false;
-        //     pokemon.Types.forEach((type) => {
-        //         bestDamage.forEach((best) => {
-        //             if (best.zhName === type.zhName) isReturn = true;
-        //         });
-        //     });
-        //     if (isReturn) return pokemon;
-        // });
-        // console.log(bestPokemon);
-        // handleFilterBestPokemon(bestPokemon);
-    }, [bestDamage]);
-};
-
 //
 // ============ 檢查 pokemon 是否存在 ============
 //
@@ -100,7 +72,6 @@ const checkPokemonIsExist = async (ref, name) => {
 //
 // ============ 檢查 pokemon 欄位是否一致 ============
 //
-const checkPokemonData = () => {};
 //
 // ============ 新增 pokemon  ============
 //

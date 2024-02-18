@@ -12398,6 +12398,26 @@ footer {
   align-items: center;
   gap: 1rem 0.1rem;
 }
+.hero #DamageGroup > .group-img {
+  display: flex;
+  flex-direction: column;
+}
+.hero #DamageGroup > .group-img > div {
+  width: 100%;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  gap: 1rem 0.1rem;
+}
+.hero #DamageGroup .group-onlyText > div {
+  grid-template-columns: repeat(3, 1fr);
+}
+.hero #DamageGroup .group-onlyImage > div {
+  grid-template-columns: repeat(3, 1fr);
+}
+.hero #DamageGroup .group-imageText > div {
+  grid-template-columns: repeat(2, 1fr);
+}
 
 /*
 
@@ -12486,8 +12506,15 @@ footer {
   .group-imageText {
     grid-template-columns: repeat(1, 1fr);
   }
-  /*
-  */
+  .hero #DamageGroup .group-onlyText > div {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .hero #DamageGroup .group-onlyImage > div {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .hero #DamageGroup .group-imageText > div {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
 .button-hover {
   font-size: 0.8rem;
