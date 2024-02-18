@@ -1,6 +1,15 @@
 # Pokemon Gym
 
-## Intro
+### What is this?
+
+-   Pokemon Gym 是一款基於 Pokemon GO 手機遊戲開發的輔助網頁
+
+### What is Pokemon GO?
+
+-   是一款由 Niantic 開發營運的 AR 手機遊戲，有 AR 體驗、捕捉、道館戰鬥等等機制。而道館戰鬥會以藍、紅、黃分隊伍陣營，讓各陣營玩家可以將自己的 Pokemon 分配到附近的道館中，並且攻擊不同陣營的玩家達到佔領的目的。
+-   而每個 Pokemon 都有自己的屬性，不同屬性的角色會有不同的傷害倍率。例如，火屬性攻擊草屬性的有優勢，但對水屬性有劣勢。因此如何選擇最佳屬性更為重要!
+
+## Project Intro
 
 ### Situation
 
