@@ -12686,8 +12686,11 @@ footer {
   width: 50%;
 }
 
-.card div {
-  margin-bottom: 0.5rem;
+.card {
+  margin-top: 20px;
+}
+.card > div {
+  margin-bottom: 10px;
 }
 
 #avatar {
