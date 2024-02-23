@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import Hero from "../components/Hero";
+import Hero from "../components/Hero/Heros";
 import { HeroProvider } from "../components/Hero/useHeroContext";
 
 const Gym = () => {

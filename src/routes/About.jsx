@@ -1,18 +1,11 @@
 import { Col, Container, Row } from "react-bootstrap";
 import avatar from "../images/personal-avatar.jpg";
-import { useThemeContext } from "../components/contexts/useTheme";
 const About = () => {
-    const { textColor } = useThemeContext();
     return (
         <section className="text-center">
             <Container>
-                {/* <Container className={`text-${textColor}`}> */}
                 <h1>關於</h1>
                 <hr />
-                {/* <h1 className={`text-${themeColor}`}>關於</h1> */}
-                {/* <div className="pt-5 d-none d-md-block">
-                <h1>About us</h1>
-            </div> */}
                 <Row className="justify-content-md-center">
                     <Col md="5">
                         <p>
@@ -37,8 +30,6 @@ const About = () => {
                         </div>
                     </Col>
                 </Row>
-
-                {/* <Col lg="auto">Variable width content</Col> */}
             </Container>
         </section>
     );
