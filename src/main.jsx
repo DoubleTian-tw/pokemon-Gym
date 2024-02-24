@@ -72,6 +72,9 @@ const router = createBrowserRouter([
             },
         ],
     },
+    {
+        basename: "/pokemon-Gym",
+    },
 ]);
 const queryClient = new QueryClient();
 ReactDOM.createRoot(document.getElementById("root")).render(
