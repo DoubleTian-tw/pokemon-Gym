@@ -39,7 +39,7 @@ const DamageDetail = ({ title, detail_item, textColor }) => {
     );
 };
 const TypeView = () => {
-    const { isDarkMode, bgColor, textColor } = useThemeContext();
+    const { isDarkMode, textColor } = useThemeContext();
     const { storeAllTypes } = useHeroContext();
     let navigate = useNavigate();
     let { type } = useParams();

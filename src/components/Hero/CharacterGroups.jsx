@@ -22,7 +22,7 @@ import { memo } from "react";
 //顯示神奇寶貝的屬性
 const CharacterShowType = memo(function CharacterShowType({
     item,
-    showType_select,
+    showType,
     styleObj,
 }) {
     // console.log("顯示屬性");
@@ -30,7 +30,7 @@ const CharacterShowType = memo(function CharacterShowType({
     return (
         <ul style={styleObj}>
             {(item?.Types ?? []).map((type) => {
-                switch (showType_select) {
+                switch (showType) {
                     case DROPDOWN_SHOW_COLOR: //只顯示顏色
                         return (
                             <li key={nanoid()}>
@@ -56,14 +56,14 @@ const CharacterShowType = memo(function CharacterShowType({
     );
 });
 
-const ShowInfoSelect = ({
-    showInfo_select = DROPDOWN_SHOW_IMAGE,
-    showType_select,
+const ShowInfo = ({
+    showInfo = DROPDOWN_SHOW_IMAGE,
+    showType,
     item,
     isActive = "",
     handleClick = () => {},
 }) => {
-    switch (showInfo_select) {
+    switch (showInfo) {
         case DROPDOWN_SHOW_TEXT: //只顯示文字
             return (
                 <CharacterShowText
@@ -78,8 +78,8 @@ const ShowInfoSelect = ({
                             justifyContent: "space-evenly",
                         }}
                         item={item}
-                        showType_select={showType_select}
-                        showInfo_select={showInfo_select}
+                        showType={showType}
+                        showInfo={showInfo}
                     />
                 </CharacterShowText>
             );
@@ -98,8 +98,8 @@ const ShowInfoSelect = ({
                             gap: "0.3rem",
                         }}
                         item={item}
-                        showType_select={showType_select}
-                        showInfo_select={showInfo_select}
+                        showType={showType}
+                        showInfo={showInfo}
                     />
                 </CharacterShowTextImage>
             );
@@ -119,8 +119,8 @@ const ShowInfoSelect = ({
                             alignItems: "center",
                         }}
                         item={item}
-                        showType_select={showType_select}
-                        showInfo_select={showInfo_select}
+                        showType={showType}
+                        showInfo={showInfo}
                     />
                 </CharacterShowImage>
             );
@@ -128,8 +128,8 @@ const ShowInfoSelect = ({
 };
 
 export const TierGroups = memo(function TierGroups({
-    showInfo_select,
-    showType_select,
+    showInfo,
+    showType,
     displayTier,
     bestDamage,
 }) {
@@ -164,10 +164,10 @@ export const TierGroups = memo(function TierGroups({
                         {characters.map((item) => {
                             if (item === undefined) return;
                             return (
-                                <ShowInfoSelect
+                                <ShowInfo
                                     item={item}
-                                    showInfo_select={showInfo_select}
-                                    showType_select={showType_select}
+                                    showInfo={showInfo}
+                                    showType={showType}
                                     key={nanoid()}
                                 />
                             );
@@ -181,8 +181,8 @@ export const TierGroups = memo(function TierGroups({
 
 //角色群組
 const CharacterGroups = memo(function CharacterGroups({
-    showInfo_select,
-    showType_select,
+    showInfo,
+    showType,
     displayCharacter,
     handleClick,
     id,
@@ -230,9 +230,9 @@ const CharacterGroups = memo(function CharacterGroups({
         const isSameImg = selectImg.some((img) => img.enName === item.enName);
         const isActive = isSameImg ? "hero-active" : "";
         return (
-            <ShowInfoSelect
-                showInfo_select={showInfo_select}
-                showType_select={showType_select}
+            <ShowInfo
+                showInfo={showInfo}
+                showType={showType}
                 item={item}
                 isActive={isActive}
                 handleClick={handleClick}

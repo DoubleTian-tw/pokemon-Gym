@@ -52,26 +52,6 @@ export const defaultFilterType = {
     zhName: "全部",
     bgColor: "#17CCF0",
 };
-// export const defaultFilterType_test = [
-//     {
-//         id: ID_SELECT,
-//         enType: "all",
-//         zhName: "全部",
-//         bgColor: "#17CCF0",
-//     },
-//     {
-//         id: ID_BEEN_SELECT,
-//         enType: "all",
-//         zhName: "全部",
-//         bgColor: "#17CCF0",
-//     },
-//     {
-//         id: ID_DAMAGE,
-//         enType: "all",
-//         zhName: "全部",
-//         bgColor: "#17CCF0",
-//     },
-// ];
 
 export const allType = [
     { enName: "normal", zhName: "一般", bgColor: "#a8a8a8" },

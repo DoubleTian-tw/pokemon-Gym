@@ -6,6 +6,7 @@ import {
     useMemo,
 } from "react";
 import {
+    DROPDOWN_SHOW_IMAGE,
     allType,
     defaultFilterType,
     heroDropdownItem,
@@ -165,20 +166,17 @@ export const HeroProvider = ({ children }) => {
     // ===================================================
     // Image、text顯示方式
     // ===================================================
-    const defaultDropdownItem = heroDropdownItem.filter((item) => {
-        return item.default === true;
-    })[0];
     const [showInfo_select, setShowInfo_select] = useState({
-        type: defaultDropdownItem.type,
-        title: defaultDropdownItem.title,
+        type: DROPDOWN_SHOW_IMAGE,
+        title: "",
     });
     const [showInfo_beenSelect, setShowInfo_beenSelect] = useState({
-        type: defaultDropdownItem.type,
-        title: defaultDropdownItem.title,
+        type: DROPDOWN_SHOW_IMAGE,
+        title: "",
     });
     const [showInfo_bestDamage, setShowInfo_bestDamage] = useState({
-        type: defaultDropdownItem.type,
-        title: defaultDropdownItem.title,
+        type: DROPDOWN_SHOW_IMAGE,
+        title: "",
     });
 
     //是否顯示屬性
