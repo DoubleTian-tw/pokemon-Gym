@@ -73,7 +73,7 @@ const router = createBrowserRouter([
             },
         ],
     },
-    { basename: import.meta.env.VITE_BASE_PATH || import.meta.env.BASE_URL },
+    { basename: import.meta.env.VITE_BASE_PATH || "/pokemon-Gym" },
 ]);
 const queryClient = new QueryClient();
 ReactDOM.createRoot(document.getElementById("root")).render(
