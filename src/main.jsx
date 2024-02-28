@@ -19,11 +19,10 @@ import About from "./routes/About";
 import TypeView from "./components/Hero/TypeView";
 import ComingSoon from "./routes/ComingSoon";
 
-const defaultPath = process.env.VITE_BASE_PATH || "/Pokemon-Gym";
-
+const defaultPath = "/"; //"/pokemon-Gym";
 const router = createBrowserRouter([
     {
-        path: defaultPath,
+        path: "/",
         element: <Root />,
         errorElement: <ErrorPage />,
         children: [
@@ -36,18 +35,7 @@ const router = createBrowserRouter([
                         element: <Gym />,
                     },
                     {
-                        path: `${defaultPath}/`,
-                        element: <Gym />,
-                        children: [
-                            {
-                                path:
-                                    process.env.VITE_BASE_PATH || "type/:type",
-                                element: <TypeView />,
-                            },
-                        ],
-                    },
-                    {
-                        path: `${defaultPath}/Gym`,
+                        path: `/`,
                         element: <Gym />,
                         children: [
                             {
@@ -57,15 +45,25 @@ const router = createBrowserRouter([
                         ],
                     },
                     {
-                        path: `${defaultPath}/About`,
+                        path: `/Gym`,
+                        element: <Gym />,
+                        children: [
+                            {
+                                path: "type/:type",
+                                element: <TypeView />,
+                            },
+                        ],
+                    },
+                    {
+                        path: `/About`,
                         element: <About />,
                     },
                     {
-                        path: `${defaultPath}/Pokedex`,
+                        path: `/Pokedex`,
                         element: <ComingSoon />,
                     },
                     {
-                        path: `${defaultPath}/Login`,
+                        path: `/Login`,
                         element: <ComingSoon />,
                     },
                     {
@@ -76,6 +74,7 @@ const router = createBrowserRouter([
             },
         ],
     },
+    { basename: import.meta.env.BASE_URL },
 ]);
 const queryClient = new QueryClient();
 ReactDOM.createRoot(document.getElementById("root")).render(
