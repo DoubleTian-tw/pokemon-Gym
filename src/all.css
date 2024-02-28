@@ -12392,16 +12392,39 @@ footer {
   border: 1px solid grey;
   border-radius: 0.5rem;
 }
+.hero .search-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+}
 .hero .group-img {
   display: grid;
   justify-items: center;
   align-items: center;
   gap: 1rem 0.1rem;
 }
+.hero #DamageGroup > .group-img {
+  display: flex;
+  flex-direction: column;
+}
+.hero #DamageGroup > .group-img > div {
+  width: 100%;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  gap: 1rem 0.1rem;
+}
+.hero #DamageGroup .group-onlyText > div {
+  grid-template-columns: repeat(3, 1fr);
+}
+.hero #DamageGroup .group-onlyImage > div {
+  grid-template-columns: repeat(3, 1fr);
+}
+.hero #DamageGroup .group-imageText > div {
+  grid-template-columns: repeat(2, 1fr);
+}
 
-/*
-
-*/
 .hero-active {
   border: 2px solid rgb(255, 120, 120);
 }
@@ -12486,8 +12509,15 @@ footer {
   .group-imageText {
     grid-template-columns: repeat(1, 1fr);
   }
-  /*
-  */
+  .hero #DamageGroup .group-onlyText > div {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .hero #DamageGroup .group-onlyImage > div {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .hero #DamageGroup .group-imageText > div {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
 .button-hover {
   font-size: 0.8rem;
@@ -12652,15 +12682,11 @@ footer {
   left: 2rem;
 }
 
-.search-btn {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 50%;
+.card {
+  margin-top: 20px;
 }
-
-.card div {
-  margin-bottom: 0.5rem;
+.card > div {
+  margin-bottom: 10px;
 }
 
 #avatar {
