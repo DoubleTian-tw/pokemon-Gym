@@ -18,9 +18,12 @@ import Login from "./routes/Login";
 import About from "./routes/About";
 import TypeView from "./components/Hero/TypeView";
 import ComingSoon from "./routes/ComingSoon";
+
+const defaultPath = process.env.VITE_BASE_PATH || "/Pokemon-Gym";
+
 const router = createBrowserRouter([
     {
-        path: "/Pokemon-Gym",
+        path: defaultPath,
         element: <Root />,
         errorElement: <ErrorPage />,
         children: [
@@ -33,7 +36,18 @@ const router = createBrowserRouter([
                         element: <Gym />,
                     },
                     {
-                        path: "/Pokemon-Gym/",
+                        path: `${defaultPath}/`,
+                        element: <Gym />,
+                        children: [
+                            {
+                                path:
+                                    process.env.VITE_BASE_PATH || "type/:type",
+                                element: <TypeView />,
+                            },
+                        ],
+                    },
+                    {
+                        path: `${defaultPath}/Gym`,
                         element: <Gym />,
                         children: [
                             {
@@ -43,25 +57,15 @@ const router = createBrowserRouter([
                         ],
                     },
                     {
-                        path: "/Pokemon-Gym/Gym",
-                        element: <Gym />,
-                        children: [
-                            {
-                                path: "type/:type",
-                                element: <TypeView />,
-                            },
-                        ],
-                    },
-                    {
-                        path: "/Pokemon-Gym/About",
+                        path: `${defaultPath}/About`,
                         element: <About />,
                     },
                     {
-                        path: "/Pokemon-Gym/Pokedex",
+                        path: `${defaultPath}/Pokedex`,
                         element: <ComingSoon />,
                     },
                     {
-                        path: "/Pokemon-Gym/Login",
+                        path: `${defaultPath}/Login`,
                         element: <ComingSoon />,
                     },
                     {
