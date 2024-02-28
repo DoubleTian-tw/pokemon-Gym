@@ -18,6 +18,9 @@ import Login from "./routes/Login";
 import About from "./routes/About";
 import TypeView from "./components/Hero/TypeView";
 import ComingSoon from "./routes/ComingSoon";
+import SignIn from "./routes/Signin";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const router = createBrowserRouter([
     {
         path: "/Pokemon-Gym",
@@ -62,7 +65,11 @@ const router = createBrowserRouter([
                     },
                     {
                         path: "/Pokemon-Gym/Login",
-                        element: <ComingSoon />,
+                        element: <Login />,
+                    },
+                    {
+                        path: "/Pokemon-Gym/SignIn",
+                        element: <SignIn />,
                     },
                     {
                         path: "*",
@@ -83,6 +90,19 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <RouterProvider router={router} />
             {/* <App /> */}
             <ReactQueryDevtools initialIsOpen={false} />
+            <ToastContainer
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="colored"
+                transition:Bounce
+            />
         </QueryClientProvider>
     </React.StrictMode>
 );
