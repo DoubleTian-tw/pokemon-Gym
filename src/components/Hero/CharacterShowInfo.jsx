@@ -6,9 +6,13 @@ const DEFAULT_COLOR = "white";
 const DEFAULT_BG_COLOR = "black";
 const defaultNotFound = "not found";
 //屬性 - 單純文字
-export const ShowType_Text = memo(function ShowType_Text({ bgColor, zhName }) {
+export const ShowType_Text = memo(function ShowType_Text({
+    bgColor,
+    zhName,
+    enName,
+}) {
     return (
-        <a href="#">
+        <Link to={`type/${enName}`}>
             <span
                 style={{
                     color: bgColor ?? DEFAULT_COLOR,
@@ -16,13 +20,17 @@ export const ShowType_Text = memo(function ShowType_Text({ bgColor, zhName }) {
                 }}>
                 {zhName ?? DEFAULT_TEXT}
             </span>
-        </a>
+        </Link>
     );
 });
 //屬性 - 單純顏色
-export const ShowType_Color = memo(function ShowType_Color({ bgColor }) {
+export const ShowType_Color = memo(function ShowType_Color({
+    bgColor,
+    zhName,
+    enName,
+}) {
     return (
-        <a href="#">
+        <Link to={`type/${enName}`}>
             <span
                 className="type"
                 style={{
@@ -30,7 +38,7 @@ export const ShowType_Color = memo(function ShowType_Color({ bgColor }) {
                 }}>
                 {"\u00A0"}
             </span>
-        </a>
+        </Link>
     );
 });
 //屬性 - 顏色+文字
@@ -40,7 +48,6 @@ export const ShowType_ColorText = memo(function ShowType_ColorText({
     enName,
 }) {
     return (
-        // <a href="#">
         <Link to={`type/${enName}`}>
             <span
                 className="type"
@@ -50,7 +57,6 @@ export const ShowType_ColorText = memo(function ShowType_ColorText({
                 {zhName ?? DEFAULT_TEXT}
             </span>
         </Link>
-        // </a>
     );
 });
 

@@ -200,24 +200,28 @@ const CharacterGroups = memo(function CharacterGroups({
         //搜尋 pokemon
         if (searchPokemon !== "") {
             mappingCharacter = mappingCharacter.filter((character) => {
+                if (character === undefined) return false;
                 return character?.zhName.includes(searchPokemon);
             });
         }
         // 塞選屬性;
         if (filterType.enName !== "all")
             mappingCharacter = mappingCharacter.filter((character) => {
+                if (character === undefined) return false;
                 const result = character.Types.filter(
                     (type) => type.enName === filterType.enName
                 );
                 return result.length > 0;
             });
+
         //道館常見角色
         if (filterPopular === true) {
-            mappingCharacter = mappingCharacter.filter((character) =>
-                popularPokemon.some(
+            mappingCharacter = mappingCharacter.filter((character) => {
+                if (character === undefined) return false;
+                return popularPokemon.some(
                     (popular) => popular.enName === character.enName
-                )
-            );
+                );
+            });
         }
     }
 
