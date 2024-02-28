@@ -1,14 +1,14 @@
 import { Modal } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { useHeroContext } from "./useHeroContext";
-import { allType } from "../../data";
+import { allTypes } from "../../data";
 import { nanoid } from "nanoid";
 import { useThemeContext } from "../contexts/useTheme";
 
-// 透過屬性名稱，取得data.js中allType的資訊 - 顏色、中文屬性等等
+// 透過屬性名稱，取得data.js中allTypes的資訊 - 顏色、中文屬性等等
 const getDamageDetail = (item) => {
     return item.map(
-        ({ name }) => allType.filter(({ enName }) => name === enName)[0]
+        ({ name }) => allTypes.filter(({ enName }) => name === enName)[0]
     );
 };
 // 顯示Modal內詳細屬性資訊
@@ -44,7 +44,7 @@ const TypeView = () => {
     let navigate = useNavigate();
     let { type } = useParams();
     //取得目前顯示屬性的資訊
-    let typeFromData = allType.filter((t) => t.enName === type)[0];
+    let typeFromData = allTypes.filter((t) => t.enName === type)[0];
     let zhName = typeFromData?.zhName;
     let color = typeFromData?.bgColor;
     //取得目前屬性的傷害關係表

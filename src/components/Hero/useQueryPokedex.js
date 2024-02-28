@@ -1,7 +1,7 @@
 import { useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect } from "react";
-import { allType } from "../../data";
+import { allTypes } from "../../data";
 import { useHeroContext } from "./useHeroContext";
 const URL = "https://pokeapi.co/api/v2/pokemon-species/";
 const URL_Types = "https://pokeapi.co/api/v2/type/";
@@ -155,7 +155,7 @@ export const useGraphQLFetchPokemon = () => {
                 //屬性
                 const types = pokemon_v2_pokemontypes.map((type) => {
                     const { pokemon_v2_type } = type;
-                    const typeWithBgColor = allType.filter(
+                    const typeWithBgColor = allTypes.filter(
                         (type) => type.enName === pokemon_v2_type.name
                     )[0];
                     //傷害關係

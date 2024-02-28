@@ -3,8 +3,12 @@ import {
     ID_BEEN_SELECT,
     ID_DAMAGE,
     ID_SELECT,
-    allTier,
-    allType,
+    TITLE_BEEN_SELECT,
+    TITLE_DAMAGE,
+    TITLE_SELECT,
+    allTiers,
+    allTypes,
+    DEFAULT_BG_COLOR,
     defaultFilterType,
 } from "../../data";
 import CharacterGroups, { TierGroups } from "./CharacterGroups";
@@ -15,7 +19,7 @@ import {
     useFetchTierPokemon,
     postFirebase_whenClose,
 } from "./useFetchFirebase";
-import { Suspense, lazy, useCallback, useEffect, useRef } from "react";
+import { Suspense, lazy, memo, useCallback, useEffect, useRef } from "react";
 import Loading from "../Loading";
 import { FaRegThumbsUp } from "react-icons/fa";
 import { nanoid } from "nanoid";
@@ -25,24 +29,36 @@ import { ShowType_ColorText } from "./CharacterShowInfo.jsx";
 import { throttle } from "lodash";
 
 import { Button, InputGroup, Modal, Form, Dropdown } from "react-bootstrap";
+import { useMemo } from "react";
 
 const CharacterGroupsLoading = lazy(() => import("./CharacterGroups.jsx"));
 
 /**
- * 塞選屬性功能
- * @returns
+ * 可篩選的下拉選單
+ * @param {string} id - Dropdown.toggle的id
+ * @param {string} title - Dropdown.toggle的標題
+ * @param {object} currentValue - Dropdown.toggle顯示目前的值
+ * @param {function} handleEvent - Dropdown點擊內容時處理的事情
+ * @param {object} items - Dropdown顯示下拉所有內容
+ * @returns {Component}
  */
-const DropdownFilterType = () => {
-    const { filterType, handleFilterType } = useHeroContext();
-
+const DropdownFilter = memo(function DropdownFilter({
+    id,
+    title,
+    currentValue,
+    handleEvent,
+    items,
+}) {
     return (
         <>
             <Dropdown>
                 <Dropdown.Toggle
                     variant="outline-myInfo"
                     className="button-hover"
-                    id="t-dropdownBtnFilterType">
-                    <span>篩選屬性 : {filterType.zhName || "error"}</span>
+                    id={id}>
+                    <span>
+                        {title} : {currentValue || "error"}
+                    </span>
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu
@@ -54,11 +70,11 @@ const DropdownFilterType = () => {
                     <Dropdown.Item
                         as="button"
                         className="dropdown-type"
-                        style={{ backgroundColor: "#17CCF0" }}
-                        onClick={() => handleFilterType(defaultFilterType)}>
+                        style={{ backgroundColor: DEFAULT_BG_COLOR }}
+                        onClick={() => handleEvent(defaultFilterType)}>
                         <span>全部</span>
                     </Dropdown.Item>
-                    {allType.map((type) => {
+                    {items.map((type) => {
                         const { zhName, bgColor } = type;
                         return (
                             <Dropdown.Item
@@ -66,7 +82,7 @@ const DropdownFilterType = () => {
                                 as="button"
                                 className="dropdown-type"
                                 style={{ backgroundColor: bgColor }}
-                                onClick={() => handleFilterType(type)}>
+                                onClick={() => handleEvent(type)}>
                                 <span>{zhName}</span>
                             </Dropdown.Item>
                         );
@@ -75,79 +91,7 @@ const DropdownFilterType = () => {
             </Dropdown>
         </>
     );
-};
-
-/**
- * 僅顯示常被選擇的pokemon
- */
-const CheckboxShowPopular = () => {
-    const { handleFilterPopular } = useHeroContext();
-    return (
-        <div>
-            <Form>
-                <Form.Check
-                    type="switch"
-                    id="showPopular-switch"
-                    label="道館常見角色"
-                    onChange={handleFilterPopular}
-                />
-            </Form>
-        </div>
-    );
-};
-
-/**
- * 下拉選單 - 篩選等級
- * @returns
- */
-const DropdownFilterTier = () => {
-    const { filterTier, handleFilterTier } = useHeroContext();
-    const defaultBgColor = { backgroundColor: "#1b1b1d" };
-    return (
-        <>
-            <Dropdown>
-                <Dropdown.Toggle
-                    variant="outline-myInfo"
-                    className="button-hover"
-                    id="t-dropdownBtnTier">
-                    <span>等級 : {filterTier.zhName || "error"}</span>
-                </Dropdown.Toggle>
-
-                <Dropdown.Menu
-                    style={{
-                        width: "auto",
-                        height: "150px",
-                        overflowY: "auto",
-                    }}>
-                    <Dropdown.Item
-                        as="button"
-                        className="dropdown-type"
-                        style={defaultBgColor}
-                        onClick={() => handleFilterTier(defaultFilterType)}>
-                        <span>全部</span>
-                    </Dropdown.Item>
-                    {allTier.map((type) => {
-                        const { zhName, bgColor } = type;
-                        return (
-                            <Dropdown.Item
-                                key={nanoid()}
-                                as="button"
-                                className="dropdown-type"
-                                onClick={() => handleFilterTier(type)}
-                                style={
-                                    bgColor === ""
-                                        ? defaultBgColor
-                                        : { backgroundColor: bgColor }
-                                }>
-                                <span>{zhName}</span>
-                            </Dropdown.Item>
-                        );
-                    })}
-                </Dropdown.Menu>
-            </Dropdown>
-        </>
-    );
-};
+});
 
 /**
  * 選擇 - 角色群組
@@ -174,6 +118,8 @@ const ScrollCharacterGroup = () => {
         handleIsLoadingPokemon,
         handleShowInfo_select,
         searchMorePokemon,
+        filterPopular,
+        popularPokemon,
     } = useHeroContext();
 
     const scrollDown = useCallback(() => {
@@ -215,6 +161,43 @@ const ScrollCharacterGroup = () => {
         handleIsLoadingPokemon(true);
         if (ifShowTextOnly) handleShowInfo_select(DROPDOWN_SHOW_TEXT, "");
     };
+
+    const displayCharacter = useMemo(() => {
+        let currentCharacter = storeAllPokemon.slice(0, page);
+        if (searchPokemon !== "") {
+            currentCharacter = currentCharacter.filter((character) => {
+                if (character === undefined) return false;
+                return character?.zhName.includes(searchPokemon);
+            });
+        }
+        // 塞選屬性;
+        if (filterType.enName !== "all")
+            currentCharacter = currentCharacter.filter((character) => {
+                if (character === undefined) return false;
+                const result = character.Types.filter(
+                    (type) => type.enName === filterType.enName
+                );
+                return result.length > 0;
+            });
+
+        //道館常見角色
+        if (filterPopular === true) {
+            currentCharacter = currentCharacter.filter((character) => {
+                if (character === undefined) return false;
+                return popularPokemon.some(
+                    (popular) => popular.enName === character.enName
+                );
+            });
+        }
+        return currentCharacter;
+    }, [
+        searchPokemon,
+        storeAllPokemon,
+        page,
+        filterType.enName,
+        filterPopular,
+        popularPokemon,
+    ]);
     return (
         <div id={ID_SELECT} ref={scrollRef} className="groups">
             <div className={`group-img group-${showInfo_select.type}`}>
@@ -222,9 +205,9 @@ const ScrollCharacterGroup = () => {
                     <CharacterGroupsLoading
                         showInfo={showInfo_select.type}
                         showType={showType_select.type}
-                        displayCharacter={storeAllPokemon.slice(0, page)}
+                        // displayCharacter={storeAllPokemon.slice(0, page)}
+                        displayCharacter={displayCharacter}
                         handleClick={AddRemoveImg}
-                        id={ID_SELECT}
                     />
                 </Suspense>
             </div>
@@ -322,7 +305,13 @@ const Heros = () => {
         bestDamage,
         searchPokemon,
         handleSearchPokemon,
+        filterType,
+        handleFilterType,
+        filterTier,
+        handleFilterTier,
+        handleFilterPopular,
     } = useHeroContext();
+
     const { isDarkMode, bsTheme } = useThemeContext();
     const bgColor = isDarkMode ? "darkBg" : "white-50";
 
@@ -350,11 +339,24 @@ const Heros = () => {
                 {/* 選擇 ======================================*/}
                 <div className="group-col" style={{ position: "relative" }}>
                     {/* 下拉選單 */}
-                    <Dropdowns title="選擇" id={ID_SELECT}>
-                        {/* 塞選屬性 */}
-                        <DropdownFilterType />
-                        {/* 顯示玩家常查詢的角色 */}
-                        <CheckboxShowPopular />
+                    <Dropdowns title={TITLE_SELECT} id={ID_SELECT}>
+                        {/* 塞選屬性*/}
+                        <DropdownFilter
+                            id="t-dropdownBtnFilterType"
+                            title="篩選屬性"
+                            currentValue={filterType.zhName}
+                            handleEvent={handleFilterType}
+                            items={allTypes}
+                        />
+                        {/* 顯示道館常角色 */}
+                        <Form>
+                            <Form.Check
+                                type="switch"
+                                id="showPopular-switch"
+                                label="道館常見角色"
+                                onChange={handleFilterPopular}
+                            />
+                        </Form>
                     </Dropdowns>
                     {/* 搜尋Pokemon */}
                     <InputGroup size="sm" className="search-btn">
@@ -377,7 +379,7 @@ const Heros = () => {
                 {/* 你選擇的 ======================================*/}
                 <div className="group-col">
                     {/* 下拉選單 */}
-                    <Dropdowns title="你選擇的" id={ID_BEEN_SELECT} />
+                    <Dropdowns title={TITLE_BEEN_SELECT} id={ID_BEEN_SELECT} />
                     {/* 角色選擇群組 */}
                     <div id={ID_BEEN_SELECT} className="groups">
                         <div
@@ -395,15 +397,21 @@ const Heros = () => {
                 {/* 推薦有傷害的 ======================================*/}
                 <div className="group-col">
                     {/* 下拉選單 */}
-                    <Dropdowns title="推薦有傷害的" id={ID_DAMAGE}>
+                    <Dropdowns title={TITLE_DAMAGE} id={ID_DAMAGE}>
                         {/* 推薦tier常見排名 */}
-                        <DropdownFilterTier />
+                        <DropdownFilter
+                            id="t-dropdownBtnTier"
+                            title="篩選等級"
+                            currentValue={filterTier.zhName}
+                            handleEvent={handleFilterTier}
+                            items={allTiers}
+                        />
                     </Dropdowns>
                     {/* 角色選擇群組 */}
                     <div id={ID_DAMAGE} className="groups">
                         <div
                             className={`group-img group-${showInfo_bestDamage.type}`}>
-                            <BestDamageCharacters></BestDamageCharacters>
+                            <BestDamageCharacters />
                         </div>
                         {/* 顯示推薦傷害的屬性 */}
                         {bestDamage.length > 0 && (
