@@ -19,7 +19,8 @@ import About from "./routes/About";
 import TypeView from "./components/Hero/TypeView";
 import ComingSoon from "./routes/ComingSoon";
 
-const defaultPath = "/"; //"/pokemon-Gym";
+const defaultPath = import.meta.env.VITE_BASE_PATH || "/Pokemon-Gym";
+
 const router = createBrowserRouter([
     {
         path: "/",
