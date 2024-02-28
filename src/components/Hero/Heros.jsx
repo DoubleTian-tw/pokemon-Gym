@@ -1,17 +1,11 @@
 import Hero from "./Hero";
 import { ID_BEEN_SELECT, ID_DAMAGE, ID_SELECT, heroTitles } from "../../data";
 import CharacterGroups, { TierGroups } from "./CharacterGroups";
-import {
-    useFetchPokemon,
-    // useFetchAllPokemon,
-    useGraphQLFetchPokemon,
-} from "./useQueryPokedex";
-import getBestDamage from "./useDamageHook";
+import { useGraphQLFetchPokemon } from "./useQueryPokedex";
 import { useHeroContext } from "./useHeroContext";
 import {
-    fetchPopularPokemon,
-    fetchTierPokemon,
-    filterTierPokemon,
+    useFetchPopularPokemon,
+    useFetchTierPokemon,
     postFirebase_whenClose,
 } from "./useFetchFirebase";
 import { Suspense, lazy, useEffect, useMemo, useState } from "react";
@@ -34,25 +28,17 @@ const Heros = () => {
         showType_bestDamage,
         storeAllPokemon,
         bestDamage,
-        filterBestPokemon,
         tierPokemon,
-        popularPokemon,
     } = useHeroContext();
 
-    //fetch pokemon data
-    // useFetchPokemon();
-    useGraphQLFetchPokemon();
-    //get best damage
-    getBestDamage();
     if (process.env.NODE_ENV === "production") {
         console.log("production");
     }
-    fetchPopularPokemon();
-    //fetch firebase data
-    //filter popular pokemon
+    //fetch pokemon data
+    useGraphQLFetchPokemon();
+    useFetchPopularPokemon();
     //fetch tier pokemon
-    fetchTierPokemon();
-    // filterTierPokemon();
+    useFetchTierPokemon();
     //判斷使用者關閉或重新整理頁面時，將資料上傳到firebase中
     useEffect(() => {
         const handleTabClose = (event) => {
@@ -78,11 +64,6 @@ const Heros = () => {
                     displayTier={tierPokemon}
                     bestDamage={bestDamage}
                 />
-                // <CharacterGroups
-                //     showInfo_select={showInfo_bestDamage.type}
-                //     showType_select={showType_bestDamage.type}
-                //     displayCharacter={tierPokemon}
-                // />
             );
         } else {
             return (
@@ -94,24 +75,6 @@ const Heros = () => {
                 </>
             );
         }
-        // if (filterBestPokemon.length > 0) {
-        //     return (
-        //         <CharacterGroups
-        //             showInfo_select={showInfo_bestDamage.type}
-        //             showType_select={showType_bestDamage.type}
-        //             displayCharacter={filterBestPokemon}
-        //         />
-        //     );
-        // } else {
-        //     return (
-        //         <>
-        //             <p></p>
-        //             <p className="best-damage-no-data">
-        //                 目前沒有推薦屬性的神奇寶貝
-        //             </p>
-        //         </>
-        //     );
-        // }
     };
     return (
         <main>
@@ -126,7 +89,6 @@ const Heros = () => {
                             showInfo_select={showInfo_select.type}
                             showType_select={showType_select.type}
                             displayCharacter={storeAllPokemon.slice(0, page)}
-                            // displayCharacter={storePokemon}
                             handleClick={AddRemoveImg}
                             id={ID_SELECT}
                         />

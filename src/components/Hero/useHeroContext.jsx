@@ -1,5 +1,12 @@
-import { useContext, createContext, useState, useCallback, useMemo } from "react";
 import {
+    useContext,
+    createContext,
+    useState,
+    useCallback,
+    useMemo,
+} from "react";
+import {
+    allType,
     defaultFilterType,
     heroDropdownItem,
     heroDropdownItem_showType,
@@ -32,7 +39,11 @@ export const HeroProvider = ({ children }) => {
     };
 
     //目前儲存的pokemon
-    const [storePokemon, setStorePokemon] = useState([]);
+    // const [storePokemon, setStorePokemon] = useState([]);
+    // const handleStorePokemon = (newValue) => {
+    //     setStorePokemon((currentValue) => [...currentValue, ...newValue]);
+    // };
+
     //目前是否在loading
     const [isLoadingPokemon, setIsLoadingPokemon] = useState(false);
     //載入的頁數
@@ -41,17 +52,11 @@ export const HeroProvider = ({ children }) => {
     //搜尋不到pokemon是否載入更多?
     const [searchMorePokemon, setSearchMorePokemon] = useState(false);
 
-    const handleStorePokemon = (newValue) => {
-        setStorePokemon((currentValue) => [...currentValue, ...newValue]);
-    };
     const handleIsLoadingPokemon = (state) => {
         setIsLoadingPokemon(() => state);
     };
     const handleNextPage = (page) => {
-        setPage((prev) => {
-            if (page) return page;
-            return prev + 100;
-        });
+        setPage((prev) => (page === undefined ? prev + 100 : page));
     };
     const handleSearchMorePokemon = () => {
         setSearchMorePokemon((val) => !val);
@@ -108,11 +113,48 @@ export const HeroProvider = ({ children }) => {
     //選中屬性相剋關係
     // const [doubleDamage, setDoubleDamage] = useState([]); //攻擊 X 2
     // const [halfDamage, setHalfDamage] = useState([]); //攻擊 X 0.5
-    const [bestDamage, setBestDamage] = useState([]); //最佳攻擊組合
+    // const [bestDamage, setBestDamage] = useState([]); //最佳攻擊組合
 
-    const handleBestDamage = (item) => {
-        setBestDamage(() => item);
-    };
+    // const handleBestDamage = (item) => {
+    //     setBestDamage(() => item);
+    // };
+    /**
+     * 最佳攻擊組合
+     */
+    const bestDamage = useMemo(() => {
+        const doubleDamageResult = getDamageFrom(selectImg, true);
+        const halfDamageResult = getDamageFrom(selectImg, false);
+        //塞選出best damage組合
+        const bestDamageSet = new Set(doubleDamageResult);
+        halfDamageResult.forEach((item) => {
+            if (bestDamageSet.has(item)) bestDamageSet.delete(item);
+        });
+        //返回含有allType物件類型的值
+        return allType.filter((type) => {
+            if (bestDamageSet.has(type.enName)) return type;
+        });
+    }, [selectImg]);
+
+    function getDamageFrom(selectImg, isDoubleDamage) {
+        if (selectImg.length === 0) return [];
+        const result = selectImg.map((item) => {
+            const typesResult = item?.Types.map((type) => {
+                const damageFrom = isDoubleDamage
+                    ? type?.damage_relations?.double_damage_from ?? []
+                    : type?.damage_relations?.half_damage_from ?? [];
+                return damageFrom.map((damage) => damage?.name);
+            });
+            return [].concat(...typesResult);
+        });
+        const firstSet = new Set(result[0]);
+        result.forEach((r) => {
+            const currentSet = new Set(r);
+            firstSet.forEach((item) => {
+                if (!currentSet.has(item)) firstSet.delete(item);
+            });
+        });
+        return Array.from(firstSet);
+    }
     // ===================================================
     // 取得 All屬性
     // ===================================================
@@ -208,7 +250,7 @@ export const HeroProvider = ({ children }) => {
 
     // ===================================================
     // 從firebase讀取的資料
-    // ===================================================
+    // ================================`===================
     const [popularPokemon, setPopularPokemon] = useState([]);
     const handlePopularPokemon = (pokemon) => {
         setPopularPokemon(() => pokemon);
@@ -229,8 +271,7 @@ export const HeroProvider = ({ children }) => {
             });
             if (isReturn) return pokemon;
         });
-
-    }, [bestDamage, popularPokemon, storeAllPokemon])
+    }, [bestDamage, popularPokemon, storeAllPokemon]);
 
     return (
         <HeroContext.Provider
@@ -251,8 +292,6 @@ export const HeroProvider = ({ children }) => {
                 //=============
                 storeAllPokemon,
                 handleStoreAllPokemon,
-                storePokemon,
-                handleStorePokemon,
                 isLoadingPokemon,
                 handleIsLoadingPokemon,
                 page,
@@ -265,10 +304,7 @@ export const HeroProvider = ({ children }) => {
                 selectImg,
                 AddRemoveImg,
                 RemoveImg,
-                // handleDoubleDamage,
-                // handleHalfDamage,
                 bestDamage,
-                handleBestDamage,
                 storeAllTypes,
                 handleStoreAllTypes,
                 //=============
