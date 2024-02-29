@@ -19,9 +19,11 @@ import About from "./routes/About";
 import TypeView from "./components/Hero/TypeView";
 import ComingSoon from "./routes/ComingSoon";
 
+const haveBasePath = import.meta.env.VITE_BASE_PATH ? true : false;
+
 const router = createBrowserRouter([
     {
-        path: "/",
+        path: import.meta.env.BASE_URL,
         element: <Root />,
         errorElement: <ErrorPage />,
         children: [
@@ -34,7 +36,7 @@ const router = createBrowserRouter([
                         element: <Gym />,
                     },
                     {
-                        path: `/`,
+                        path: import.meta.env.VITE_BASE_PATH || "",
                         element: <Gym />,
                         children: [
                             {
@@ -44,7 +46,7 @@ const router = createBrowserRouter([
                         ],
                     },
                     {
-                        path: `/Gym`,
+                        path: haveBasePath ? "/Gym" : "Gym",
                         element: <Gym />,
                         children: [
                             {
@@ -54,15 +56,15 @@ const router = createBrowserRouter([
                         ],
                     },
                     {
-                        path: `/About`,
+                        path: haveBasePath ? "/About" : "About",
                         element: <About />,
                     },
                     {
-                        path: `/Pokedex`,
+                        path: haveBasePath ? "/Pokedex" : "Pokedex",
                         element: <ComingSoon />,
                     },
                     {
-                        path: `/Login`,
+                        path: haveBasePath ? "/Login" : "Login",
                         element: <ComingSoon />,
                     },
                     {
@@ -73,7 +75,7 @@ const router = createBrowserRouter([
             },
         ],
     },
-    { basename: import.meta.env.VITE_BASE_PATH || "/pokemon-Gym" },
+    { basename: import.meta.env.BASE_URL },
 ]);
 const queryClient = new QueryClient();
 ReactDOM.createRoot(document.getElementById("root")).render(
