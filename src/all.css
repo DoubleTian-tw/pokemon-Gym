@@ -12392,6 +12392,12 @@ footer {
   border: 1px solid grey;
   border-radius: 0.5rem;
 }
+.hero .search-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+}
 .hero .group-img {
   display: grid;
   justify-items: center;
@@ -12419,9 +12425,6 @@ footer {
   grid-template-columns: repeat(2, 1fr);
 }
 
-/*
-
-*/
 .hero-active {
   border: 2px solid rgb(255, 120, 120);
 }
@@ -12677,13 +12680,6 @@ footer {
   position: absolute;
   top: 2px;
   left: 2rem;
-}
-
-.search-btn {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 50%;
 }
 
 .card {
