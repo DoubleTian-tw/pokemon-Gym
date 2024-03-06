@@ -21,7 +21,7 @@ export const ThemeProvider = ({ children }) => {
         localStorage.setItem(DARK_THEME, newDarkMode);
     };
 
-    const bgColor = isDarkMode ? "dark" : "light";
+    const bsTheme = isDarkMode ? "dark" : "light";
     const textColor = isDarkMode ? "white-50" : "mySecondary";
 
     useEffect(() => {
@@ -34,7 +34,7 @@ export const ThemeProvider = ({ children }) => {
                 isDarkMode,
                 handleIsDarkMode,
                 textColor,
-                bgColor,
+                bsTheme,
             }}>
             {children}
         </ThemeContext.Provider>

@@ -6,10 +6,10 @@ import {
     useMemo,
 } from "react";
 import {
-    allType,
+    DROPDOWN_SHOW_COLOR_TEXT,
+    DROPDOWN_SHOW_IMAGE,
+    allTypes,
     defaultFilterType,
-    heroDropdownItem,
-    heroDropdownItem_showType,
 } from "../../data";
 
 const HeroContext = createContext();
@@ -130,7 +130,7 @@ export const HeroProvider = ({ children }) => {
             if (bestDamageSet.has(item)) bestDamageSet.delete(item);
         });
         //返回含有allType物件類型的值
-        return allType.filter((type) => {
+        return allTypes.filter((type) => {
             if (bestDamageSet.has(type.enName)) return type;
         });
     }, [selectImg]);
@@ -165,39 +165,31 @@ export const HeroProvider = ({ children }) => {
     // ===================================================
     // Image、text顯示方式
     // ===================================================
-    const defaultDropdownItem = heroDropdownItem.filter((item) => {
-        return item.default === true;
-    })[0];
     const [showInfo_select, setShowInfo_select] = useState({
-        type: defaultDropdownItem.type,
-        title: defaultDropdownItem.title,
+        type: DROPDOWN_SHOW_IMAGE,
+        title: "",
     });
     const [showInfo_beenSelect, setShowInfo_beenSelect] = useState({
-        type: defaultDropdownItem.type,
-        title: defaultDropdownItem.title,
+        type: DROPDOWN_SHOW_IMAGE,
+        title: "",
     });
     const [showInfo_bestDamage, setShowInfo_bestDamage] = useState({
-        type: defaultDropdownItem.type,
-        title: defaultDropdownItem.title,
+        type: DROPDOWN_SHOW_IMAGE,
+        title: "",
     });
 
     //是否顯示屬性
-    const defaultDropdownItem_Type = heroDropdownItem_showType.filter(
-        (item) => {
-            return item.default === true;
-        }
-    )[0];
     const [showType_select, setShowType_select] = useState({
-        type: defaultDropdownItem_Type.type,
-        title: defaultDropdownItem_Type.title,
+        type: DROPDOWN_SHOW_COLOR_TEXT,
+        title: "",
     });
     const [showType_beenSelect, setShowType_beenSelect] = useState({
-        type: defaultDropdownItem_Type.type,
-        title: defaultDropdownItem_Type.title,
+        type: DROPDOWN_SHOW_COLOR_TEXT,
+        title: "",
     });
     const [showType_bestDamage, setShowType_bestDamage] = useState({
-        type: defaultDropdownItem_Type.type,
-        title: defaultDropdownItem_Type.title,
+        type: DROPDOWN_SHOW_COLOR_TEXT,
+        title: "",
     });
 
     //設定目前顯示方式
@@ -317,6 +309,7 @@ export const HeroProvider = ({ children }) => {
                 showInfo_bestDamage,
                 showType_bestDamage,
                 filterType,
+                setFilterType,
                 filterTier,
                 filterPopular,
                 handleShowInfo_select,
