@@ -5,7 +5,7 @@ import {
     DROPDOWN_SHOW_IMAGE_TEXT,
     DROPDOWN_SHOW_TEXT,
     ID_SELECT,
-    allTier,
+    allTiers,
 } from "../../data";
 import { nanoid } from "nanoid";
 import { useHeroContext } from "./useHeroContext";
@@ -22,7 +22,7 @@ import { memo } from "react";
 //顯示神奇寶貝的屬性
 const CharacterShowType = memo(function CharacterShowType({
     item,
-    showType_select,
+    showType,
     styleObj,
 }) {
     // console.log("顯示屬性");
@@ -30,7 +30,7 @@ const CharacterShowType = memo(function CharacterShowType({
     return (
         <ul style={styleObj}>
             {(item?.Types ?? []).map((type) => {
-                switch (showType_select) {
+                switch (showType) {
                     case DROPDOWN_SHOW_COLOR: //只顯示顏色
                         return (
                             <li key={nanoid()}>
@@ -56,14 +56,14 @@ const CharacterShowType = memo(function CharacterShowType({
     );
 });
 
-const ShowInfoSelect = ({
-    showInfo_select = DROPDOWN_SHOW_IMAGE,
-    showType_select,
+const ShowInfo = ({
+    showInfo = DROPDOWN_SHOW_IMAGE,
+    showType,
     item,
     isActive = "",
     handleClick = () => {},
 }) => {
-    switch (showInfo_select) {
+    switch (showInfo) {
         case DROPDOWN_SHOW_TEXT: //只顯示文字
             return (
                 <CharacterShowText
@@ -78,8 +78,8 @@ const ShowInfoSelect = ({
                             justifyContent: "space-evenly",
                         }}
                         item={item}
-                        showType_select={showType_select}
-                        showInfo_select={showInfo_select}
+                        showType={showType}
+                        showInfo={showInfo}
                     />
                 </CharacterShowText>
             );
@@ -98,8 +98,8 @@ const ShowInfoSelect = ({
                             gap: "0.3rem",
                         }}
                         item={item}
-                        showType_select={showType_select}
-                        showInfo_select={showInfo_select}
+                        showType={showType}
+                        showInfo={showInfo}
                     />
                 </CharacterShowTextImage>
             );
@@ -119,8 +119,8 @@ const ShowInfoSelect = ({
                             alignItems: "center",
                         }}
                         item={item}
-                        showType_select={showType_select}
-                        showInfo_select={showInfo_select}
+                        showType={showType}
+                        showInfo={showInfo}
                     />
                 </CharacterShowImage>
             );
@@ -128,15 +128,15 @@ const ShowInfoSelect = ({
 };
 
 export const TierGroups = memo(function TierGroups({
-    showInfo_select,
-    showType_select,
+    showInfo,
+    showType,
     displayTier,
     bestDamage,
 }) {
     const { filterTier } = useHeroContext();
     //篩選等級，全部或各別等級
     const currentTier =
-        filterTier.enName !== "all" ? [{ ...filterTier }] : allTier;
+        filterTier.enName !== "all" ? [{ ...filterTier }] : allTiers;
     return (
         <>
             {currentTier.map((tier) => {
@@ -164,10 +164,10 @@ export const TierGroups = memo(function TierGroups({
                         {characters.map((item) => {
                             if (item === undefined) return;
                             return (
-                                <ShowInfoSelect
+                                <ShowInfo
                                     item={item}
-                                    showInfo_select={showInfo_select}
-                                    showType_select={showType_select}
+                                    showInfo={showInfo}
+                                    showType={showType}
                                     key={nanoid()}
                                 />
                             );
@@ -181,58 +181,21 @@ export const TierGroups = memo(function TierGroups({
 
 //角色群組
 const CharacterGroups = memo(function CharacterGroups({
-    showInfo_select,
-    showType_select,
+    showInfo,
+    showType,
     displayCharacter,
     handleClick,
-    id,
 }) {
-    const {
-        selectImg,
-        searchPokemon,
-        filterType,
-        filterPopular,
-        popularPokemon,
-    } = useHeroContext();
+    const { selectImg } = useHeroContext();
 
-    let mappingCharacter = displayCharacter;
-    if (id === ID_SELECT) {
-        //搜尋 pokemon
-        if (searchPokemon !== "") {
-            mappingCharacter = mappingCharacter.filter((character) => {
-                if (character === undefined) return false;
-                return character?.zhName.includes(searchPokemon);
-            });
-        }
-        // 塞選屬性;
-        if (filterType.enName !== "all")
-            mappingCharacter = mappingCharacter.filter((character) => {
-                if (character === undefined) return false;
-                const result = character.Types.filter(
-                    (type) => type.enName === filterType.enName
-                );
-                return result.length > 0;
-            });
-
-        //道館常見角色
-        if (filterPopular === true) {
-            mappingCharacter = mappingCharacter.filter((character) => {
-                if (character === undefined) return false;
-                return popularPokemon.some(
-                    (popular) => popular.enName === character.enName
-                );
-            });
-        }
-    }
-
-    return mappingCharacter.map((item) => {
+    return displayCharacter.map((item) => {
         if (item === undefined) return;
         const isSameImg = selectImg.some((img) => img.enName === item.enName);
         const isActive = isSameImg ? "hero-active" : "";
         return (
-            <ShowInfoSelect
-                showInfo_select={showInfo_select}
-                showType_select={showType_select}
+            <ShowInfo
+                showInfo={showInfo}
+                showType={showType}
                 item={item}
                 isActive={isActive}
                 handleClick={handleClick}
