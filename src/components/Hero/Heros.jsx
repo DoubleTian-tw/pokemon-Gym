@@ -312,6 +312,7 @@ const Heros = () => {
         handleFilterPopular,
     } = useHeroContext();
 
+
     const { isDarkMode, bsTheme } = useThemeContext();
     const bgColor = isDarkMode ? "darkBg" : "white-50";
 

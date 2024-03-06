@@ -94,7 +94,7 @@ export const HeroProvider = ({ children }) => {
                 //移除目前已存在的pokemon
                 return newSelectImg.filter((img) => img.enName !== item.enName);
             } else {
-                if (process.env.NODE_ENV === "deploy") {
+                if (import.meta.env.NODE_ENV === "deploy") {
                     //POST點擊次數
                     // postFirebase(item);
                 }
