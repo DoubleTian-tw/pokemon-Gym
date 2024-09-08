@@ -12,7 +12,7 @@ const Navbar = () => {
         <>
             <BsNavbar expand="md" data-bs-theme="dark" className="bg-primary">
                 <Container expand="md">
-                    <BsNavbar.Brand as={Link} to={`Gym`}>
+                    <BsNavbar.Brand as={Link} to={`/`}>
                         <img
                             src={logo}
                             width="30"
@@ -44,7 +44,7 @@ const Navbar = () => {
                             <Nav.Link as={Link} to={`Pokedex`}>
                                 圖鑑
                             </Nav.Link>
-                            <Nav.Link as={Link} to={`Gym`}>
+                            <Nav.Link as={Link} to={`/`}>
                                 道館
                             </Nav.Link>
                             <Nav.Link as={Link} to={`Login`}>

@@ -1,4 +1,4 @@
-const ErrorPage = () => {
+const NotFound = () => {
     return (
         <div id="error-page" className="text-center pt-5">
             <h1 className="text-danger">Oops!</h1>
@@ -8,4 +8,5 @@ const ErrorPage = () => {
         </div>
     );
 };
-export default ErrorPage;
+
+export default NotFound;

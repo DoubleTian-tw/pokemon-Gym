@@ -1,5 +1,5 @@
 import { Col, Container, Row } from "react-bootstrap";
-import avatar from "../images/personal-avatar.jpg";
+import avatar from "@/images/personal-avatar.jpg";
 const About = () => {
     return (
         <section className="text-center">
