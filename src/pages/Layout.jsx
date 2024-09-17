@@ -1,18 +1,16 @@
 import { Outlet } from "react-router-dom";
-import Footer from "@/components/Footer/Footer";
-import Navbar from "@/components/Navbar/Navbar";
-import { ThemeProvider } from "@/components/contexts/useTheme";
+import TabBar from "@/components/TabBar";
+import { ThemeProvider } from "@/components/theme-provider";
 
-const App = () => {
+const Layout = () => {
     return (
         <>
-            <ThemeProvider>
-                <Navbar />
+            <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
                 <Outlet />
-                <Footer />
+                <TabBar />
             </ThemeProvider>
         </>
     );
 };
 
-export default App;
+export default Layout;
