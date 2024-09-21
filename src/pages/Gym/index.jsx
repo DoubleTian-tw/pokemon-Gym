@@ -6,8 +6,8 @@ const Gym = () => {
     return (
         <>
             <HeroProvider>
-                <Hero />
-                <Outlet />
+                {/* <Hero />
+                <Outlet /> */}
             </HeroProvider>
         </>
     );
