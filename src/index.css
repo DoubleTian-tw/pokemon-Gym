@@ -9,11 +9,27 @@
     --primary-300: #145da0;
     --primary-400: #0c2d48;
 
+    --dark-blue-100: #4a3dff;
+    --dark-blue-200: #3d39e5;
+    --dark-blue-300: #3235cc;
+    --dark-blue-400: #2830b3;
+    --dark-blue-500: #212b9a;
+    --dark-blue-600: #1b2682;
+    --dark-blue-700: #16206a;
+    --dark-blue-800: #131a53;
+    --dark-blue-900: #0f143d;
+    --dark-blue-1000: #0d0b28;
+
     --grey-100: #eeede7;
-    --grey-200: #bebeb9;
-    --grey-300: #8f8e8b;
-    --grey-400: #5f5f5c;
-    --grey-500: #302f2e;
+    --grey-200: #d2d0cb;
+    --grey-300: #b7b4b0;
+    --grey-400: #9c9996;
+    --grey-500: #827f7d;
+    --grey-600: #686564;
+    --grey-700: #504d4c;
+    --grey-800: #383636;
+    --grey-900: #222121;
+    --grey-1000: #0b0a0a;
 
     --bg-dark: #333333;
     --shadow: 0 0 0.5rem #9c9c9c;
@@ -45,7 +61,6 @@ body {
     position: relative;
     min-height: 100%;
     padding-bottom: 6rem;
-    color: #525e99;
     transition: var(--transition-400-ease);
 }
 footer {
@@ -97,21 +112,26 @@ section {
     }
 }
 @layer base {
-  :root {
-        --background: 0 0% 100%;
-        --foreground: 0 0% 3.9%;
+    :root {
+        --background: var(--grey-100);
+        --foreground: var(--dark-blue-800);
+        --navbar: var(--grey-100);
+        --navbar-foreground: var(--grey-300);
+        --navbar-active: var(--grey-200);
         --card: 0 0% 100%;
         --card-foreground: 0 0% 3.9%;
         --popover: 0 0% 100%;
         --popover-foreground: 0 0% 3.9%;
-        --primary: 0 0% 9%;
-        --primary-foreground: 0 0% 98%;
+        --primary: var(--grey-800);
+        --primary-foreground: var(--grey-100);
+        --linear: #f77062;
         --secondary: 0 0% 96.1%;
         --secondary-foreground: 0 0% 9%;
         --muted: 0 0% 96.1%;
         --muted-foreground: 0 0% 45.1%;
-        --accent: 0 0% 96.1%;
-        --accent-foreground: 0 0% 9%;
+        --accent: #fe5196;
+        --accent-foreground: var(--grey-800);
+        --linear: #f77062;
         --destructive: 0 84.2% 60.2%;
         --destructive-foreground: 0 0% 98%;
         --border: 0 0% 89.8%;
@@ -124,21 +144,25 @@ section {
         --chart-5: 27 87% 67%;
         --radius: 0.5rem;
     }
-  .dark {
-        --background: 0 0% 3.9%;
-        --foreground: 0 0% 98%;
+    .dark {
+        --background: var(--grey-1000);
+        --foreground: var(--grey-100);
+        --navbar: var(--dark-blue-1000);
+        --navbar-foreground: var(--grey-300);
+        --navbar-active: var(--grey-100);
         --card: 0 0% 3.9%;
         --card-foreground: 0 0% 98%;
         --popover: 0 0% 3.9%;
         --popover-foreground: 0 0% 98%;
-        --primary: 0 0% 98%;
-        --primary-foreground: 0 0% 9%;
+        --primary: #fe5196;
+        --primary-foreground: var(--grey-800);
         --secondary: 0 0% 14.9%;
         --secondary-foreground: 0 0% 98%;
         --muted: 0 0% 14.9%;
         --muted-foreground: 0 0% 63.9%;
-        --accent: 0 0% 14.9%;
-        --accent-foreground: 0 0% 98%;
+        --accent: #fe5196;
+        --accent-foreground: var(--grey-100);
+        --linear: #f77062;
         --destructive: 0 62.8% 30.6%;
         --destructive-foreground: 0 0% 98%;
         --border: 0 0% 14.9%;
@@ -152,10 +176,10 @@ section {
     }
 }
 @layer base {
-  * {
-    @apply border-border;
+    * {
+        @apply border-border;
     }
-  body {
-    @apply bg-background text-foreground;
+    body {
+        @apply bg-background text-foreground;
     }
 }

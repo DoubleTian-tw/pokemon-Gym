@@ -10,8 +10,13 @@ export default {
         sm: 'calc(var(--radius) - 4px)'
       },
       colors: {
-        background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
+        background: 'var(--background)',
+        foreground: 'var(--foreground)',
+        navbar: {
+          DEFAULT: 'var(--navbar)',
+          foreground: 'var(--navbar-foreground)',
+          active: 'var(--navbar-active)',
+        },
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))'
@@ -21,8 +26,8 @@ export default {
           foreground: 'hsl(var(--popover-foreground))'
         },
         primary: {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))'
+          DEFAULT: 'var(--primary)',
+          foreground: 'var(--primary-foreground)'
         },
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
@@ -33,8 +38,11 @@ export default {
           foreground: 'hsl(var(--muted-foreground))'
         },
         accent: {
-          DEFAULT: 'hsl(var(--accent))',
+          DEFAULT: 'var(--accent)',
           foreground: 'hsl(var(--accent-foreground))'
+        },
+        linear: {
+          DEFAULT: 'var(--linear)'
         },
         destructive: {
           DEFAULT: 'hsl(var(--destructive))',
