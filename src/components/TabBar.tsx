@@ -16,7 +16,7 @@ import {
     NavigationMenuList,
     NavigationMenuTrigger,
     navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
+} from "@/components/ui/navbar-menu";
 
 type navType = "link" | "trigger";
 
@@ -73,7 +73,7 @@ const NavLink = ({ path, children }) => {
 const NavTrigger = ({ navWidth, content, children }) => {
     return (
         <NavigationMenuItem>
-            <NavigationMenuTrigger triggerType="icon">
+            <NavigationMenuTrigger displayType="icon">
                 <div>{children}</div>
             </NavigationMenuTrigger>
             <NavigationMenuContent>
@@ -97,9 +97,9 @@ const TabBar = () => {
     return (
         <div
             className={cn(
-                "fixed bottom-0 w-full flex justify-center bg-background"
+                "fixed bottom-0 w-full flex justify-center bg-navbar"
             )}>
-            <NavigationMenu viewportDirection="above" ref={navRef}>
+            <NavigationMenu ref={navRef}>
                 <NavigationMenuList>
                     {navList.map((nav) => {
                         switch (nav.type) {
