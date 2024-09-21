@@ -1,7 +1,7 @@
 "use client";
 
 import React, { ReactNode, useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { nanoid } from "nanoid";
 import { TbPokeball } from "react-icons/tb";
 import { PiCardholderBold } from "react-icons/pi";
@@ -56,13 +56,19 @@ const navList: navProps[] = [
 ];
 
 const NavLink = ({ path, children }) => {
+    const location = useLocation();
+    const isActive = path === location.pathname;
     return (
         <NavigationMenuItem className="flex-1">
             <Link to={path}>
                 <NavigationMenuLink
                     asChild
                     className={cn(
-                        navigationMenuTriggerStyle({ type: "icon" })
+                        navigationMenuTriggerStyle({
+                            type: "icon",
+                        }),
+                        isActive &&
+                            "bg-gradient-to-b from-accent to-linear text-navbar-active"
                     )}>
                     <div>{children}</div>
                 </NavigationMenuLink>
