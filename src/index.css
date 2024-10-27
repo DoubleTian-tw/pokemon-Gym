@@ -3,11 +3,27 @@
 @tailwind utilities;
 
 :root {
-    /* primary color */
-    --primary-100: #b1d4e0;
-    --primary-200: #2e8bc0;
-    --primary-300: #145da0;
-    --primary-400: #0c2d48;
+    --primary-100: #ffffff;
+    --primary-200: #f6f4f5;
+    --primary-300: #f0e7eb;
+    --primary-400: #ecd8e0;
+    --primary-500: #e9c7d5;
+    --primary-600: #e9b4c9;
+    --primary-700: #eb9fbd;
+    --primary-800: #ef87b1;
+    --primary-900: #f66ea4;
+    --primary-1000: #fe5297;
+
+    --second-100: #ffffff;
+    --second-200: #f7f5f5;
+    --second-300: #f1eae9;
+    --second-400: #ecdddc;
+    --second-500: #e9cfcc;
+    --second-600: #e8c0bb;
+    --second-700: #e9afa8;
+    --second-800: #ec9c93;
+    --second-900: #f1887c;
+    --second-1000: #f77364;
 
     --dark-blue-100: #4a3dff;
     --dark-blue-200: #3d39e5;
@@ -143,6 +159,9 @@ section {
         --chart-4: 43 74% 66%;
         --chart-5: 27 87% 67%;
         --radius: 0.5rem;
+        --w-sm: 576px;
+        --w-md: 960px;
+        --w-lg: 1440px;
     }
     .dark {
         --background: var(--grey-1000);
