@@ -6,36 +6,43 @@ import {
     HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { Toggle } from "@/components/ui/toggle";
+import { AbilityType, ABILITIES, ERROR_ABILITY } from "@/constants/ability";
+import { cn } from "@/lib/utils";
 import { nanoid } from "nanoid";
 import React, { FunctionComponent } from "react";
 
-interface abilityProps {
-    enName: string;
-    zhName: string;
-    bgColor: string;
-}
 interface AvatarProps {
     name: string;
     src: string;
-    abilities: abilityProps[];
+    abilities: AbilityType[];
 }
 
+const CURRENT_LANG = "zh-Hant";
 const PokemonAvatar: FunctionComponent<AvatarProps> = ({
     name,
     src,
     abilities,
 }) => {
+    const isZhHant = CURRENT_LANG === "zh-Hant";
+    const processAbilities = abilities.map(
+        (ability) => ABILITIES[ability as AbilityType] || ERROR_ABILITY
+    );
+
     return (
         <div className="flex">
             <div className="flex flex-col justify-center gap-2">
-                {abilities.map((item) => (
-                    <Button
-                        key={nanoid()}
-                        className="px-2 py-1 h-auto rounded-full
-                        ">
-                        {item.zhName}
-                    </Button>
-                ))}
+                {processAbilities.map((ability) => {
+                    return (
+                        <Button
+                            key={nanoid()}
+                            className={cn(
+                                "px-2 py-1 h-auto rounded-full text-white"
+                            )}
+                            style={{ backgroundColor: ability.bgColor }}>
+                            {isZhHant ? ability.zhName : ability.enName}
+                        </Button>
+                    );
+                })}
             </div>
             <HoverCard>
                 <HoverCardTrigger>
