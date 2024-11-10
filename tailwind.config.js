@@ -3,6 +3,11 @@ export default {
   darkMode: ["class"],
   content: ["./index.html", './src/**/*.{html,js,ts,tsx,jsx,js}'],
   theme: {
+    screens: {
+      'sm': 'var(--w-sm)',
+      'md': 'var(--w-md)',
+      'lg': 'var(--w-lg)',
+    },
     extend: {
       width: {
         sm: 'var(--w-sm)',
@@ -30,6 +35,9 @@ export default {
           DEFAULT: 'hsl(var(--popover))',
           foreground: 'hsl(var(--popover-foreground))'
         },
+        select: {
+          DEFAULT: 'var(--select)',
+        },
         primary: {
           DEFAULT: 'var(--primary)',
           foreground: 'var(--primary-foreground)'
@@ -44,7 +52,7 @@ export default {
         },
         accent: {
           DEFAULT: 'var(--accent)',
-          foreground: 'hsl(var(--accent-foreground))'
+          foreground: 'var(--accent-foreground)'
         },
         linear: {
           DEFAULT: 'var(--linear)'
