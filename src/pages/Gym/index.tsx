@@ -69,7 +69,7 @@ const Gym: FunctionComponent = () => {
             <PokemonSearch />
 
             <ScrollArea className="h-[360px] w-auto rounded-md border py-3 mb-5">
-                <div className="grid grid-cols-3 gap-5 py-2 px-5">
+                <div className="grid grid-cols-3 gap-5 py-2 px-5 justify-center">
                     {pokemonDetails.map((pokemon) => {
                         return (
                             <PokemonAvatar
