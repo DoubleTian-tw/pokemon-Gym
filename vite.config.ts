@@ -1,6 +1,7 @@
 import { vitePlugin as remix } from "@remix-run/dev";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
+import { resolve } from "path";
 
 declare module "@remix-run/node" {
     interface Future {
@@ -9,7 +10,13 @@ declare module "@remix-run/node" {
 }
 
 export default defineConfig({
-    base: process.env.VITE_BASE_PATH || "/pokemon-Gym",
+    // base: process.env.VITE_BASE_PATH || "/pokemon-Gym",
+    resolve: {
+        alias: {
+            "@": resolve(__dirname, "./app"),
+            "@public": resolve(__dirname, "./public"),
+        },
+    },
     plugins: [
         remix({
             future: {
