@@ -9,8 +9,9 @@ import {
     useRouteError,
 } from "@remix-run/react";
 
-import stylesHref from "./tailwind.css?url";
 import Navbar from "@/components/Navbar";
+import Providers from "@/providers";
+import stylesHref from "@/tailwind.css?url";
 
 export const links: LinksFunction = () => [
     { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -89,8 +90,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <Links />
             </head>
             <body>
-                <Navbar />
-                {children}
+                <Providers>
+                    <Navbar />
+                    {children}
+                </Providers>
                 <ScrollRestoration />
                 <Scripts />
             </body>
