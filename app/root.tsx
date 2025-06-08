@@ -45,6 +45,11 @@ export const meta: MetaFunction = () => {
             content:
                 "想打道館時總是忘記該選甚麼屬性、神奇寶貝嗎? 還是每次都要一一查名稱呢? 很花時間又開很多分頁! 體驗看看Pokemon Gym帶來的方便吧! 不用再為選擇困擾啦!",
         },
+        {
+            name: "og:image",
+            content:
+                "https://raw.githubusercontent.com/DoubleTian-tw/pokemon-Gym/main/src/images/pokemon-og-image.jpg",
+        },
     ];
 };
 
