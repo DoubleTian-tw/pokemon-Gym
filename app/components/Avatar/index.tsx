@@ -7,13 +7,13 @@ import {
 } from "@/components/ui/hover-card";
 import { Toggle } from "@/components/ui/toggle";
 import {
-    AbilityType,
     ABILITIES,
+    AbilityType,
     ERROR_ABILITY,
 } from "@/constants/pokemon/ability";
 import { cn } from "@/lib/utils";
 import { nanoid } from "nanoid";
-import React, { FunctionComponent } from "react";
+import { FunctionComponent } from "react";
 
 interface AvatarProps {
     name: string;
