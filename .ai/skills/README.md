@@ -89,7 +89,7 @@
 > 已於 2026-05 移除（功能被 Change 系統 / 直接對話取代）：
 > - `new-feature-docs` / `auto-new-feature-docs` / `upgrade-feature-docs` / `auto-upgrade-feature-docs` → 用 `/discuss-spec` + `/run-change --stop-at sd`
 > - `auto-new-feature` / `auto-upgrade-feature` → 走 Change 系統（`/start-change` + `/run-change`），保留完整 spec/SA/SD/handoff/trace 紀錄
-> - `e2e-test` → UI／E2E 範圍必須先在規格或對話中明確同意；一般測試由 AI 依 `package.json` 與 `docs/testing-guidelines.md` 執行 `pnpm format → lint → build → test`，`dev` 的畫面與文件確認由人工處理
+> - `e2e-test` → UI／E2E 範圍必須先在規格或對話中明確同意；一般驗證由 AI 依 `package.json` 與 `docs/testing-guidelines.md` 執行既有自動驗證（`tsc --noEmit → lint → build`，若有設定 `format` / `test` 則一併執行），`dev` 的畫面與文件確認由人工處理
 
 ## 共用內容（`_references/`）
 

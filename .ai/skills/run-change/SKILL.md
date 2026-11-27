@@ -130,14 +130,14 @@ loop:
     - change_id
     - test_iterations（目前第幾輪，0 起算）
     - 必讀：docs/changes/<id>/{sa,sd}.md、handoff/{impl,review}-output.md、docs/testing-guidelines.md
-    - 要求：獨立依 SA/SD 寫 Node Vitest 測試（不沿用 implementer 假設），抽檢既有測試未被放寬，並實跑聚焦測試與全量 `pnpm format:check` / `pnpm lint` / `pnpm build` / `pnpm test`；禁止未實跑卻標記 done
+    - 要求：依 `package.json` 既有 scripts 實跑驗證（目前必跑 `pnpm exec tsc --noEmit`、`pnpm lint`、`pnpm build`；若有定義 `test` / `format:check` 則依 SA/SD 寫邏輯測試、抽檢既有測試並全量實跑）；禁止未實跑卻標記 done
 
     讀取 handoff/test-output.md，執行完成閘門檢查：
 
     1. 若未實際執行自動驗證（且不屬純文件例外）：
        → 強制標記 test.needs_human（或環境錯標 failed），停下回報，**嚴禁推進至 commit**
 
-    2. 若 frontmatter status == "done" 且內含 `format:check / lint / build / test` 全綠實跑統計（或合法純文件例外）與防作弊自檢：
+    2. 若 frontmatter status == "done" 且內含 `package.json` 既有自動驗證全綠實跑統計（或合法純文件例外）與防作弊自檢：
        → 標記 test.done，跳出 loop
 
     3. 若 frontmatter status == "needs_human"（實作 Bug 或發現既有測試被放寬）：

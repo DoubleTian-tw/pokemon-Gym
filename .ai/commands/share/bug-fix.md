@@ -19,8 +19,8 @@ $ARGUMENTS
 1. **先重現或取證**：邏輯類寫 Node Vitest 紅燈測試；純 UI 類追蹤元件呼叫鏈取證（無證據禁改 `src/`）
 2. **二分定位**：追呼叫鏈、`docs/features/` 與 `git log` 排除假說，鎖定唯一根因
 3. **最小修復**：只改證據支持的最小範圍，禁放寬既有測試斷言
-4. **同面驗證**：原失敗測試轉綠 + `pnpm format`、`pnpm lint`、`pnpm build`、`pnpm test`
-5. **回報證據**：附上修前紅燈／定位證據、修後綠燈輸出，以及待 `pnpm dev` / `../nomad-playwright` 驗收項目
+4. **同面驗證**：原失敗測試轉綠（若有 `test` script）+ 依 `package.json` 既有 scripts 執行 `pnpm exec tsc --noEmit`、`pnpm lint`、`pnpm build`（及既有的 `format` / `test`）
+5. **回報證據**：附上修前紅燈／定位證據、修後綠燈輸出，以及待 `pnpm dev` 手機瀏覽器驗收項目
 
 ## 對應 Skill
 

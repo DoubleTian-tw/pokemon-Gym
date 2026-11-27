@@ -28,18 +28,19 @@ $ARGUMENTS
 
 - 依 Bug 描述釐清對應路由、`src/` 檔案、純函式模組或測試檔，並讀取 `docs/testing-guidelines.md`。
 - **分流處理**：
-  - **邏輯／狀態／資料轉換／API 請求與錯誤處理**：撰寫能穩定觸發此 Bug 的 Node Vitest 失敗案例（紅燈），並實跑取得失敗輸出：
+  - **邏輯／狀態／資料轉換／API 請求與錯誤處理**：若專案已設定 `test` script，撰寫能穩定觸發此 Bug 的失敗案例（紅燈）並實跑取得失敗輸出；若尚未設定 `test` script，則追蹤邏輯呼叫鏈與型別邊界取證：
     ```bash
-    pnpm test -- <target>.test.ts
+    # 若 package.json 有定義 test script：
+    # pnpm test -- <target>.test.ts
     ```
-  - **純 UI／畫面互動／跨系統旅程問題**：依 `docs/testing-guidelines.md` 不引入 `jsdom` 或 DOM runner；若部分狀態判斷可抽成純函式則寫紅燈測試，其餘透過實際追蹤呼叫鏈、props／query／cache 流向與 `client.openapi.json` 合約確認失敗機制（若為用戶提供之操作重現路徑，須對齊到確切元件與分支行號）。
+  - **純 UI／畫面互動／跨系統流程問題**：依 `docs/testing-guidelines.md` 不引入 `jsdom` 或 DOM runner；若部分狀態判斷可抽成純函式且有測試環境則寫紅燈測試，其餘透過實際追蹤呼叫鏈、props／state 流向確認失敗機制（若為用戶提供之操作重現路徑，須對齊到確切元件與分支行號）。
 
 ### Step 2：二分法定位唯一根因（Binary-Search the Cause + Anti-Spin 迴圈）
 
-1. **建立脈絡**：追蹤受影響子系統的實際呼叫鏈（Route `page.tsx` → Component → `_hooks/` → `_lib/` / `src/lib/` → `src/api/generated/`），並查閱 `docs/features/<module>/` 與 `git log -n 10 --oneline <path>` 確認原本設計意圖與近期回歸點。
+1. **建立脈絡**：追蹤受影響子系統的實際呼叫鏈（Route `page.tsx` → Component → `_hooks/` → `_lib/` / `src/lib/`），並查閱 `docs/features/<module>/` 與 `git log -n 10 --oneline <path>` 確認原本設計意圖與近期回歸點。
 2. **單輪單假說二分排除**：列出候選根因，每一輪只驗證一個假說，並記錄試探結果（`假說 → 驗證方式 → 輸出證據 → 保留／排除`）：
    - **證據推翻即還原**：一旦該假說不成立，立即清除為該假說加上的程式碼或探針，不留殘骸。
-   - **Anti-Spin 止損規則**：若連續 3 輪試探都沒有取得新證據或無法縮小範圍，**強制跳出原本思路**（回頭檢查 Server/Client 邊界、TanStack Query cache / queryKey、Orval 型別或向用戶回報目前已排除項目與剩餘假說），禁止無止境猜測空轉。
+   - **Anti-Spin 止損規則**：若連續 3 輪試探都沒有取得新證據或無法縮小範圍，**強制跳出原本思路**（回頭檢查 Server/Client 邊界、state 所有權、資料型別或向用戶回報目前已排除項目與剩餘假說），禁止無止境猜測空轉。
 3. 確認只剩**唯一經過證據驗證的機制**後，清除所有除錯用 `console.log` 再進入 Step 3。
 
 ### Step 3：最小範圍修復（Surgical Fix）
@@ -49,18 +50,19 @@ $ARGUMENTS
 
 ### Step 4：驗證與回歸（Verify on the Same Surface）
 
-- **原重現必須轉綠**：重新執行 Step 1 新增或修改的 Vitest 測試確認穩定通過：
+- **原重現必須轉綠**：若有新增或修改測試檔，重新執行確認穩定通過：
   ```bash
-  pnpm test -- <target>.test.ts
+  # 若 package.json 有定義 test script：
+  # pnpm test -- <target>.test.ts
   ```
-- **依序執行全套自動驗證**：
+- **依序執行全套自動驗證**（依 `package.json` 既有 scripts）：
   ```bash
-  pnpm format
+  pnpm exec tsc --noEmit
   pnpm lint
   pnpm build
-  pnpm test
+  # 若 package.json 有定義 format / test script，一併執行 pnpm format / pnpm test
   ```
-- **跨面與人工驗證邊界**：涉及 UI 互動、版面或跨系統流程時，明確列出待人工於 `pnpm dev` 確認的操作步驟，或須交由相鄰 `../nomad-playwright` 專案補跑／驗證的旅程情境，**禁止將未經畫面／旅程驗證的項目宣稱已完全驗收**。
+- **跨面與人工驗證邊界**：涉及 UI 互動、版面或跨系統流程時，明確列出待人工於 `pnpm dev`（含手機瀏覽器）確認的操作步驟，**禁止將未經畫面／流程驗證的項目宣稱已完全驗收**。
 
 ### Step 5：提交順序建議（Failing Test Before Fix）
 
@@ -76,6 +78,6 @@ $ARGUMENTS
 2. **修改內容**：最小改動摘要與涉及檔案清單
 3. **重現與驗證證據（貼上真實指令與摘要輸出）**：
    - 修前失敗證據（紅燈輸出或追蹤定位證據）
-   - 修後 `pnpm format`、`pnpm lint`、`pnpm build`、`pnpm test` 通過輸出
-4. **待跨面／人工確認項目**（若涉 UI 或跨系統流程）：列明 `pnpm dev` 目視檢查步驟與建議 `../nomad-playwright` 驗證項目（純邏輯問題寫「無」）
+   - 修後 `pnpm exec tsc --noEmit`、`pnpm lint`、`pnpm build`（及若有定義的 `format` / `test`）通過輸出
+4. **待跨面／人工確認項目**（若涉 UI 或跨系統流程）：列明 `pnpm dev` 目視與手機瀏覽器檢查步驟（純邏輯問題寫「無」）
 5. **延伸對抗檢查（選配）**：若本次修復涉及認證／Cookie／Session、購物車金額／價格確認、金流導轉與回調、或課程觀看權限，提醒使用者「若本機已安裝 `/troy-interrogate`，可選跑一次對抗實跑驗屍」；一般小修免問。

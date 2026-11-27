@@ -60,14 +60,14 @@ commit.done  → change 完成，提示 archive
 `test` 階段採「**寫程式與出題分離 + 實跑證據閘門 + 最多 2 輪修復循環**」，由 orchestrator 控制：
 
 1. **完成閘門（硬性規則）**：
-   - 必須實際執行 `pnpm format:check`（若 `tester` 新增／修改測試檔則先跑 `pnpm format`）、`pnpm lint`、`pnpm build` 與全量 `pnpm test` 並取得全綠輸出，才可標記 `test.done`。
+   - 必須實際執行 `package.json` 既有自動驗證（目前為 `pnpm exec tsc --noEmit`、`pnpm lint`、`pnpm build`；若 `package.json` 有定義 `format:check` / `format` / `test` 則一併執行）並取得全綠輸出，才可標記 `test.done`。
    - 僅當本次變更純屬文件且未影響 `src/`、設定檔或套件依賴時，依 `docs/testing-guidelines.md` 可略過程式驗證並於 `test-output.md` 註明原因。
    - 若因環境或指令失敗未完成實跑驗證，**嚴禁標記 `done`**——一律標記 `needs_human` 或 `failed`，orchestrator 禁止推進至 `commit`。
-   - `pnpm dev` 視覺確認與 `../nomad-playwright` 跨端旅程驗收固定列在 `test-output.md` 的待後續驗收清單，不阻斷本 repo `commit`。
+   - `pnpm dev` 視覺確認與手機瀏覽器驗收固定列在 `test-output.md` 的待後續驗收清單，不阻斷本 repo `commit`。
 2. **Test-Fix Loop（上限 2 輪）**：
 
 ```
-1. 呼叫 tester → 依 SA/SD 獨立撰寫／更新 Node Vitest 測試並抽檢既有測試防作弊，先跑 `pnpm test -- <affected>.test.ts`，再跑全量 `format:check / lint / build / test`
+1. 呼叫 tester → 若專案已設定 test script，依 SA/SD 獨立撰寫／更新邏輯測試並抽檢既有測試防作弊，再依 package.json 實跑全量自動驗證（tsc --noEmit / lint / build 及既有的 format:check / test）
 2. 若測試本身寫錯 → tester 自行修正重跑（不計入修復輪數）
 3. 若發現實作 Bug（handoff status: needs_human 且標記實作缺陷）：
    - 若 test_iterations < 2：
@@ -75,7 +75,7 @@ commit.done  → change 完成，提示 archive
      b. 呼叫 implementer（觸發情境：test-fix，context: handoff/test-output.md）修復
      c. 回到步驟 1 由 tester 重跑驗證
    - 若已達 2 輪仍失敗 → 標記 test.needs_human，停下回報（interactive 可讓用戶選 fix / skip / abort）
-4. 全量 `format:check / lint / build / test` 全綠且附實際輸出統計 → 標記 test.done
+4. package.json 既有全量驗證全綠且附實際輸出統計 → 標記 test.done
 ```
 
 ## Active Change 概念

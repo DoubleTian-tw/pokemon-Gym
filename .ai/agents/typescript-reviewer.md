@@ -98,10 +98,10 @@ model: sonnet
 ## 診斷指令
 
 ```bash
+pnpm exec tsc --noEmit
 pnpm lint
 pnpm build
-pnpm format
-# 若 package.json 明確定義 typecheck 或 test script，使用 pnpm <script>
+# 若 package.json 明確定義 format、typecheck 或 test script，使用 pnpm <script>
 ```
 
 不要自行假設 Vitest、Jest、Playwright、MSW、npm audit 或 yarn/npm/bun 指令存在；先以 `package.json` 為準。

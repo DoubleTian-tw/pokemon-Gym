@@ -32,7 +32,7 @@ $ARGUMENTS
 
 ### 階段三：收尾驗證
 
-- 自動重新對齊目錄（TOC）錨點並執行 `pnpm format` 格式化。
+- 自動重新對齊目錄（TOC）錨點；若 `package.json` 有定義 `format` script 則執行 `pnpm format` 格式化。
 
 ---
 
@@ -234,9 +234,9 @@ Agent 在逐題向用戶提問時，**必須主動向用戶說明判定理由**�
 
 ## Step 5：排版格式化與驗證
 
-1. 執行排版格式化：
+1. 排版格式化（若 `package.json` 有定義 `format` script）：
    ```bash
-   pnpm format
+   # pnpm format
    ```
 2. 統計清洗前後行數（`wc -l`），確認核心業務決策（業務規則、狀態矩陣、API 契約）未遭誤刪。
 3. 向用戶回報清晰的清洗結果摘要。

@@ -17,7 +17,7 @@ $ARGUMENTS
 
 1. **型別檢查與 Lint 不算行為保護**：`pnpm build` 和 `pnpm lint` 只能保證語法與型別，無法證明業務規則與狀態行為沒變。
    - 可測的邏輯／狀態／資料轉換／API helper：沒有 Node Vitest 行為測試釘選前，**禁止搬動或重組程式碼結構**。
-   - 純 JSX 元件拆分／排版整理（不改邏輯、且依 `docs/testing-guidelines.md` 不引入 `jsdom`）：先將夾雜在元件內的計算／狀態判斷抽成純函式補測釘選，純畫面組合則須先盤點 props／a11y／design token 合約並於收尾列出 `pnpm dev`／`../nomad-playwright` 驗收清單。
+   - 純 JSX 元件拆分／排版整理（不改邏輯、且依 `docs/testing-guidelines.md` 不引入 `jsdom`）：先將夾雜在元件內的計算／狀態判斷抽成純函式（若有設定 `test` script 則補測釘選），純畫面組合則須先盤點 props／a11y／design token 合約並於收尾列出 `pnpm dev` 目視驗收清單。
 2. **先減後加（Subtract Before You Add）**：引入新抽象或搬移結構前，先刪掉死碼、只有單一呼叫端的無意義薄包裝、冗餘狀態與孤立引用（含廢棄 `_mock/` 殘檔）。
 3. **禁止留相容層（No Legacy Shims）**：調整內部介面、hook 回傳形狀或函式簽名時，同一波把所有呼叫端一次遷移完並刪除舊函式／舊檔，不留平行新舊兩條路。
 4. **降低閱讀負擔（Minimize Reader Load）**：重構的唯一檢驗標準是最終 Diff 讓下一位讀者更好懂、分支與巢狀更少（符合 `docs/development-guidelines.md` 元件拆分與 co-location 原則）；若沒變簡單反而多了間接層，應直接還原。
@@ -45,23 +45,25 @@ $ARGUMENTS
 
 ### Step 4：小步搬移、步步保綠（Behavior-Preserving Steps）
 
-- 分小步調整結構，每一步都重跑 Step 1 的釘選測試確保維持綠燈：
+- 分小步調整結構，每一步都重跑 Step 1 的釘選測試（若專案已設定 `test` script）或型別／建置檢查確保維持綠燈：
   ```bash
-  pnpm test -- <affected>.test.ts
+  # 若 package.json 有定義 test script：
+  # pnpm test -- <affected>.test.ts
+  pnpm exec tsc --noEmit
   ```
 - 更名、調整 co-location 路徑或調整函式簽名時，務必全域 grep（含動態 import、文件引用與測試檔案）一次遷移所有呼叫端並移除舊介面。
 
 ### Step 5：完整自動驗證與閱讀負擔自檢
 
-1. 依序執行完整驗證：
+1. 依 `package.json` 既有 scripts 執行完整驗證：
    ```bash
-   pnpm format
+   pnpm exec tsc --noEmit
    pnpm lint
    pnpm build
-   pnpm test
+   # 若 package.json 有定義 format / test script，一併執行 pnpm format / pnpm test
    ```
 2. **檢查 Diff 複雜度**：確認改動確實消除了重複分支、過深巢狀或無效狀態，且閱讀負擔下降；未改善則果斷 revert。
-3. **跨面與人工驗證提醒**：若重構涉及畫面元件結構、route 切換或表單互動，明確列出待 `pnpm dev` 目視檢查或 `../nomad-playwright` 回歸驗證的項目。
+3. **跨面與人工驗證提醒**：若重構涉及畫面元件結構、route 切換或表單互動，明確列出待 `pnpm dev` 目視與手機瀏覽器檢查的項目。
 
 ### Step 6：建議切分順序
 
@@ -75,5 +77,5 @@ $ARGUMENTS
 完成後精簡列出：
 1. **結構變化摘要**：刪除了什麼冗餘、調整了哪裡、降低了什麼閱讀負擔
 2. **行為釘選基礎**：依賴哪幾支既有的或新補的 `.test.ts` 作為保護網（若為純 UI 結構調整，說明未動邏輯並列出待驗互動點）
-3. **驗證證據**：`pnpm format`、`pnpm lint`、`pnpm build`、`pnpm test` 實跑通過統計
-4. **待跨面／人工確認項目**：`pnpm dev` 目視或 `../nomad-playwright` 建議驗證範圍（純邏輯重構寫「無」）
+3. **驗證證據**：`pnpm exec tsc --noEmit`、`pnpm lint`、`pnpm build`（及若有定義的 `format` / `test`）實跑通過統計
+4. **待跨面／人工確認項目**：`pnpm dev` 目視與手機瀏覽器建議驗證範圍（純邏輯重構寫「無」）

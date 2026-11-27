@@ -25,7 +25,7 @@
 
 ## Pokémon Gym 使用方式
 
-首次設定或修改 `.ai/` 後，從專案根目錄執行 `npm run sync:ai`（需安裝 `rsync`）。指令將 `agents/`、`commands/` 和 `skills/` 複製到 `.agents/` 與 `.claude/`，並移除這三個生成目錄裡來源已刪除的檔案。目標目錄外的工具設定可以照常維護。各工具如何載入規則，請參考 [Pokémon Gym 執行規則](../docs/ai-workflow.md#pokémon-gym-執行規則)。
+首次設定或修改 `.ai/` 後，從專案根目錄執行 `pnpm run sync:ai`（需安裝 `rsync`）。指令將 `agents/`、`commands/` 和 `skills/` 複製到 `.agents/` 與 `.claude/`，並移除這三個生成目錄裡來源已刪除的檔案。目標目錄外的工具設定可以照常維護。各工具如何載入規則，請參考 [Pokémon Gym 執行規則](../docs/ai-workflow.md#pokémon-gym-執行規則)。
 
 ## 編輯規範
 
