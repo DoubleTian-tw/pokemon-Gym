@@ -108,7 +108,7 @@ $ARGUMENTS
 
 - **核心準則**：**SA 絕對不出現任何內部代碼與檔案路徑，由 SD 承擔所有程式碼映射**。
 - **掃描特徵**：
-  - 前端程式碼路徑：`src/app/...`、`src/hooks/...`、`src/lib/...`、`src/api/generated/...`。
+  - 前端程式碼路徑：`src/app/...`、`src/hooks/...`、`src/lib/...`。
   - 具體 Component 與 Hook 名稱：如 `useCurrentMember`、`LearningChapterFab`、`PdfPageControls`。
   - 後端程式碼細節：Prisma / DTO Class 名稱、內部 Service 名稱（如 `EmailSendCooldownService`）、Git commit 哈希（如 `commit 7ce3090`）。
 - **Grill-me 提案**：
@@ -219,7 +219,7 @@ Agent 在逐題向用戶提問時，**必須主動向用戶說明判定理由**�
 - **Grill-me 確認要點**：
   - 保留模組所有核心檔案清單及其架構職責定位。
   - 剔除工單 diff 式流水帳（如「約第 49~51 行 TODO」、「修改匯入路徑」、「本次新增此函式」，還原為客觀架構職責描述）。
-  - 建置與環境依賴（如 `package.json`、`orval.config.ts`、依賴套件升級等）不列於業務檔案清單，統一收斂至 ADR 架構決策表。
+  - 建置與環境依賴（如 `package.json`、`next.config.ts`、依賴套件升級等）不列於業務檔案清單，統一收斂至 ADR 架構決策表。
 
 ---
 

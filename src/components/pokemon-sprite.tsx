@@ -40,7 +40,7 @@ export function PokemonSprite({
       style={
         accentMeta
           ? {
-              background: `radial-gradient(circle at 50% 30%, ${hexToRgba(accentMeta.color, 0.30)}, transparent 72%)`,
+              background: `radial-gradient(circle at 50% 30%, ${hexToRgba(accentMeta.color, 0.3)}, transparent 72%)`,
             }
           : undefined
       }

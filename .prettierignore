@@ -1,0 +1,11 @@
+.next
+.agents
+.claude
+build
+out
+node_modules
+public
+src/legacy-backup
+pnpm-lock.yaml
+next-env.d.ts
+tsconfig.tsbuildinfo

@@ -12,7 +12,7 @@ export function TypePill({ type, className }: TypePillProps) {
   return (
     <span
       className={cn(
-        "inline-flex items-center justify-center rounded-full px-2 py-1 text-[11px] font-bold leading-none whitespace-nowrap",
+        "inline-flex items-center justify-center rounded-full px-2 py-1 text-[11px] leading-none font-bold whitespace-nowrap",
         className,
       )}
       style={{

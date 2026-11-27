@@ -14,16 +14,10 @@ export function AppShell({
   showTabBar = true,
 }: AppShellProps) {
   return (
-    <div
-      className="relative flex min-h-dvh flex-col overflow-x-clip text-[var(--ink-primary)] tabular-nums"
-      style={{
-        background:
-          "linear-gradient(170deg, var(--obsidian-canvas) 0%, var(--graphite-depth) 55%, #090b10 100%)",
-      }}
-    >
+    <div className="relative flex min-h-dvh flex-col overflow-x-clip bg-gradient-to-b from-[var(--obsidian-canvas)] via-[var(--graphite-depth)] to-[var(--obsidian-canvas)] text-[var(--ink-primary)] tabular-nums">
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-full focus:bg-[var(--apple-blue-deep)] focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white focus:outline-2 focus:outline-[#60a5fa]"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-full focus:bg-[var(--apple-blue-deep)] focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white focus:outline-2 focus:outline-blue-400"
       >
         跳至主要內容
       </a>

@@ -1,7 +1,7 @@
-import type * as React from "react";
+import type { ComponentPropsWithoutRef } from "react";
 import { cn } from "@/lib/utils";
 
-export interface GlassPanelProps extends React.ComponentPropsWithoutRef<"div"> {
+export interface GlassPanelProps extends ComponentPropsWithoutRef<"div"> {
   material?: "blur" | "tinted";
   as?: "div" | "section" | "aside";
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import type { ComponentProps } from "react";
 import { Dialog as DialogPrimitive } from "radix-ui";
 import { cn } from "@/lib/utils";
 
@@ -12,12 +12,12 @@ const DialogClose = DialogPrimitive.Close;
 function DialogOverlay({
   className,
   ...props
-}: React.ComponentProps<typeof DialogPrimitive.Overlay>) {
+}: ComponentProps<typeof DialogPrimitive.Overlay>) {
   return (
     <DialogPrimitive.Overlay
       data-slot="dialog-overlay"
       className={cn(
-        "fixed inset-0 z-50 bg-[#03060e]/72 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+        "fixed inset-0 z-50 bg-black/75 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0",
         className,
       )}
       {...props}
@@ -25,8 +25,9 @@ function DialogOverlay({
   );
 }
 
-interface DialogContentProps
-  extends React.ComponentProps<typeof DialogPrimitive.Content> {
+interface DialogContentProps extends ComponentProps<
+  typeof DialogPrimitive.Content
+> {
   variant?: "sheet" | "modal";
   preventMobileAutoFocus?: boolean;
 }
@@ -58,7 +59,7 @@ function DialogContent({
         data-slot="dialog-content"
         onOpenAutoFocus={handleOpenAutoFocus}
         className={cn(
-          "glass-sheet fixed z-50 flex w-full max-w-[540px] flex-col overflow-hidden text-[var(--ink-primary)] outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+          "glass-sheet fixed z-50 flex w-full max-w-[540px] flex-col overflow-hidden text-[var(--ink-primary)] outline-none data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0",
           variant === "sheet"
             ? "inset-x-0 bottom-0 mx-auto max-h-[85dvh] rounded-t-[24px] rounded-b-none px-4 pt-3 pb-[max(16px,env(safe-area-inset-bottom))] data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom sm:inset-x-auto sm:top-1/2 sm:bottom-auto sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-[24px] sm:p-4 sm:data-[state=closed]:slide-out-to-bottom-0 sm:data-[state=open]:slide-in-from-bottom-0"
             : "top-1/2 left-1/2 max-h-[85dvh] -translate-x-1/2 -translate-y-1/2 rounded-[24px] p-4",
@@ -78,7 +79,7 @@ function DialogContent({
   );
 }
 
-function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
+function DialogHeader({ className, ...props }: ComponentProps<"div">) {
   return (
     <div
       data-slot="dialog-header"
@@ -91,11 +92,14 @@ function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
 function DialogTitle({
   className,
   ...props
-}: React.ComponentProps<typeof DialogPrimitive.Title>) {
+}: ComponentProps<typeof DialogPrimitive.Title>) {
   return (
     <DialogPrimitive.Title
       data-slot="dialog-title"
-      className={cn("text-base font-bold tracking-[-0.01em] text-[var(--ink-primary)]", className)}
+      className={cn(
+        "text-base font-bold tracking-[-0.01em] text-[var(--ink-primary)]",
+        className,
+      )}
       {...props}
     />
   );
@@ -104,7 +108,7 @@ function DialogTitle({
 function DialogDescription({
   className,
   ...props
-}: React.ComponentProps<typeof DialogPrimitive.Description>) {
+}: ComponentProps<typeof DialogPrimitive.Description>) {
   return (
     <DialogPrimitive.Description
       data-slot="dialog-description"

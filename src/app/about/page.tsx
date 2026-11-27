@@ -13,7 +13,8 @@ export default function AboutPage() {
             關於 Pokémon Gym
           </h2>
           <p className="text-[13px] leading-relaxed text-[var(--ink-secondary)]">
-            專為 Pokémon GO 道館實戰打造的行動端屬性相剋查詢工具。免註冊、免登入，打開即可依守衛陣容快速判讀進攻推薦與反打風險。
+            專為 Pokémon GO
+            道館實戰打造的行動端屬性相剋查詢工具。免註冊、免登入，打開即可依守衛陣容快速判讀進攻推薦與反打風險。
           </p>
         </GlassPanel>
       </div>

@@ -1,10 +1,10 @@
 "use client";
 
 import { Plus, X } from "lucide-react";
+import type { PokemonCandidate } from "@/app/_types/gym";
 import { GlassPanel } from "@/components/glass-panel";
 import { PokemonSprite } from "@/components/pokemon-sprite";
 import { Button } from "@/components/ui/button";
-import type { PokemonCandidate } from "../_types/gym";
 
 export interface DefenderSlotBarProps {
   defenders: readonly PokemonCandidate[];
@@ -72,17 +72,17 @@ export function DefenderSlotBar({
             />
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-t from-[#0b0c10]/92 via-[#0b0c10]/40 to-transparent"
+              className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-t from-[var(--obsidian-canvas)]/92 via-[var(--obsidian-canvas)]/40 to-transparent"
             />
             <button
               type="button"
               onClick={() => onRemove(def.id)}
               aria-label={`移除 ${def.zhName}`}
-              className="glass-motion-safe relative z-10 ml-auto mb-auto inline-flex size-[22px] items-center justify-center rounded-full border border-white/20 bg-[#0b0c10]/65 text-white/85 transition-colors after:absolute after:-inset-2 after:content-[''] not-disabled:hover:border-[var(--risk-red)]/60 not-disabled:hover:bg-[var(--risk-red)]/35 not-disabled:hover:text-white focus-visible:outline-2 focus-visible:outline-[#60a5fa] focus-visible:outline-offset-2"
+              className="glass-motion-safe relative z-10 mb-auto ml-auto inline-flex size-[22px] items-center justify-center rounded-full border border-white/20 bg-[var(--obsidian-canvas)]/65 text-white/85 transition-colors after:absolute after:-inset-2 after:content-[''] not-disabled:hover:border-[var(--risk-red)]/60 not-disabled:hover:bg-[var(--risk-red)]/35 not-disabled:hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400"
             >
               <X className="size-3 stroke-[2.5]" aria-hidden="true" />
             </button>
-            <span className="relative z-10 w-full truncate text-[12px] font-semibold leading-tight text-[var(--ink-primary)]">
+            <span className="relative z-10 w-full truncate text-[12px] leading-tight font-semibold text-[var(--ink-primary)]">
               {def.zhName}
             </span>
           </div>
@@ -93,7 +93,7 @@ export function DefenderSlotBar({
             key={`empty-slot-${index}`}
             type="button"
             onClick={onAddClick}
-            className="glass-motion-safe flex min-h-[76px] items-center justify-center rounded-[var(--radius-slot)] border border-dashed border-[var(--glass-border-interactive)] bg-white/[0.03] px-2 text-[12px] font-semibold text-[var(--ink-muted-glass)] transition-colors hover:border-[var(--apple-blue)]/75 hover:bg-[var(--apple-blue)]/12 hover:text-[#93c5fd] focus-visible:outline-2 focus-visible:outline-[#60a5fa] focus-visible:outline-offset-2 sm:min-h-[68px]"
+            className="glass-motion-safe flex min-h-[76px] items-center justify-center rounded-[var(--radius-slot)] border border-dashed border-[var(--glass-border-interactive)] bg-white/[0.03] px-2 text-[12px] font-semibold text-[var(--ink-muted-glass)] transition-colors hover:border-[var(--apple-blue)]/75 hover:bg-[var(--apple-blue)]/12 hover:text-blue-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400 sm:min-h-[68px]"
           >
             + 空位
           </button>

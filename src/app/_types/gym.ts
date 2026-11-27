@@ -40,13 +40,3 @@ export type GymStageView =
   | { status: "loading" }
   | { status: "error"; message: string }
   | { status: "ready"; matchup: GymMatchupResult };
-
-export interface CounterGraphStageProps {
-  stage: GymStageView;
-  showRisk: boolean;
-  lockedNodeId: string | null;
-  onSelectNode: (nodeId: string | null) => void;
-  onAddDefenderClick: () => void;
-  onLoadSampleClick: () => void;
-  onRetryClick: () => void;
-}

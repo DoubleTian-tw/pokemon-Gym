@@ -1,6 +1,7 @@
 "use client";
 
 import { Check, Search, X } from "lucide-react";
+import type { PokemonCandidate } from "@/app/_types/gym";
 import { PokemonSprite } from "@/components/pokemon-sprite";
 import { TypePill } from "@/components/type-pill";
 import { Button } from "@/components/ui/button";
@@ -12,7 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import type { PokemonCandidate } from "../_types/gym";
+import { cn } from "@/lib/utils";
 
 export interface DefenderPickerDialogProps {
   open: boolean;
@@ -81,7 +82,7 @@ export function DefenderPickerDialog({
             <button
               type="button"
               onClick={() => onSearchQueryChange("")}
-              className="rounded-full p-1 text-[var(--ink-muted-glass)] hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-[#60a5fa]"
+              className="rounded-full p-1 text-[var(--ink-muted-glass)] hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-blue-400"
               aria-label="清除搜尋"
             >
               <X className="size-4" aria-hidden="true" />
@@ -112,11 +113,12 @@ export function DefenderPickerDialog({
                   aria-pressed={active}
                   disabled={disabled}
                   onClick={() => onToggleDefender(candidate.id)}
-                  className={`group relative flex min-h-[132px] flex-col justify-end overflow-hidden rounded-[var(--radius-slot)] border p-2.5 text-left transition-colors focus-visible:outline-2 focus-visible:outline-[#60a5fa] focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-45 ${
+                  className={cn(
+                    "group relative flex min-h-[132px] flex-col justify-end overflow-hidden rounded-[var(--radius-slot)] border p-2.5 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400 disabled:cursor-not-allowed disabled:opacity-45",
                     active
-                      ? "border-[#60a5fa]/85 bg-[#0a84ff]/20"
-                      : "border-white/16 bg-white/6 not-disabled:hover:border-white/30"
-                  }`}
+                      ? "border-blue-400/85 bg-[var(--apple-blue)]/20"
+                      : "border-white/16 bg-white/6 not-disabled:hover:border-white/30",
+                  )}
                 >
                   <PokemonSprite
                     src={candidate.spriteUrl}
@@ -125,7 +127,7 @@ export function DefenderPickerDialog({
                   />
                   <div
                     aria-hidden="true"
-                    className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-t from-[#0b0c10]/92 via-[#0b0c10]/45 to-transparent"
+                    className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-t from-[var(--obsidian-canvas)]/92 via-[var(--obsidian-canvas)]/45 to-transparent"
                   />
                   {active ? (
                     <span

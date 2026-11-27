@@ -31,8 +31,8 @@ orchestrator 會在 prompt 中告訴你 `<change-id>` 與 **觸發情境**（`im
 2. `docs/changes/<change-id>/sa.md`
 3. `docs/changes/<change-id>/sd.md` - **主要依據**
 4. `docs/changes/<change-id>/handoff/sd-output.md` - **必讀**，sd-writer 給你的拆分建議
-5. `docs/development-guidelines.md`、`docs/code-style-guide.md`、`docs/data-layer-guide.md`、`docs/testing-guidelines.md`
-6. 實際前端程式碼結構（若為 upgrade）：優先檢查 `src/app/` 的 route segment，再依現有 repo 結構讀取相關 `components`、`hooks`、`lib`、`types` 與 `src/api/generated/`
+5. [`.ai/skills/_references/read-guidelines.md`](../skills/_references/read-guidelines.md)（涵蓋開發規範、程式碼風格、Liquid Glass 樣式、資料層、測試與 Git 規範）
+6. 實際前端程式碼結構（若為 upgrade）：優先檢查 `src/app/` 的 route segment，再依現有 repo 結構讀取相關 `components`、`hooks`、`lib`、`types`
 
 ### 情境 2：Review 修復（review-fix）
 
@@ -76,7 +76,7 @@ git checkout -b feat/<change-slug>
 
 - `src/app/**/page.tsx`、`layout.tsx`、`loading.tsx`、`error.tsx` 等 App Router 檔案（僅在需求需要時）
 - 相關 React components、`_hooks/`、`hooks/`、`_lib/`、`lib/`、`_schemas/`、`_types/`、`types/`
-- 外部 API 呼叫（依 `data-layer-guide.md` 透過 `_hooks/` 包裝 Orval generated hooks）、資料轉換與 UI view model
+- 外部 API 呼叫（依 `docs/data-layer-guide.md` 既有決策，未定案前暫用 `_mock/`）、資料轉換與 UI view model
 - 表單、互動狀態、loading / empty / error 顯示與 a11y 行為
 - 樣式與 UI 結構（遵守 design token 邊界，需改 `globals.css` 時先詢問）
 
@@ -91,10 +91,11 @@ git checkout -b feat/<change-slug>
 依 `package.json` 既有 scripts 執行以下自動驗證指令：
 
 ```bash
+pnpm format:check
 pnpm exec tsc --noEmit
 pnpm lint
 pnpm build
-# 若 package.json 明確定義 format 或 test script，一併執行 pnpm format / pnpm test
+# 若 package.json 明確定義 test script，一併執行 pnpm test
 ```
 
 **若本次變更涉及 UI/UX 修改**，若本機有對應工具可再執行：
