@@ -24,7 +24,7 @@ orchestrator 會在 prompt 中告訴你 `<change-id>`、`<target_module>`、`rev
 3. `docs/changes/<change-id>/handoff/impl-output.md` - 取得修改的檔案清單與高風險區
 4. `.ai/skills/_references/severity-levels.md` - **必讀**，分級標準
 5. `.ai/skills/_references/code-fix-templates.md` - 常見問題範本（用來識別問題模式）
-6. `docs/development-guidelines.md`、`docs/code-style-guide.md`、`docs/data-layer-guide.md`、`docs/testing-guidelines.md` - 規範來源
+6. [`.ai/skills/_references/read-guidelines.md`](../skills/_references/read-guidelines.md) - 規範來源（涵蓋開發規範、程式碼風格、`docs/style-guide.md`、資料層與測試指南）
 7. impl 修改的所有 `src/` 檔案（含任何被牽動到的 `src/**/*.test.ts`）
 8. **若 `docs/features/<target_module>/<target_module>-{sa,sd}.md` 存在**：讀進來，對比 `docs/changes/<id>/{sa,sd}.md`，做「features 文件更新合理性」review
 
@@ -78,7 +78,7 @@ orchestrator 會在 prompt 中告訴你 `<change-id>`、`<target_module>`、`rev
    - **既有測試保護**（🚨）：檢查既有 `src/**/*.test.ts` 案例是否被刪除，或原本嚴格斷言（如 `toEqual`、`toStrictEqual`）是否被偷偷放寬（如改成 `toBeDefined` / `toBeTruthy`）來讓壞掉的程式過關
    - **抓假測試與弱斷言**（⚠️／🚨）：若審查範圍包含測試檔（含獨立 `/code-review` 檢查整個分支時），檢查是否把被測函式／模組的核心邏輯全 mock 掉只測假回傳值；錯誤路徑是否只測寬鬆 `toThrow()` 而未驗證預期錯誤型別（如 `ApiError`）、狀態碼或錯誤碼
    - **抓違規 UI／DOM 測試與為測而測**（🚨／⚠️）：依 `docs/testing-guidelines.md`，檢查是否偷引 `jsdom` / Testing Library、斷言文案／CSS class／DOM 結構，或為無分支邏輯的薄轉呼叫撰寫空洞 mock 測試
-   - **核實證據與分工邊界**（🚨／⚠️）：對照 `impl-output.md` 確認 `package.json` 既有驗證指令（目前為 `pnpm exec tsc --noEmit`、`pnpm lint`、`pnpm build`；若有定義 `format` / `test` 亦須核實）確已實跑通過，且 `implementer` 未越界先撰寫本次新功能的測試檔（僅允許因簽名異動對齊既有測試 fixture）
+   - **核實證據與分工邊界**（🚨／⚠️）：對照 `impl-output.md` 確認 `package.json` 既有驗證指令（目前為 `pnpm format:check`、`pnpm exec tsc --noEmit`、`pnpm lint`、`pnpm build`；若有定義 `test` 亦須核實）確已實跑通過，且 `implementer` 未越界先撰寫本次新功能的測試檔（僅允許因簽名異動對齊既有測試 fixture）
 
 6. **Features 文件更新合理性**（**新增，僅 upgrade 模式適用**）
    - 對比：`diff docs/features/<target_module>/<target_module>-sa.md docs/changes/<id>/sa.md`

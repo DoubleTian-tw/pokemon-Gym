@@ -173,7 +173,7 @@ mv docs/changes/<id> docs/changes/_archive/<id>
   2. 整理 **1～2 條候選永久規則**，並建議對應落點：
      - 元件／型別／命名規範與反模式 → `docs/code-style-guide.md`
      - 目錄結構／Server-Client 邊界／拆分原則 → `docs/development-guidelines.md`
-     - Orval／TanStack Query／Axios／Zod 資料層慣例 → `docs/data-layer-guide.md`
+     - 資料層／API／表單架構慣例 → `docs/data-layer-guide.md`
      - 測試規範／取捨／反假測試／案例遺漏模式 → `docs/testing-guidelines.md`
      - 可機械檢查的寫法 → `eslint.config.mjs`
      - 常見 Review 修復樣板 → `.ai/skills/_references/code-fix-templates.md`

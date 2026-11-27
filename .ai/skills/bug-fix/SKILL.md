@@ -20,13 +20,13 @@ $ARGUMENTS
    - 純 UI／畫面互動／跨頁瀏覽器問題（超出 Node Vitest 範圍，且禁裝 `jsdom`／Testing Library）：先追蹤元件狀態與呼叫鏈取得確切因果證據；若能抽離成純函式邏輯則先抽離寫紅燈測試。
 2. **科學排除、不靠猜測**：禁止憑直覺加上「順便加個 `?.`、`setTimeout` 或 `try/catch`」的猜測性修補。當證據推翻假說時，立即還原該假說引出的改動。
 3. **只改證據支持的最小範圍**：能精準在數行內解決，絕不順手重構無關模組；若發現大面積設計缺陷，修完本次 Bug 後另開 `/refactor` 或 `/start-change` 處理。
-4. **遵循專案邊界**：一律用 `pnpm`；嚴禁讀取／修改 `.env*`（`.env.example` 除外）；不手改 `src/api/generated/` 或擅動 `globals.css` design token。
+4. **遵循專案邊界**：一律用 `pnpm`；嚴禁讀取／修改 `.env*`（`.env.example` 除外）；不擅動 `globals.css` design token 或擅自引入未定案資料層套件。
 
 ## 執行流程
 
 ### Step 1：重現失敗或追蹤取證（Reproduce First）
 
-- 依 Bug 描述釐清對應路由、`src/` 檔案、純函式模組或測試檔，並讀取 `docs/testing-guidelines.md`。
+- 依 Bug 描述釐清對應路由、`src/` 檔案、純函式模組或測試檔，並先依 [`../_references/read-guidelines.md`](../_references/read-guidelines.md) 讀取規範（含 `docs/testing-guidelines.md`）。
 - **分流處理**：
   - **邏輯／狀態／資料轉換／API 請求與錯誤處理**：若專案已設定 `test` script，撰寫能穩定觸發此 Bug 的失敗案例（紅燈）並實跑取得失敗輸出；若尚未設定 `test` script，則追蹤邏輯呼叫鏈與型別邊界取證：
     ```bash
@@ -45,7 +45,7 @@ $ARGUMENTS
 
 ### Step 3：最小範圍修復（Surgical Fix）
 
-- 若修復跨越既有元件／Hook 公共介面或狀態歸屬邊界，先依 [`.ai/agents/architect.md`](../../agents/architect.md) 原則畫出兩種設計形狀並依三條硬標準擇一（同時對照 `docs/features/<module>/`、`docs/development-guidelines.md`、`docs/data-layer-guide.md`、`docs/code-style-guide.md`），不靠疊補丁硬繞。
+- 若修復跨越既有元件／Hook 公共介面或狀態歸屬邊界，先依 [`.ai/agents/architect.md`](../../agents/architect.md) 原則畫出兩種設計形狀並依三條硬標準擇一（同時對照 `docs/features/<module>/` 與 [`../_references/read-guidelines.md`](../_references/read-guidelines.md) 所列規範），不靠疊補丁硬繞。
 - 針對 Step 2 確認的唯一根因執行最小化修改，**嚴禁放寬既有測試斷言或刪除舊案例**。
 
 ### Step 4：驗證與回歸（Verify on the Same Surface）
@@ -57,10 +57,11 @@ $ARGUMENTS
   ```
 - **依序執行全套自動驗證**（依 `package.json` 既有 scripts）：
   ```bash
+  pnpm format:check
   pnpm exec tsc --noEmit
   pnpm lint
   pnpm build
-  # 若 package.json 有定義 format / test script，一併執行 pnpm format / pnpm test
+  # 若 package.json 有定義 test script，一併執行 pnpm test
   ```
 - **跨面與人工驗證邊界**：涉及 UI 互動、版面或跨系統流程時，明確列出待人工於 `pnpm dev`（含手機瀏覽器）確認的操作步驟，**禁止將未經畫面／流程驗證的項目宣稱已完全驗收**。
 

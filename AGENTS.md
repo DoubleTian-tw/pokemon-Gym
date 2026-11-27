@@ -2,7 +2,7 @@
 
 ## 專案結構與模組組織
 
-Pokémon Gym 是使用 Next.js App Router（React 19 + TypeScript + Tailwind CSS v4 + shadcn/ui）建置的應用程式，執行環境鎖定 Node.js `24.x` 與 `pnpm`。路由定義位於 `src/app/`（如 `page.tsx`、`about/page.tsx`、`pokedex/page.tsx`），各路由專用元件與邏輯依 co-location 原則放於 `_components/`、`_hooks/`、`_lib/`。跨頁共用元件放在 `src/components/`，shadcn/ui 基礎元件放在 `src/components/ui/`，工具函式放在 `src/lib/`。既有圖資位於 `src/images/`，公開靜態檔案位於 `public/`。
+Pokémon Gym 是使用 Next.js App Router（React 19 + TypeScript + Tailwind CSS v4 + shadcn/ui）建置的應用程式，執行環境鎖定 Node.js `24.x` 與 `pnpm`。路由定義位於 `src/app/`，採 **Route Co-location** 原則將單頁專用檔案放在最深層路由底下的 `_components/`、`_hooks/`、`_lib/`、`_types/`、`_mock/`；確認被 2 個以上路由共用才升級搬到 `src/components/`、`src/hooks/`、`src/lib/` 或 `src/types/`。shadcn/ui 基礎元件位於 `src/components/ui/`，既有圖資位於 `src/images/`，公開靜態檔案位於 `public/`。
 
 ## 建置、測試與開發指令
 
@@ -10,18 +10,24 @@ Pokémon Gym 是使用 Next.js App Router（React 19 + TypeScript + Tailwind CSS
 
 - `pnpm install` 依照 `pnpm-lock.yaml` 安裝相依套件。
 - `pnpm dev` 啟動 Next.js 本機開發伺服器。
-- `pnpm lint` 執行 ESLint（`eslint-config-next`）檢查。
+- `pnpm format` / `pnpm format:check` 執行 Prettier（含 Tailwind class 排序）排版與檢查。
+- `pnpm lint` 執行 ESLint（`eslint-config-next` + `eslint-config-prettier`）檢查。
 - `pnpm exec tsc --noEmit` 執行 TypeScript 型別檢查。
 - `pnpm build` 建置正式環境產物（輸出至 `.next/`）。
 - `pnpm start` 在建置後啟動正式環境伺服器。
 
 ## 程式碼風格與命名慣例
 
-遵循 `docs/development-guidelines.md` 與所在檔案既有格式。預設使用 Server Component，僅互動或瀏覽器 API 邊界加 `'use client'`。元件名稱使用 PascalCase，函式使用 camelCase，React hooks 以 `use` 開頭。跨 `src/` 匯入時使用 `@/`，同目錄或相鄰檔案使用相對路徑。修改畫面時，請重用 `src/components/ui/` 既有 shadcn/ui 元件與 Tailwind CSS v4 類別。
+所有開發與審查依循 [`docs/development-guidelines.md`](docs/development-guidelines.md)、[`docs/code-style-guide.md`](docs/code-style-guide.md)、[`docs/style-guide.md`](docs/style-guide.md) 與 [`docs/data-layer-guide.md`](docs/data-layer-guide.md)：
+
+- **檔案命名與匯出**：所有檔案一律 `kebab-case`（如 `defender-slot-bar.tsx`、`use-gym-workspace.ts`）；**禁止 `index.ts` / `index.tsx` barrel file**。
+- **React 與 TypeScript**：預設 Server Component，僅互動或瀏覽器 API 邊界加 `"use client"`；頂層元件、Page、Hook 與匯出函式一律使用 `export function` / `export default function`；物件與 Props 用 `interface`，Union 用 `type`；`next.config.ts` 已開啟 `reactCompiler: true`，預設不手寫 `useMemo` / `useCallback`。
+- **Import 規範**：4 段分組（React/Next → 第三方 → `@/` → `./`）；僅同資料夾使用 `./`，跨資料夾一律使用 `@/`（禁止 `../`）。
+- **樣式與圖片**：Prettier（2 空格、雙引號、分號）；Tailwind v4 禁止動態拼接與任意色碼（可用必要幾何方括號），`disabled` 按鈕搭配 `not-disabled:hover/active`；本地圖資用 `next/image`，外部大量 CDN 圖可封裝原生 `<img>` 並補齊尺寸、`lazy`、fallback 與 ESLint 註解。
 
 ## 測試指南
 
-執行驗證時請確認 `pnpm exec tsc --noEmit`、`pnpm lint` 與 `pnpm build` 皆以退出碼 `0` 通過，並透過 `pnpm dev` / `pnpm start` 確認主要路由（`/`、`/about`、`/pokedex`）正常回應且無 Console 錯誤。
+執行驗證時請確認 `pnpm format:check`、`pnpm exec tsc --noEmit`、`pnpm lint` 與 `pnpm build` 皆以退出碼 `0` 通過，並透過 `pnpm dev` / `pnpm start` 確認主要路由正常回應且無 Console 錯誤。
 
 ## Commit 與 Pull Request 指南
 
