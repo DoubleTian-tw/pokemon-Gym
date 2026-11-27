@@ -1,17 +1,23 @@
-import { Shield } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Suspense } from "react";
+import { HeadBar } from "@/components/head-bar";
+import { GymWorkspace } from "./_components/gym-workspace";
+import { GymWorkspaceSkeleton } from "./_components/gym-workspace-skeleton";
 
 export default function GymPage() {
   return (
-    <section className="space-y-4">
-      <h1 className="text-xl font-semibold">Gym（Next.js 基礎底座）</h1>
-      <p className="text-sm text-muted-foreground">
-        此頁面為 Next.js 16 + Tailwind CSS v4 + shadcn/ui 架構遷移佔位殼，正式 UI/UX 與資料串接將於後續階段實作。
-      </p>
-      <Button type="button" variant="default">
-        <Shield className="size-4" />
-        shadcn/ui + Lucide 驗證按鈕
-      </Button>
-    </section>
+    <div className="space-y-3">
+      <HeadBar
+        title="Gym"
+        rightSlot={
+          <span className="glass-tinted rounded-full px-2.5 py-1 text-[11px] font-semibold text-[var(--ink-muted-glass)]">
+            無會員・免登入
+          </span>
+        }
+      />
+
+      <Suspense fallback={<GymWorkspaceSkeleton />}>
+        <GymWorkspace />
+      </Suspense>
+    </div>
   );
 }
