@@ -1,433 +1,184 @@
 # 程式碼風格指南
 
-> 受眾：AI（Claude Code）。本文件定義本專案獨有的風格規範。
-> 效能最佳化規則 → `.ai/skills/vercel-react-best-practices/`
-> Component 組合模式 → `.ai/skills/vercel-composition-patterns/`
+> 受眾：AI 協作與開發者。本文件定義 **Pokémon Gym** 的命名、TypeScript、Formatting、Import、Tailwind CSS v4 與圖片規範。
+> 架構與狀態歸屬 → [`development-guidelines.md`](development-guidelines.md)
+> Liquid Glass 視覺設計與模糊預算 → [`style-guide.md`](style-guide.md)
+
+## Vercel Skills 對照（不重複條列）
+
+React / Next.js 效能與元件組合的通用規則已內建於 `.ai/skills/`，本文件僅保留專案自訂規則，其餘請直接依以下技能執行：
+
+| 主題 | 對應 Skill 與規則 |
+| --- | --- |
+| 避免 barrel import 拖慢打包 | `.ai/skills/vercel-react-best-practices/rules/bundle-barrel-imports.md` |
+| 條件渲染避免印出 `0`（改用三元） | `.ai/skills/vercel-react-best-practices/rules/rendering-conditional-render.md` |
+| 禁止在元件內部定義子元件 | `.ai/skills/vercel-react-best-practices/rules/rerender-no-inline-components.md` |
+| 衍生狀態不開 `useEffect` 同步 | `.ai/skills/vercel-react-best-practices/rules/rerender-derived-state-no-effect.md` |
+| React 19 `ref` 直接當 prop（不用 `forwardRef`） | `.ai/skills/vercel-composition-patterns/rules/react19-no-forwardref.md` |
+| 避免大量 boolean props 改用複合/明確變體 | `.ai/skills/vercel-composition-patterns/rules/architecture-avoid-boolean-props.md` |
 
 ---
 
 ## 1. 通用原則
 
-1. 保持程式碼簡潔、清晰
-2. 遵循一致的命名慣例
-3. 避免過深的巢狀結構
-4. 善用 TypeScript 型別系統，明確定義型別，避免 `any`
+1. 保持程式碼直白、淺層巢狀（優先使用 early return）。
+2. 善用 TypeScript 明確定義合約，**禁止使用 `any`**（未知型別一律用 `unknown` + 型別窄化）。
+3. 嚴格維持單一狀態擁有者與單向資料流。
 
 ---
 
-## 2. 命名慣例
+## 2. 命名慣例與檔案匯出
 
-| 對象              | 規則                    | 範例                            |
-| ----------------- | ----------------------- | ------------------------------- |
-| 元件（Component） | `PascalCase`            | `CourseTable`, `SidebarNav`     |
-| Hook              | `camelCase`，`use` 開頭 | `useToggle`, `useCourses`       |
-| 一般函式 / 變數   | `camelCase`             | `getCourses`, `isLoading`       |
-| 型別 / Interface  | `PascalCase`            | `Course`, `ApiResponse`         |
-| 常數              | `SCREAMING_SNAKE_CASE`  | `MAX_PAGE_SIZE`, `API_BASE_URL` |
-| 檔案（元件）      | `kebab-case.tsx`        | `course-table.tsx`              |
-| 檔案（hook）      | `use-xxx.ts`            | `use-toggle.ts`                 |
-| 檔案（工具）      | `kebab-case.ts`         | `format-date.ts`                |
+| 對象 | 規則 | 範例 |
+| --- | --- | --- |
+| 元件（Component） | `PascalCase` | `DefenderSlotBar`, `TypePill` |
+| Hook | `camelCase`，`use` 開頭 | `useGymWorkspace`, `useToggle` |
+| 一般函式 / 變數 | `camelCase` | `computeGymMatchups`, `isLoading` |
+| 型別 / Interface | `PascalCase` | `PokemonCandidate`, `HeadBarProps` |
+| 模組常數 | `SCREAMING_SNAKE_CASE` | `MAX_DEFENDERS`, `POKEMON_TYPE_META` |
+| 所有檔案名稱 | `kebab-case` | `defender-slot-bar.tsx`, `use-gym-workspace.ts`, `matchup-engine.ts`, `gym.ts` |
+
+- **禁止 barrel file**：不可建立 `index.ts` 或 `index.tsx` 集中轉出模組，一律直接匯入目標檔案（Next.js 路由保留檔除外）。
 
 ---
 
-## 3. TypeScript 型別規範
+## 3. TypeScript 與函式宣告規範
 
-### Interface vs Type
+### 頂層函式一律使用 `function` 宣告
 
-- **`interface`**：定義物件結構、元件 Props
-- **`type`**：複合型別、Union、Utility types
+- 元件、Next.js Page/Layout、Custom Hook 與匯出的工具函式，一律使用 `export function` 或 `export default function`。
+- 只有 inline callback、事件處理函式與 `.map()` / `.filter()` 等陣列 callback 使用 arrow function。
+
+```tsx
+// ✅ 頂層元件與 Hook 使用 function 宣告
+export function TypePill({ type, className }: TypePillProps) {
+  return <span className={cn("...", className)}>{type}</span>;
+}
+
+export default function GymPage() {
+  return <main>...</main>;
+}
+```
+
+### `interface` vs `type`
+
+- **`interface`**：定義物件結構、元件 Props。
+- **`type`**：Union、Intersection、Tuple、Mapped / Utility types。
 
 ```typescript
-// ✅ 物件結構用 interface
-interface Course {
+// ✅ 物件結構與 Props 用 interface
+export interface PokemonCandidate {
   id: string;
-  title: string;
-  status: CourseStatus;
+  name: string;
+  types: readonly [PokemonTypeId] | readonly [PokemonTypeId, PokemonTypeId];
 }
 
 // ✅ Union 或複合型別用 type
-type CourseStatus = 'draft' | 'published' | 'archived';
-type ApiResponse<T> = { data: T; error: null } | { data: null; error: string };
+export type GymStageStatus = "empty" | "loading" | "error" | "ready";
 ```
 
-### Props 定義規則
+### Props 定義與解構規則
 
-- **1 個 required prop** → 允許 inline
-- **2+ 個 props 或有 optional prop** → 一律用 `interface`
-- React 型別要直接 import 需要的型別，例如 `import type { ReactNode } from 'react'`。不要為了使用型別而寫 `React.ReactNode`，也不要 import 整個 `React` namespace 後再取子物件。
+- **1 個必填 prop**：允許 inline 寫在參數型別。
+- **2+ 個 props 或含選填 prop**：一律抽取成具名 `interface`（如 `CardProps`）。
+- **參數直接解構**：元件參數必須直接解構 Props，禁止在 JSX 中寫 `props.xxx`。
+- **Discriminated Union Props**：若不同 mode 有專屬欄位，缺少該欄位的分支必須補上 `?: never` 才能安全解構。
+- **React 型別匯入**：一律使用 `import type { ReactNode } from "react"`，禁止整包 `import React` 或寫 `React.ReactNode`。
 
 ```tsx
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
 
-// ✅ 1 required prop → inline OK
-export const CardBody = ({ children }: { children: ReactNode }) => {
+// ✅ 1 個必填 prop 可 inline
+export function CardBody({ children }: { children: ReactNode }) {
   return <div className="p-4">{children}</div>;
-};
-
-// ✅ 2+ props → interface
-interface CardProps {
-  children: ReactNode;
-  variant?: 'default' | 'outlined';
-  className?: string;
 }
 
-export const Card = ({ children, variant = 'default', className }: CardProps) => {
-  return <div className={`card-${variant} ${className ?? ''}`}>{children}</div>;
-};
-```
+// ✅ Discriminated Union Props 補齊 ?: never
+type PickerItemProps =
+  | { mode: "empty"; name?: never }
+  | { mode: "filled"; name: string };
 
-```tsx
-// ❌ 不要為了型別 import 整包 React namespace
-import React from 'react';
-// ✅ 只 import 實際使用的 React 型別
-import type { ReactNode } from 'react';
-
-interface PanelProps {
-  children: React.ReactNode;
+export function PickerItem({ mode, name }: PickerItemProps) {
+  return mode === "filled" ? <span>{name}</span> : <span>空欄位</span>;
 }
-
-interface PanelProps {
-  children: ReactNode;
-}
-```
-
-### React 19 注意事項
-
-- **不使用 `forwardRef`**：React 19 起，`ref` 直接作為 prop 傳入
-- **Context 讀取**：可依情境使用 `use(Context)`；既有 `useContext` 若符合 React Hooks 規則，不視為違規
-
-```tsx
-// ✅ React 19：use() 可讀取 Context
-import { use } from 'react';
-
-// ✅ React 19：ref 直接當 prop
-interface InputProps {
-  ref?: React.Ref<HTMLInputElement>;
-  placeholder?: string;
-}
-
-export const Input = ({ ref, placeholder }: InputProps) => {
-  return <input ref={ref} placeholder={placeholder} />;
-};
-
-const value = use(SomeContext);
 ```
 
 ---
 
-## 4. 格式化
+## 4. 格式化與 Import 規範
 
-目前 `package.json` 尚未設定 Prettier 與 `pnpm format` script，程式碼須遵循既有檔案格式與 `pnpm lint`（ESLint）規範；若後續導入 Prettier，再依專案設定執行格式化。
+### Prettier 自動格式化
 
----
+- 由根目錄 `.prettierrc` 與 `prettier-plugin-tailwindcss` 管理格式：**2 空格縮排、雙引號 `"`、結尾分號 `;`、尾逗號 `all`**。
+- Tailwind class 排序由 Prettier plugin 自動處理，不手動調整順序。
+- 提交或結束編輯前執行 `pnpm format:check`（需要自動排版時執行 `pnpm format`）。
 
-## 5. 元件撰寫規範
+### Import 路徑與 4 段分組順序
 
-### Props 一律在參數處解構 (Destructuring)
+匯入順序固定分為 4 組（組間保留單行或由格式化維持清晰）：
 
-元件的 props 必須直接在函數參數中解構，避免在元件內部使用 `props.xxx`，這樣能一目了然元件相依了哪些資料。
+1. React / Next.js 核心（`react`、`next/*`）
+2. 第三方套件（`lucide-react`、`radix-ui`、`class-variance-authority` 等）
+3. 站內 `@/` 絕對路徑（`@/components/*`、`@/lib/*`、`@/app/*` 等）
+4. 同資料夾相對路徑（`./*`）
 
-```tsx
-// ❌ 避免使用 props.xxx
-export const UserProfile = (props: UserProfileProps) => {
-  return <div>{props.name}</div>
-}
+**路徑規則**：
 
-// ✅ 直接解構
-export const UserProfile = ({ name, age }: UserProfileProps) => {
-  return <div>{name}</div>
-}
-```
-
-#### 特殊狀況：Discriminated Union Props 的解構
-
-當 Props 是由多個物件型別組成的 **Discriminated Union（辨識型聯合型別）**，表示「不同模式（mode）會有不同的專屬屬性」時，直接解構會導致 TypeScript 報錯。
-
-為了兼顧嚴格的型別推導與解構的便利性，**必須在不包含該屬性的型別分支中補上 `?: never`**：
+- **只有同資料夾檔案允許用 `./`**（例如 `gym-workspace.tsx` 匯入 `./canvas-controls`）。
+- **所有跨資料夾匯入一律使用 `@/`**（包含 `page.tsx` 匯入 `@/app/_components/...`，以及 `_components` 匯入 `@/app/_types/...` 或 `@/app/_hooks/...`）。
+- **禁止 `../` 爬層匯入**，降低搬移與重構時的路徑修改成本。
 
 ```tsx
-// ❌ 直接解構會報錯，因為 'create' 模式沒有 'ad' 屬性
-type AdEditorProps =
-  | { mode: 'create' }
-  | { mode: 'edit'; ad: AdFixture }
+"use client";
 
-export const AdEditor = ({ mode, ad }: AdEditorProps) => { ... } // Error!
-
-// ✅ 在缺少的屬性補上 `?: never`
-type AdEditorProps =
-  | { mode: 'create'; ad?: never }
-  | { mode: 'edit'; ad: AdFixture }
-
-export const AdEditor = ({ mode, ad }: AdEditorProps) => {
-  const isEdit = mode === 'edit';
-  // TS 會正確推導：isEdit 為 true 時 ad 必為 AdFixture，否則為 undefined
-}
-```
-
-### 一律使用 arrow function
-
-元件、hook、工具函式一律以 arrow function 撰寫，**唯一例外是 shadcn/ui 自動產生的檔案**（`src/components/ui/`、`src/lib/utils.ts`），維持工具產生的 `function` 宣告原樣，避免重新 init 時產生 diff 衝突。
-
-```tsx
-// ✅ named export 元件
-export const Card = ({ children }: CardProps) => {
-  return <div>{children}</div>;
-};
-
-// ✅ App Router 的 default export：拆成 const + export default
-const Page = () => {
-  return <main>...</main>;
-};
-
-export default Page;
-```
-
-> arrow function 沒有 hoisting：互相引用的函式必須「先定義、後使用」。
-
-### 不在元件內部定義元件
-
-```tsx
-// ❌ 每次 render 都會重建 Item
-export const List = ({ items }: { items: string[] }) => {
-  const Item = ({ text }: { text: string }) => {
-    return <li>{text}</li>
-  }
-  return <ul>{items.map((item) => <Item key={item} text={item} />)}</ul>
-}
-
-// ✅ 獨立定義
-const Item = ({ text }: { text: string }) => {
-  return <li>{text}</li>
-}
-
-export const List = ({ items }: { items: string[] }) => {
-  return <ul>{items.map((item) => <Item key={item} text={item} />)}</ul>
-}
-```
-
-### 條件渲染用三元，不用 `&&`
-
-```tsx
-// ❌ 可能渲染 "0"
-{
-  count && <Badge>{count}</Badge>;
-}
-
-// ✅ 明確
-{
-  count > 0 ? <Badge>{count}</Badge> : null;
-}
-```
-
-### Tailwind 類別不可動態拼接
-
-Tailwind CSS 依賴**靜態分析**來提取使用的 class，不會執行 JavaScript。因此，**絕對不可以**使用樣板字面值（Template Literal）動態組合類別名稱。
-
-```tsx
-// ❌ Tailwind 無法掃描到 `typo-color-sky`，導致樣式遺失
-export const Typography = ({ color }: { color: string }) => {
-  return <span className={`typo-color-${color}`}>...</span>
-}
-
-// ✅ 使用靜態 Mapping 物件，確保完整字串出現在原始碼中
-const COLOR_CLASSES = {
-  sky: 'typo-color-sky',
-  earth: 'typo-color-earth'
-}
-export const Typography = ({ color }: { color: keyof typeof COLOR_CLASSES }) => {
-  return <span className={COLOR_CLASSES[color]}>...</span>
-}
-```
-
-### 重複元件用 config 陣列 + map 產出
-
-同一個元件在同區塊重複 **≥ 3 次**、彼此只有少數 props 不同時，抽成 **module 層 config 陣列 + `.map()`** 產出，勿逐一手寫每個實例。差異的**行為**（`active`、`onClick`）也一併資料化成函式欄位，維護時只改資料、不動 JSX。
-
-```tsx
-// ❌ 逐一手寫，差異埋在一大片重複 JSX 裡
-<ToolbarButton label="粗體" active={s.isBold} onClick={() => editor.toggleBold()}>
-  <BoldIcon />
-</ToolbarButton>
-<ToolbarButton label="斜體" active={s.isItalic} onClick={() => editor.toggleItalic()}>
-  <ItalicIcon />
-</ToolbarButton>
-<ToolbarButton label="底線" active={s.isUnderline} onClick={() => editor.toggleUnderline()}>
-  <UnderlineIcon />
-</ToolbarButton>
-// ...再 15 個
-
-// ✅ config 陣列 + map；行為資料化成 isActive / run 函式
-interface ToolbarItemConfig {
-  key: string
-  label: string
-  icon: LucideIcon
-  isActive: (state: ToolbarState) => boolean
-  run: (editor: Editor) => void
-}
-
-const TOOLBAR_ITEMS: ToolbarItemConfig[] = [
-  { key: 'bold', label: '粗體', icon: BoldIcon, isActive: (s) => s.isBold, run: (e) => e.toggleBold() },
-  { key: 'italic', label: '斜體', icon: ItalicIcon, isActive: (s) => s.isItalic, run: (e) => e.toggleItalic() },
-  { key: 'underline', label: '底線', icon: UnderlineIcon, isActive: (s) => s.isUnderline, run: (e) => e.toggleUnderline() },
-  // ...
-]
-
-{TOOLBAR_ITEMS.map((item) => {
-  const Icon = item.icon
-  return (
-    <ToolbarButton
-      key={item.key}
-      label={item.label}
-      active={item.isActive(state)}
-      onClick={() => item.run(editor)}
-    >
-      <Icon aria-hidden="true" />
-    </ToolbarButton>
-  )
-})}
-```
-
-邊界（避免矯枉過正）：
-
-- **`key` 用穩定 id，不用陣列 index**——重排或增刪時才不會錯亂。
-- **「長得像但行為特殊」的個案保留為獨立元件，不硬塞進 config**。例如 `rich-text-editor.tsx` 的連結按鈕帶 popover 表單，就獨立為 `LinkToolbarButton` 排除在 map 之外，勿為了塞進陣列而在 config 裡堆 `if`。
-- **呼應「勿過早抽象」**：只重複 1～2 次別抽，維持手寫比硬做資料驅動更好讀。
-
-> 何時該抽（重複 ≥ 3 次的量化訊號與拆分決策）見 [`development-guidelines.md`](development-guidelines.md) §元件拆分策略。真實範例見 `src/app/courses/[id]/_components/rich-text-editor.tsx` 的 `TOOLBAR_GROUPS`。
-
----
-
-## 6. Accessibility Patterns
-
-### 鍵盤導航
-
-互動元件需處理鍵盤事件：
-
-```tsx
-import { KeyboardEvent } from 'react';
-
-const handleKeyDown = (e: KeyboardEvent) => {
-  switch (e.key) {
-    case 'ArrowDown':
-      /* 向下 */ break;
-    case 'ArrowUp':
-      /* 向上 */ break;
-    case 'Enter':
-      /* 確認 */ break;
-    case 'Escape':
-      /* 關閉 */ break;
-  }
-};
-```
-
-### Modal 焦點管理
-
-```tsx
-'use client';
-
-import { ReactNode, useEffect, useRef } from 'react';
-
-interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  children: ReactNode;
-}
-
-export const Modal = ({ isOpen, onClose, children }: ModalProps) => {
-  const modalRef = useRef<HTMLDivElement>(null);
-  const previousFocusRef = useRef<HTMLElement | null>(null);
-
-  useEffect(() => {
-    if (isOpen) {
-      previousFocusRef.current = document.activeElement as HTMLElement;
-      modalRef.current?.focus();
-    } else {
-      previousFocusRef.current?.focus();
-    }
-  }, [isOpen]);
-
-  if (!isOpen) return null;
-
-  return (
-    <div
-      ref={modalRef}
-      role="dialog"
-      aria-modal="true"
-      tabIndex={-1}
-      onKeyDown={(e) => e.key === 'Escape' && onClose()}
-    >
-      {children}
-    </div>
-  );
-};
+import { Suspense } from "react";
+import { Plus } from "lucide-react";
+import { useGymWorkspace } from "@/app/_hooks/use-gym-workspace";
+import { Button } from "@/components/ui/button";
+import { CanvasControls } from "./canvas-controls";
 ```
 
 ---
 
-## 7. 注釋規範
+## 5. 重複元件抽成 Config 陣列
 
-預設**不寫注釋**。只在以下情況加注釋：
+同一個元件在同區塊重複 **≥ 3 次**、僅少數 props 或行為不同時，抽成 module 層 config 陣列 + `.map()` 產出：
 
-- 非顯而易見的業務規則或限制
-- 特定 bug 的 workaround
-- 複雜演算法的關鍵步驟
-
-```typescript
-// ✅ 有必要：說明為什麼，不是說什麼
-// 外部 API 回傳的 price 是整數分（cents），需除以 100 顯示
-const displayPrice = price / 100;
-
-// ❌ 不必要：code 本身就說得很清楚
-// 設定 loading 為 true
-setIsLoading(true);
-```
+- `key` 必須使用穩定 id，不用陣列 index。
+- 行為差異（如 `isActive`、`run`）一併資料化為函式欄位。
+- 長相相同但行為特殊（例如額外帶 popover）的個案保留獨立元件，不硬塞進 config 寫一堆 `if`。
+- 重複 1～2 次保持手寫，勿過早抽象。
 
 ---
 
-## 8. 語言規範
+## 6. Tailwind CSS v4 樣式規範
 
-- 所有中文內容使用繁體中文
+- **禁止動態拼接 class 名稱**：不可寫 `` `bg-${color}-500` ``，一律使用靜態 lookup 物件或 `cva`（元件變體 ≥ 3 種時建議使用 `cva`）。
+- **`cn()` 合併原則**：有條件樣式或接收外部 `className` 時才使用 `cn()`（`@/lib/utils`）；純靜態 class 字串不硬包 `cn()`。
+- **Mobile-first 響應式**：預設撰寫手機版樣式，再往上以 `sm:` / `md:` / `lg:` 覆寫。手機表單輸入框字級至少為 `text-base sm:text-sm`，避免 iOS Safari 自動放大頁面。
+- **Disabled 按鈕防呆（Tailwind v4）**：禁用按鈕若保留 `disabled:cursor-not-allowed`，所有 hover 與 active 樣式必須加上 `not-disabled:hover:*` 與 `not-disabled:active:*`，防止禁用狀態仍觸發視覺回饋。
+- **Inline `style` 邊界**：僅允許執行期動態計算值（座標、`objectPosition`、動態運算色碼）；靜態樣式一律寫在 Tailwind class 或 CSS token。
+- **Arbitrary values（`[...]`）邊界**：
+  - **禁止硬寫任意色碼**（例如 `text-[#fff]`、`bg-[#0b0c10]`）：色彩一律來自 `src/app/globals.css` design tokens、CSS variables 或常數模組。
+  - **放行必要幾何值**：當標準 Tailwind 刻度沒有對應值（如 `max-h-[85dvh]`、`min-h-[76px]`）時，允許使用幾何方括號。
+- **專案專屬 Liquid Glass 規範**：4 層 `backdrop-filter` 模糊預算、`.glass-blur` vs `.glass-tinted` 分層與 18 屬性文字對比規則見 [`style-guide.md`](style-guide.md)。
 
 ---
 
-## 9. 圖片使用規範
+## 7. 圖片與媒體載入規範（分層混合策略）
 
-**一律使用 `next/image` 的 `<Image>`，禁止使用原生 `<img>` tag。**
+- **本地靜態圖資與主視覺圖**（`public/`、`src/images/` 或首屏 LCP 圖片）：一律使用 `next/image` 的 `<Image>`，取得自動格式最佳化與尺寸防跳動（CLS）保護。
+- **外部大量／第三方 CDN 圖資**（例如 PokéAPI 寶可夢圖鑑 sprite）：允許封裝在專屬元件（如 `PokemonSprite`）內使用原生 `<img>`，避免大量外部圖消耗 Image Optimization 配額與頻繁更動 `next.config.ts`，但必須同時滿足：
+  1. 補齊語意化 `alt`（或純裝飾加上 `aria-hidden`）
+  2. 外層容器明確限制尺寸（防止版面跳動）
+  3. 加上 `loading="lazy"`（首屏重點圖可傳 `priority` 切為 `"eager"`）與 `decoding="async"`
+  4. 提供壞圖 fallback（例如置中 icon 佔位）
+  5. 附上行內 ESLint 說明註解：`// eslint-disable-next-line @next/next/no-img-element -- <原因>`
 
-`<Image>` 提供自動 lazy loading、WebP 格式轉換、尺寸優化與 CLS 防護，原生 `<img>` 完全沒有這些。
+---
 
-```tsx
-// ❌ 不使用原生 img tag
-<img src={coverImageUrl} alt="課程封面" width={160} height={120} />
+## 8. Accessibility、註解與語言規範
 
-// ✅ 使用 next/image
-import Image from 'next/image'
-
-<Image src={coverImageUrl} alt="課程封面" width={160} height={120} />
-
-// ✅ fill 模式（容器需設 position: relative 與明確高度）
-<div className="relative h-[120px] w-[160px]">
-  <Image src={coverImageUrl} alt="課程封面" fill className="object-cover" />
-</div>
-```
-
-### 外部圖片網域
-
-使用外部 URL（例如 Unsplash、CDN）需在 `next.config.ts` 加 `remotePatterns`，否則 Next.js 會拒絕載入：
-
-```ts
-// next.config.ts
-const nextConfig = {
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-      },
-      // 正式環境加上自家 CDN 域名
-    ],
-  },
-};
-```
-
-> ⚠️ 修改 `next.config.ts` 前先確認（屬於邊界規則「修改前先問」範圍）。
+- **無障礙互動**：彈窗、切換開關等互動元件優先沿用 `src/components/ui/`（Radix UI / shadcn/ui）原語，確保鍵盤操作、focus trap 與 `aria-*` 語意完整；圖片 icon 按鈕必須提供 `aria-label`。
+- **註解規範**：預設**不寫多餘註解**；僅針對非顯而易見的業務限制、特定瀏覽器／套件 workaround 或複雜演算法說明「為什麼」，使用 `//` 或 JSDoc `/** */`（禁用 `///`）。
+- **語言規範**：所有中文註解與介面文案皆使用**台灣繁體中文**。

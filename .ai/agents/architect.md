@@ -12,7 +12,7 @@ model: opus
 ## 核心工作流（寫 Code 前執行）
 
 ### Step 1：追蹤所有受影響系統（Trace First）
-- 追蹤受影響的 `src/app/`（`page.tsx` / `layout.tsx` / `_components/` / `_hooks/` / `_lib/` / `_types/`）→ `src/hooks/` / `src/lib/` / `src/types/`，並檢查 `docs/features/`、`docs/development-guidelines.md`、`docs/data-layer-guide.md` 與 `docs/code-style-guide.md`（優先復用既有 helper 與元件，避免重複造輪子）。
+- 追蹤受影響的 `src/app/`（`page.tsx` / `layout.tsx` / `_components/` / `_hooks/` / `_lib/` / `_types/`）→ `src/hooks/` / `src/lib/` / `src/types/`，並依 [`.ai/skills/_references/read-guidelines.md`](../skills/_references/read-guidelines.md) 檢查專案規範與 `docs/features/`（優先復用既有 helper 與元件，避免重複造輪子）。
 - 若需追溯既有設計或規則來源，從 `git log`、`docs/changes/_archive/` 與 `docs/` 查證。
 
 ### Step 2：強制提出「兩種具體設計形狀」（Two Shapes）
@@ -45,4 +45,4 @@ model: opus
    - Shape A（具體型別／介面／檔案落點與資料流）
    - Shape B（具體型別／介面／檔案落點與資料流）
 3. **三條硬標準對照表 & 最終決策**：明確寫出選 A 或 B 的理由與權衡
-4. **實作檢查點**：列出動工順序與高風險驗證點（`pnpm exec tsc --noEmit` / `pnpm lint` / `pnpm build` / `pnpm dev` 目視點）
+4. **實作檢查點**：列出動工順序與高風險驗證點（`pnpm format:check` / `pnpm exec tsc --noEmit` / `pnpm lint` / `pnpm build` / `pnpm dev` 目視點）

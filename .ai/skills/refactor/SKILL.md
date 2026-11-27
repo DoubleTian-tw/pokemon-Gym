@@ -24,6 +24,10 @@ $ARGUMENTS
 
 ## 執行流程
 
+### Step 0：讀取開發規範
+
+先依 [`../_references/read-guidelines.md`](../_references/read-guidelines.md) 讀完專案規範，確保目標目錄結構、命名、Import 順序與 React Compiler 邊界對齊最新定案。
+
 ### Step 1：先釘死既有行為（Pin the Behavior Contract First）
 
 1. 追蹤受影響子系統的呼叫鏈與 `docs/features/<module>/`，釐清目前對外合約（props、query key、router/storage 副作用、錯誤處理）與邊界條件。
@@ -57,10 +61,11 @@ $ARGUMENTS
 
 1. 依 `package.json` 既有 scripts 執行完整驗證：
    ```bash
+   pnpm format:check
    pnpm exec tsc --noEmit
    pnpm lint
    pnpm build
-   # 若 package.json 有定義 format / test script，一併執行 pnpm format / pnpm test
+   # 若 package.json 有定義 test script，一併執行 pnpm test
    ```
 2. **檢查 Diff 複雜度**：確認改動確實消除了重複分支、過深巢狀或無效狀態，且閱讀負擔下降；未改善則果斷 revert。
 3. **跨面與人工驗證提醒**：若重構涉及畫面元件結構、route 切換或表單互動，明確列出待 `pnpm dev` 目視與手機瀏覽器檢查的項目。

@@ -13,6 +13,10 @@ $ARGUMENTS
 
 ## 前置檢查
 
+### 檢查 0：讀取專案開發規範
+
+依 [`../_references/read-guidelines.md`](../_references/read-guidelines.md) 讀取規範（特別是 `docs/development-guidelines.md`、`docs/data-layer-guide.md`、`docs/style-guide.md`），確保討論中的架構邊界、資料層限制與 UI 約束符合已定案規範。
+
 ### 檢查 1：是否已有 active change
 
 讀取 `docs/changes/_active.md`：
