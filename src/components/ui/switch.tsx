@@ -1,18 +1,18 @@
 "use client";
 
-import * as React from "react";
+import type { ComponentProps } from "react";
 import { Switch as SwitchPrimitive } from "radix-ui";
 import { cn } from "@/lib/utils";
 
 function Switch({
   className,
   ...props
-}: React.ComponentProps<typeof SwitchPrimitive.Root>) {
+}: ComponentProps<typeof SwitchPrimitive.Root>) {
   return (
     <SwitchPrimitive.Root
       data-slot="switch"
       className={cn(
-        "glass-motion-safe peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border border-white/30 bg-white/20 p-0.5 transition-colors duration-150 outline-none focus-visible:outline-2 focus-visible:outline-[#60a5fa] focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-45 data-[state=checked]:border-transparent data-[state=checked]:bg-[var(--counter-green)]",
+        "glass-motion-safe peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border border-white/30 bg-white/20 p-0.5 transition-colors duration-150 outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400 disabled:cursor-not-allowed disabled:opacity-45 data-[state=checked]:border-transparent data-[state=checked]:bg-[var(--counter-green)]",
         className,
       )}
       {...props}

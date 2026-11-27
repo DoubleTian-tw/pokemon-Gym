@@ -1,8 +1,5 @@
-import {
-  DEFAULT_AMBIENT_COLORS,
-  POKEMON_TYPE_META,
-} from "@/lib/pokemon-types";
-import type { PokemonCandidate } from "../_types/gym";
+import type { PokemonCandidate } from "@/app/_types/gym";
+import { DEFAULT_AMBIENT_COLORS, POKEMON_TYPE_META } from "@/lib/pokemon-types";
 
 export const DEFENDER_QUERY_KEY = "d";
 export const DEV_STATE_QUERY_KEY = "state";

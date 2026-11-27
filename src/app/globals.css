@@ -53,12 +53,12 @@
   --obsidian-canvas: #0b0c10;
   --graphite-depth: #11131b;
   --glass-surface: rgba(18, 22, 34, 0.56);
-  --glass-tinted: rgba(18, 22, 34, 0.80);
-  --glass-elevated: rgba(255, 255, 255, 0.10);
+  --glass-tinted: rgba(18, 22, 34, 0.8);
+  --glass-elevated: rgba(255, 255, 255, 0.1);
   --glass-stage: rgba(15, 18, 28, 0.58);
   --glass-dock: rgba(22, 26, 39, 0.72);
   --glass-border: rgba(255, 255, 255, 0.18);
-  --glass-border-interactive: rgba(255, 255, 255, 0.30);
+  --glass-border-interactive: rgba(255, 255, 255, 0.3);
   --glass-rim: inset 0 1px 0 rgba(255, 255, 255, 0.32);
   --ink-primary: #f8fafc;
   --ink-secondary: #94a3b8;
@@ -74,7 +74,9 @@
   --radius-slot: 12px;
   --radius-sheet: 24px;
   --radius-pill: 999px;
-  --font-liquid-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang TC", "Noto Sans TC", sans-serif;
+  --font-liquid-sans:
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+    "PingFang TC", "Noto Sans TC", sans-serif;
 }
 
 .dark {
@@ -151,7 +153,7 @@
     background: var(--glass-dock);
     backdrop-filter: blur(24px) saturate(190%);
     -webkit-backdrop-filter: blur(24px) saturate(190%);
-    border: 1px solid rgba(255, 255, 255, 0.20);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow:
       0 12px 32px rgba(0, 0, 0, 0.45),
       inset 0 1px 0 rgba(255, 255, 255, 0.36);
@@ -189,7 +191,8 @@
   }
 
   .glass-motion-safe {
-    transition-property: color, background-color, border-color, opacity !important;
+    transition-property:
+      color, background-color, border-color, opacity !important;
     transition-duration: 120ms !important;
     transform: none !important;
   }

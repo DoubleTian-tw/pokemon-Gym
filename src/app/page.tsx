@@ -1,7 +1,7 @@
 import { Suspense } from "react";
+import { GymWorkspace } from "@/app/_components/gym-workspace";
+import { GymWorkspaceSkeleton } from "@/app/_components/gym-workspace-skeleton";
 import { HeadBar } from "@/components/head-bar";
-import { GymWorkspace } from "./_components/gym-workspace";
-import { GymWorkspaceSkeleton } from "./_components/gym-workspace-skeleton";
 
 export default function GymPage() {
   return (

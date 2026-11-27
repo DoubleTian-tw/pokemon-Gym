@@ -1,7 +1,7 @@
 "use client";
 
+import { useGymWorkspace } from "@/app/_hooks/use-gym-workspace";
 import { AmbientGlow } from "@/components/ambient-glow";
-import { useGymWorkspace } from "../_hooks/use-gym-workspace";
 import { CanvasControls } from "./canvas-controls";
 import { CounterGraphStage } from "./counter-graph-stage";
 import { DefenderPickerDialog } from "./defender-picker-dialog";

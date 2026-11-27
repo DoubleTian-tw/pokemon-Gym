@@ -10,18 +10,37 @@ import {
   MAX_DEFENDERS,
   parseDefenderIdsParam,
   parseDevStageOverride,
-} from "../_lib/defender-query";
+} from "@/app/_lib/defender-query";
 import {
   computeGymMatchups,
   filterPokemonRoster,
-} from "../_lib/matchup-engine";
+} from "@/app/_lib/matchup-engine";
 import {
   DEFAULT_SAMPLE_DEFENDER_IDS,
   MOCK_ROSTER,
-} from "../_mock/mock-roster";
-import type { GymStageView } from "../_types/gym";
+} from "@/app/_mock/mock-roster";
+import type { GymMatchupResult, GymStageView } from "@/app/_types/gym";
 
 const VALID_ROSTER_IDS = new Set(MOCK_ROSTER.map((pokemon) => pokemon.id));
+
+function resolveGymStage(
+  devOverride: "loading" | "error" | null,
+  matchup: GymMatchupResult,
+): GymStageView {
+  if (devOverride === "loading") {
+    return { status: "loading" };
+  }
+  if (devOverride === "error") {
+    return {
+      status: "error",
+      message: "暫時無法取得資料，請檢查網路或稍後重試。",
+    };
+  }
+  if (matchup.defenders.length === 0) {
+    return { status: "empty" };
+  }
+  return { status: "ready", matchup };
+}
 
 export function useGymWorkspace() {
   const router = useRouter();
@@ -45,20 +64,7 @@ export function useGymWorkspace() {
   const matchup = computeGymMatchups(MOCK_ROSTER, defenderIds);
   const filteredRoster = filterPokemonRoster(MOCK_ROSTER, searchQuery);
   const ambientColors = deriveAmbientColors(matchup.defenders);
-
-  let stage: GymStageView;
-  if (devOverride === "loading") {
-    stage = { status: "loading" };
-  } else if (devOverride === "error") {
-    stage = {
-      status: "error",
-      message: "暫時無法取得資料，請檢查網路或稍後重試。",
-    };
-  } else if (matchup.defenders.length === 0) {
-    stage = { status: "empty" };
-  } else {
-    stage = { status: "ready", matchup };
-  }
+  const stage = resolveGymStage(devOverride, matchup);
 
   const replaceDefenders = (nextIds: readonly string[]) => {
     setLockedNodeId(null);

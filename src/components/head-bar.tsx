@@ -15,10 +15,12 @@ export function HeadBar({ title, rightSlot, className }: HeadBarProps) {
         className,
       )}
     >
-      <h1 className="text-[20px] font-bold leading-tight tracking-[-0.02em] text-[var(--ink-primary)]">
+      <h1 className="text-[20px] leading-tight font-bold tracking-[-0.02em] text-[var(--ink-primary)]">
         {title}
       </h1>
-      {rightSlot ? <div className="flex items-center gap-2">{rightSlot}</div> : null}
+      {rightSlot ? (
+        <div className="flex items-center gap-2">{rightSlot}</div>
+      ) : null}
     </header>
   );
 }

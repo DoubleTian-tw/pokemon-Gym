@@ -35,7 +35,7 @@ export function AmbientGlow({
       <div
         className="absolute -bottom-24 left-[18%] size-[320px] rounded-full transition-[background] duration-500 ease-out"
         style={{
-          background: `radial-gradient(circle, ${hexToRgba(c3, 0.20)} 0%, ${hexToRgba(c3, 0.08)} 42%, transparent 72%)`,
+          background: `radial-gradient(circle, ${hexToRgba(c3, 0.2)} 0%, ${hexToRgba(c3, 0.08)} 42%, transparent 72%)`,
         }}
       />
     </div>

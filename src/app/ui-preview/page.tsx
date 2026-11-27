@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { UiPreviewShowcase } from "./_components/ui-preview-showcase";
+import { UiPreviewShowcase } from "@/app/ui-preview/_components/ui-preview-showcase";
 
 export const metadata: Metadata = {
   title: "UI Preview — Pokémon Gym",
