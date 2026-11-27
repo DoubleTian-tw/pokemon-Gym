@@ -1,0 +1,1266 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframe Prototype｜打手 ⇄ 守衛二分連線圖</title>
+<script src="https://unpkg.com/cytoscape@3.30.0/dist/cytoscape.min.js"></script>
+<style>
+    :root {
+        --bg-outer: #ececec;
+        --bg-paper: #ffffff;
+        --bg-muted: #f5f5f5;
+        --bg-subtle: #ebebeb;
+        --ink: #171717;
+        --ink-muted: #525252;
+        --ink-soft: #737373;
+        --border: #a3a3a3;
+        --border-strong: #171717;
+        --border-light: #d4d4d4;
+        font-family: ui-sans-serif, system-ui, -apple-system, "PingFang TC", "Microsoft JhengHei", sans-serif;
+        color: var(--ink);
+        background: var(--bg-outer);
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 16px 12px 48px; }
+    [hidden] { display: none !important; }
+    button, input { font: inherit; color: inherit; }
+    button { cursor: pointer; }
+    button:disabled { cursor: not-allowed; opacity: 0.45; }
+
+    /* Wireframe Top Meta Bar (Outside App Shell) */
+    .wf-meta-bar {
+        max-width: 960px;
+        margin: 0 auto 12px;
+        padding: 10px 12px;
+        background: var(--bg-paper);
+        border: 1.5px solid var(--border-strong);
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        font-size: 12px;
+    }
+    .wf-meta-title {
+        font-weight: 700;
+        letter-spacing: 0.02em;
+    }
+    .wf-meta-badge {
+        display: inline-block;
+        padding: 2px 6px;
+        border: 1px solid var(--border-strong);
+        background: var(--bg-muted);
+        font-size: 11px;
+        font-weight: 600;
+        margin-right: 6px;
+    }
+    .wf-viewport-group {
+        display: flex;
+        gap: 4px;
+    }
+    .wf-btn {
+        border: 1px solid var(--border-strong);
+        background: var(--bg-paper);
+        padding: 4px 10px;
+        font-size: 12px;
+    }
+    .wf-btn:hover:not(:disabled) {
+        background: var(--bg-subtle);
+    }
+    .wf-btn.is-active {
+        background: var(--ink);
+        color: var(--bg-paper);
+        font-weight: 700;
+    }
+
+    /* App Frame Container */
+    .app-frame {
+        margin: 0 auto;
+        width: 100%;
+        max-width: 576px;
+        background: var(--bg-paper);
+        border: 2px solid var(--border-strong);
+        transition: max-width 0.15s ease;
+    }
+    .app-frame.vp-390 { max-width: 390px; }
+    .app-frame.vp-576 { max-width: 576px; }
+    .app-frame.vp-960 { max-width: 960px; }
+
+    /* HeadBar */
+    .headbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 14px;
+        border-bottom: 1.5px solid var(--border-strong);
+        background: var(--bg-muted);
+    }
+    .headbar h1 {
+        margin: 0;
+        font-size: 15px;
+        font-weight: 700;
+    }
+    .headbar-tag {
+        font-size: 11px;
+        color: var(--ink-muted);
+        border: 1px dashed var(--border);
+        padding: 2px 6px;
+    }
+
+    .app-body {
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    /* P0: 6-Slot Defender Bar */
+    .slot-panel {
+        border: 1.5px solid var(--border-strong);
+        padding: 10px;
+        background: var(--bg-paper);
+    }
+    .slot-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 8px;
+    }
+    .slot-title {
+        font-size: 13px;
+        font-weight: 700;
+    }
+    .slot-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .link-btn {
+        background: none;
+        border: none;
+        padding: 2px 4px;
+        font-size: 12px;
+        text-decoration: underline;
+        color: var(--ink-muted);
+    }
+    .btn-primary-wf {
+        border: 1.5px solid var(--border-strong);
+        background: var(--ink);
+        color: var(--bg-paper);
+        padding: 4px 10px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+    .btn-secondary-wf {
+        border: 1px solid var(--border-strong);
+        background: var(--bg-paper);
+        color: var(--ink);
+        padding: 4px 10px;
+        font-size: 12px;
+    }
+    .btn-icon-wf {
+        width: 26px;
+        height: 26px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .slot-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+    }
+    .app-frame.vp-960 .slot-grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+
+    .slot-filled {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 4px;
+        border: 1.5px solid var(--border-strong);
+        background: var(--bg-muted);
+        padding: 5px 6px;
+        font-size: 12px;
+        min-width: 0;
+    }
+    .slot-poke {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        min-width: 0;
+    }
+    .slot-poke span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-weight: 600;
+    }
+    .slot-remove {
+        border: 1px solid var(--border);
+        background: var(--bg-paper);
+        width: 18px;
+        height: 18px;
+        line-height: 14px;
+        text-align: center;
+        font-size: 11px;
+        flex-shrink: 0;
+        padding: 0;
+    }
+    .slot-empty {
+        border: 1px dashed var(--border);
+        background: var(--bg-paper);
+        padding: 6px;
+        font-size: 11px;
+        color: var(--ink-soft);
+        text-align: center;
+    }
+    .slot-empty:hover {
+        border-color: var(--border-strong);
+        color: var(--ink);
+    }
+
+    /* Grayscale Sprite + Text Fallback */
+    .sprite-box {
+        width: 22px;
+        height: 22px;
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--border-light);
+        background: var(--bg-paper);
+        overflow: hidden;
+    }
+    .sprite-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        filter: grayscale(100%) contrast(1.1);
+    }
+    .sprite-fallback {
+        font-size: 9px;
+        color: var(--ink-muted);
+        font-weight: 700;
+    }
+
+    /* P1: Alert Strip */
+    .alert-strip {
+        border: 1.5px dashed var(--border-strong);
+        background: var(--bg-muted);
+        padding: 8px 10px;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    /* Workspace Layout */
+    .workspace-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    /* P2: Canvas Control Bar */
+    .canvas-controls {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
+        font-size: 12px;
+        padding-bottom: 6px;
+    }
+    .ctrl-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .ctrl-actions label {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        cursor: pointer;
+        font-size: 11px;
+        color: var(--ink-muted);
+    }
+
+    /* P0: Cytoscape Stage */
+    .canvas-box {
+        border: 1.5px solid var(--border-strong);
+        background: var(--bg-paper);
+        position: relative;
+        min-height: 360px;
+    }
+    .canvas-corner-label {
+        position: absolute;
+        top: 8px;
+        z-index: 2;
+        pointer-events: none;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--ink-soft);
+        background: rgba(255, 255, 255, 0.85);
+        padding: 1px 4px;
+    }
+    .canvas-corner-label.is-left { left: 10px; }
+    .canvas-corner-label.is-right { right: 10px; }
+    .canvas-reset-focus {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 3;
+        border: 1.5px solid var(--border-strong);
+        background: var(--bg-paper);
+        color: var(--ink);
+        padding: 4px 12px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+    .canvas-reset-focus:hover {
+        background: var(--bg-subtle);
+    }
+    #cy-canvas {
+        width: 100%;
+        height: 380px;
+        display: block;
+        background-image: radial-gradient(#d4d4d4 1px, transparent 1px);
+        background-size: 16px 16px;
+    }
+
+    /* Empty / Loading / Error States inside Canvas */
+    .state-panel {
+        height: 380px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 20px;
+        gap: 10px;
+    }
+    .state-panel p {
+        margin: 0;
+        font-size: 13px;
+        color: var(--ink-muted);
+    }
+    .state-cta-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .skeleton-stack {
+        width: 100%;
+        max-width: 340px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .skeleton-line {
+        height: 22px;
+        border: 1px dashed var(--border);
+        background: var(--bg-muted);
+    }
+
+    /* P3: Bottom TabBar */
+    .tabbar {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        border-top: 1.5px solid var(--border-strong);
+        background: var(--bg-muted);
+    }
+    .tab-item {
+        padding: 10px 6px;
+        text-align: center;
+        font-size: 12px;
+        border-right: 1px solid var(--border-light);
+        color: var(--ink-muted);
+    }
+    .tab-item:last-child { border-right: none; }
+    .tab-item.is-active {
+        font-weight: 700;
+        color: var(--ink);
+        background: var(--bg-paper);
+        text-decoration: underline;
+    }
+
+    /* Drawer / Modal Overlay */
+    .drawer-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(23, 23, 23, 0.55);
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        z-index: 50;
+    }
+    @media (min-width: 600px) {
+        .drawer-backdrop {
+            align-items: center;
+            padding: 16px;
+        }
+    }
+    .drawer-sheet {
+        width: 100%;
+        max-width: 540px;
+        background: var(--bg-paper);
+        border: 2px solid var(--border-strong);
+        padding: 14px;
+    }
+    .drawer-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 10px;
+    }
+    .drawer-top h2 {
+        margin: 0 0 2px;
+        font-size: 14px;
+    }
+    .drawer-top p {
+        margin: 0;
+        font-size: 11px;
+        color: var(--ink-muted);
+    }
+    .search-row {
+        display: flex;
+        align-items: center;
+        border: 1.5px solid var(--border-strong);
+        padding: 4px 8px;
+        margin-bottom: 10px;
+        gap: 6px;
+    }
+    .search-row input {
+        border: none;
+        outline: none;
+        width: 100%;
+        font-size: 13px;
+        background: transparent;
+    }
+    .candidate-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+        max-height: 52vh;
+        overflow-y: auto;
+    }
+    @media (min-width: 500px) {
+        .candidate-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+    .candidate-card {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid var(--border);
+        background: var(--bg-paper);
+        padding: 6px;
+        text-align: left;
+        font-size: 12px;
+    }
+    .candidate-card.is-selected {
+        border: 2px solid var(--border-strong);
+        background: var(--bg-muted);
+        font-weight: 700;
+    }
+    .candidate-meta {
+        min-width: 0;
+        flex: 1;
+    }
+    .candidate-name {
+        display: flex;
+        justify-content: space-between;
+        gap: 4px;
+    }
+    .candidate-types {
+        font-size: 10px;
+        color: var(--ink-muted);
+        margin-top: 2px;
+    }
+    .empty-search {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 24px 8px;
+        font-size: 12px;
+        color: var(--ink-muted);
+        border: 1px dashed var(--border);
+    }
+
+    /* Prototype Test Sandbox Panel (Outside App Shell) */
+    .test-sandbox {
+        max-width: 960px;
+        margin: 14px auto 0;
+        border: 1.5px dashed var(--border-strong);
+        background: var(--bg-paper);
+        padding: 10px 12px;
+        font-size: 12px;
+    }
+    .test-sandbox summary {
+        cursor: pointer;
+        font-weight: 700;
+    }
+    .test-btn-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin: 10px 0;
+    }
+    .test-notes {
+        margin: 8px 0 0;
+        padding-left: 18px;
+        color: var(--ink-muted);
+        font-size: 11px;
+        line-height: 1.6;
+    }
+</style>
+</head>
+<body>
+
+    <!-- Wireframe Meta Header -->
+    <div class="wf-meta-bar">
+        <div class="wf-meta-title">
+            <span class="wf-meta-badge">LOW-FI PROTOTYPE</span>
+            打手 ⇄ 守衛二分連線圖（對齊 gym-mobile-wireframes.md）
+        </div>
+        <div class="wf-viewport-group" role="group" aria-label="預覽寬度">
+            <button type="button" class="wf-btn" data-vp="vp-390">手機 390px</button>
+            <button type="button" class="wf-btn is-active" data-vp="vp-576">手機 576px</button>
+            <button type="button" class="wf-btn" data-vp="vp-960">寬螢幕 960px</button>
+        </div>
+    </div>
+
+    <!-- Simulated App Frame -->
+    <div id="app-frame" class="app-frame vp-576">
+        <header class="headbar">
+            <h1>Gym</h1>
+            <span class="headbar-tag">無會員・免登入</span>
+        </header>
+
+        <main class="app-body">
+            <!-- P0: 6-Slot Defender Bar -->
+            <section class="slot-panel" aria-label="敵方道館守衛">
+                <div class="slot-header">
+                    <span id="slot-counter" class="slot-title">敵方道館守衛 (4 / 6)</span>
+                    <div class="slot-actions">
+                        <button type="button" id="btn-clear" class="link-btn">清空</button>
+                        <button type="button" id="btn-open-drawer" class="btn-primary-wf btn-icon-wf" aria-label="新增守衛" title="新增守衛">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                        </button>
+                    </div>
+                </div>
+                <div id="slot-grid" class="slot-grid"></div>
+            </section>
+
+            <!-- P1: Uncovered & Partial Risk Alert Strips -->
+            <div id="uncovered-alert" class="alert-strip" hidden>
+                <strong>[!]</strong>
+                <span id="uncovered-text"></span>
+            </div>
+            <div id="partial-risk-box" class="alert-strip" hidden>
+                <strong>[!]</strong>
+                <span>模擬情境：部分候選缺少屬性資料，僅顯示已確認的反制風險。</span>
+            </div>
+
+            <!-- Workspace Grid -->
+            <div class="workspace-grid">
+                <div>
+                    <!-- P2: Canvas Control Bar -->
+                    <div class="canvas-controls">
+                        <div class="ctrl-actions">
+                            <label>
+                                <input type="checkbox" id="chk-risk" checked>
+                                顯示反打
+                            </label>
+                            <button type="button" id="btn-fit" class="btn-secondary-wf btn-icon-wf" aria-label="重置視角" title="重置視角">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- P0: Graph Stage -->
+                    <div class="canvas-box">
+                        <span id="corner-left" class="canvas-corner-label is-left">推薦打手</span>
+                        <span id="corner-right" class="canvas-corner-label is-right">敵方守衛</span>
+                        <div id="cy-canvas"></div>
+                        <button type="button" id="btn-reset-focus" class="canvas-reset-focus" hidden>✕ 顯示全部連線</button>
+
+                        <!-- Empty State -->
+                        <div id="state-empty" class="state-panel" hidden>
+                            <p>選擇 1～6 隻道館守衛，立即產生「打手 ⇄ 守衛」克制連線圖</p>
+                            <div class="state-cta-row">
+                                <button type="button" id="btn-empty-add" class="btn-primary-wf">＋ 新增守衛</button>
+                                <button type="button" id="btn-empty-sample" class="btn-secondary-wf">載入常見道館範例</button>
+                            </div>
+                        </div>
+
+                        <!-- Loading State -->
+                        <div id="state-loading" class="state-panel" hidden>
+                            <p>正在取得推薦...</p>
+                            <div class="skeleton-stack" aria-hidden="true">
+                                <div class="skeleton-line"></div>
+                                <div class="skeleton-line"></div>
+                                <div class="skeleton-line"></div>
+                            </div>
+                        </div>
+
+                        <!-- Error State -->
+                        <div id="state-error" class="state-panel" hidden>
+                            <p>暫時無法取得資料，請檢查網路或稍後重試。</p>
+                            <button type="button" id="btn-retry" class="btn-primary-wf">重試</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- P3: Bottom TabBar -->
+        <nav class="tabbar" aria-label="主導覽">
+            <div class="tab-item is-active">[Gym]</div>
+            <div class="tab-item">Pokedex</div>
+            <div class="tab-item">About</div>
+        </nav>
+    </div>
+
+    <!-- Defender Picker Drawer / Modal -->
+    <div id="picker-backdrop" class="drawer-backdrop" hidden>
+        <div class="drawer-sheet" role="dialog" aria-modal="true" aria-labelledby="drawer-heading">
+            <div class="drawer-top">
+                <div>
+                    <h2 id="drawer-heading">選擇道館守衛 (4 / 6)</h2>
+                    <p>點選加入或移除，最多可選 6 隻守衛</p>
+                </div>
+                <button type="button" id="btn-close-drawer" class="btn-primary-wf">完成</button>
+            </div>
+            <div class="search-row">
+                <span>[搜尋]</span>
+                <input id="drawer-search" type="text" placeholder="搜尋寶可夢名稱或屬性（例：快龍、冰）...">
+                <button type="button" id="btn-clear-search" class="link-btn" hidden>清除</button>
+            </div>
+            <div id="candidate-grid" class="candidate-grid"></div>
+        </div>
+    </div>
+
+    <!-- Prototype Test Sandbox Controls -->
+    <details class="test-sandbox" open>
+        <summary>[原型測試工具・非正式畫面] 模擬情境與規格限制</summary>
+        <div class="test-btn-row">
+            <button type="button" class="wf-btn" data-scenario="default">正常預設（4 守衛）</button>
+            <button type="button" class="wf-btn" data-scenario="empty">空狀態（0 守衛）</button>
+            <button type="button" class="wf-btn" data-scenario="full">滿編上限（6 / 6）</button>
+            <button type="button" class="wf-btn" data-scenario="loading">正在取得資料</button>
+            <button type="button" class="wf-btn" data-scenario="error">暫時無法取得資料</button>
+            <button type="button" class="wf-btn" data-scenario="partial">部分反制風險無法判定</button>
+            <button type="button" class="wf-btn" data-scenario="imgfail">縮圖載入失敗（文字備援）</button>
+        </div>
+        <ul class="test-notes">
+            <li>本原型刻意維持單色線框樣式，用於驗證資訊層級、抽屜挑選與二分亮線互動，不代表最終 UI 配色。</li>
+            <li>目前使用 16 隻常見道館寶可夢示意資料與 Gen 6+ 18 屬性相剋表；左欄推薦數量暫以 Top 4 示意（實作時可依手機密度調整）。</li>
+            <li>未涵蓋項目：真實 PokéAPI 串接、正式版角色排名分級門檻、以及與其它分頁的路由切換。</li>
+        </ul>
+    </details>
+
+<script>
+(() => {
+    const TYPE_NAMES = {
+        normal: "一般", fighting: "格鬥", flying: "飛行", poison: "毒",
+        ground: "地面", rock: "岩石", bug: "蟲", ghost: "幽靈",
+        steel: "鋼", fire: "火", water: "水", grass: "草",
+        electric: "電", psychic: "超能力", ice: "冰", dragon: "龍",
+        dark: "惡", fairy: "妖精"
+    };
+
+    const ATTACK_CHART = {
+        normal: { rock: 0.5, ghost: 0, steel: 0.5 },
+        fighting: { normal: 2, flying: 0.5, poison: 0.5, rock: 2, bug: 0.5, ghost: 0, steel: 2, psychic: 0.5, ice: 2, dark: 2, fairy: 0.5 },
+        flying: { fighting: 2, rock: 0.5, bug: 2, steel: 0.5, grass: 2, electric: 0.5 },
+        poison: { poison: 0.5, ground: 0.5, rock: 0.5, ghost: 0.5, steel: 0, grass: 2, fairy: 2 },
+        ground: { flying: 0, poison: 2, rock: 2, bug: 0.5, steel: 2, fire: 2, grass: 0.5, electric: 2 },
+        rock: { fighting: 0.5, flying: 2, ground: 0.5, bug: 2, steel: 0.5, fire: 2, ice: 2 },
+        bug: { fighting: 0.5, flying: 0.5, poison: 0.5, ghost: 0.5, steel: 0.5, fire: 0.5, grass: 2, psychic: 2, dark: 2, fairy: 0.5 },
+        ghost: { normal: 0, ghost: 2, psychic: 2, dark: 0.5 },
+        steel: { rock: 2, steel: 0.5, fire: 0.5, water: 0.5, electric: 0.5, ice: 2, fairy: 2 },
+        fire: { rock: 0.5, bug: 2, steel: 2, fire: 0.5, water: 0.5, grass: 2, ice: 2, dragon: 0.5 },
+        water: { ground: 2, rock: 2, fire: 2, water: 0.5, grass: 0.5, dragon: 0.5 },
+        grass: { flying: 0.5, poison: 0.5, ground: 2, rock: 2, bug: 0.5, steel: 0.5, fire: 0.5, water: 2, grass: 0.5, dragon: 0.5 },
+        electric: { flying: 2, ground: 0, water: 2, grass: 0.5, electric: 0.5, dragon: 0.5 },
+        psychic: { fighting: 2, poison: 2, steel: 0.5, psychic: 0.5, dark: 0 },
+        ice: { flying: 2, ground: 2, steel: 0.5, fire: 0.5, water: 0.5, grass: 2, ice: 0.5, dragon: 2 },
+        dragon: { steel: 0.5, dragon: 2, fairy: 0 },
+        dark: { fighting: 0.5, ghost: 2, psychic: 2, dark: 0.5, fairy: 0.5 },
+        fairy: { fighting: 2, poison: 0.5, steel: 0.5, fire: 0.5, dragon: 2, dark: 2 }
+    };
+
+    const spriteUrl = (dexId) =>
+        `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${dexId}.png`;
+
+    const ROSTER = [
+        { id: "dragonite", dexId: 149, zhName: "快龍", types: ["dragon", "flying"] },
+        { id: "tyranitar", dexId: 248, zhName: "班基拉斯", types: ["rock", "dark"] },
+        { id: "metagross", dexId: 376, zhName: "巨金怪", types: ["steel", "psychic"] },
+        { id: "garchomp", dexId: 445, zhName: "烈咬陸鯊", types: ["dragon", "ground"] },
+        { id: "blissey", dexId: 242, zhName: "幸福蛋", types: ["normal"] },
+        { id: "gyarados", dexId: 130, zhName: "暴鯉龍", types: ["water", "flying"] },
+        { id: "charizard", dexId: 6, zhName: "噴火龍", types: ["fire", "flying"] },
+        { id: "machamp", dexId: 68, zhName: "怪力", types: ["fighting"] },
+        { id: "lucario", dexId: 448, zhName: "路卡利歐", types: ["fighting", "steel"] },
+        { id: "togekiss", dexId: 468, zhName: "波克基斯", types: ["fairy", "flying"] },
+        { id: "mamoswine", dexId: 473, zhName: "象牙豬", types: ["ice", "ground"] },
+        { id: "gengar", dexId: 94, zhName: "耿鬼", types: ["ghost", "poison"] },
+        { id: "gardevoir", dexId: 282, zhName: "沙奈朵", types: ["psychic", "fairy"] },
+        { id: "zapdos", dexId: 145, zhName: "閃電鳥", types: ["electric", "flying"] },
+        { id: "venusaur", dexId: 3, zhName: "妙蛙花", types: ["grass", "poison"] },
+        { id: "swampert", dexId: 260, zhName: "巨沼怪", types: ["water", "ground"] }
+    ].map((p) => ({ ...p, sprite: spriteUrl(p.dexId) }));
+
+    const DEFAULT_IDS = ["blissey", "dragonite", "metagross", "tyranitar"];
+
+    const state = {
+        defenderIds: [...DEFAULT_IDS],
+        showRisk: true,
+        lockedNodeId: null,
+        drawerOpen: false,
+        searchQuery: "",
+        viewState: "ready", // ready | loading | error
+        partialRisk: false,
+        simulateImgFail: false,
+        cy: null
+    };
+
+    const $ = (id) => document.getElementById(id);
+
+    const getMultiplier = (atkType, defTypes) =>
+        defTypes.reduce((acc, t) => acc * (ATTACK_CHART[atkType]?.[t] ?? 1), 1);
+
+    const getBestStab = (atkPoke, defPoke) => {
+        let bestMult = 0;
+        let bestType = atkPoke.types[0];
+        for (const t of atkPoke.types) {
+            const m = getMultiplier(t, defPoke.types);
+            if (m > bestMult) {
+                bestMult = m;
+                bestType = t;
+            }
+        }
+        return { multiplier: bestMult, attackType: bestType };
+    };
+
+    const formatMult = (m) => (m === 0 ? "0x" : m === 0.25 ? "¼x" : m === 0.5 ? "½x" : `${m}x`);
+
+    const makeSpriteHtml = (poke) => {
+        if (state.simulateImgFail) {
+            return `<span class="sprite-box"><span class="sprite-fallback">${poke.zhName.slice(0, 1)}</span></span>`;
+        }
+        return `<span class="sprite-box"><img src="${poke.sprite}" alt="${poke.zhName}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'sprite-fallback',textContent:'[圖]'}))"></span>`;
+    };
+
+    const computeMatchupData = () => {
+        const defenders = state.defenderIds
+            .map((id) => ROSTER.find((p) => p.id === id))
+            .filter(Boolean);
+
+        const attackers = defenders.length === 0
+            ? []
+            : ROSTER.filter((p) => !state.defenderIds.includes(p.id))
+                .map((attacker) => {
+                    const matchups = defenders.map((def) => {
+                        const atk = getBestStab(attacker, def);
+                        const defHit = getBestStab(def, attacker);
+                        return {
+                            defender: def,
+                            multiplier: atk.multiplier,
+                            attackType: atk.attackType,
+                            incomingMultiplier: defHit.multiplier,
+                            incomingType: defHit.attackType
+                        };
+                    });
+                    const covered = matchups.filter((m) => m.multiplier >= 2);
+                    const score = matchups.reduce((acc, m) => {
+                        if (m.multiplier >= 4) return acc + 3;
+                        if (m.multiplier >= 2) return acc + 1.5;
+                        if (m.incomingMultiplier >= 2) return acc - 0.5;
+                        return acc;
+                    }, 0);
+                    return { attacker, matchups, covered, score };
+                })
+                .filter((x) => x.covered.length > 0)
+                .sort((a, b) => b.covered.length - a.covered.length || b.score - a.score)
+                .slice(0, 4);
+
+        const uncovered = defenders.filter(
+            (def) => !attackers.some((a) => a.covered.some((m) => m.defender.id === def.id))
+        );
+
+        return { defenders, attackers, uncovered };
+    };
+
+    const renderSlots = (defenders) => {
+        $("slot-counter").textContent = `敵方道館守衛 (${defenders.length} / 6)`;
+        $("btn-clear").hidden = defenders.length === 0;
+        $("btn-open-drawer").disabled = defenders.length >= 6;
+
+        const grid = $("slot-grid");
+        grid.innerHTML = "";
+
+        defenders.forEach((def) => {
+            const div = document.createElement("div");
+            div.className = "slot-filled";
+            div.innerHTML = `
+                <div class="slot-poke">
+                    ${makeSpriteHtml(def)}
+                    <span>${def.zhName}</span>
+                </div>
+                <button type="button" class="slot-remove" aria-label="移除 ${def.zhName}">x</button>
+            `;
+            div.querySelector(".slot-remove").addEventListener("click", () => {
+                toggleDefender(def.id);
+            });
+            grid.appendChild(div);
+        });
+
+        for (let i = defenders.length; i < 6; i++) {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "slot-empty";
+            btn.textContent = "+ 空位";
+            btn.addEventListener("click", openDrawer);
+            grid.appendChild(btn);
+        }
+    };
+
+    const updateFocusUi = (defendersCount) => {
+        $("partial-risk-box").hidden = !state.partialRisk;
+        const showReset =
+            state.viewState === "ready" &&
+            defendersCount > 0 &&
+            Boolean(state.lockedNodeId);
+        $("btn-reset-focus").hidden = !showReset;
+    };
+
+    const renderGraph = ({ defenders, attackers, uncovered }) => {
+        if (state.cy) {
+            state.cy.destroy();
+            state.cy = null;
+        }
+
+        const cyEl = $("cy-canvas");
+        const emptyEl = $("state-empty");
+        const loadEl = $("state-loading");
+        const errEl = $("state-error");
+
+        cyEl.hidden = true;
+        emptyEl.hidden = true;
+        loadEl.hidden = true;
+        errEl.hidden = true;
+
+        if (state.viewState === "loading") {
+            loadEl.hidden = false;
+            return;
+        }
+        if (state.viewState === "error") {
+            errEl.hidden = false;
+            return;
+        }
+        if (defenders.length === 0) {
+            emptyEl.hidden = false;
+            return;
+        }
+
+        cyEl.hidden = false;
+
+        const elements = [];
+        const canvasHeight = Math.max(320, Math.max(attackers.length, defenders.length) * 76);
+
+        const placeCol = (count, x) => {
+            if (count === 1) return [{ x, y: canvasHeight / 2 }];
+            const pad = 48;
+            const step = (canvasHeight - pad * 2) / (count - 1);
+            return Array.from({ length: count }, (_, i) => ({ x, y: pad + i * step }));
+        };
+
+        const leftPos = placeCol(attackers.length, 105);
+        const rightPos = placeCol(defenders.length, 495);
+
+        attackers.forEach(({ attacker, covered }, i) => {
+            elements.push({
+                data: {
+                    id: `atk-${attacker.id}`,
+                    label: `${attacker.zhName} (${covered.length}/${defenders.length})`,
+                    sprite: state.simulateImgFail ? "" : attacker.sprite,
+                    borderStyle: "solid"
+                },
+                position: leftPos[i]
+            });
+        });
+
+        defenders.forEach((def, i) => {
+            const isUncovered = uncovered.some((u) => u.id === def.id);
+            elements.push({
+                data: {
+                    id: `def-${def.id}`,
+                    label: isUncovered ? `${def.zhName} (無反制)` : def.zhName,
+                    sprite: state.simulateImgFail ? "" : def.sprite,
+                    borderStyle: isUncovered ? "dashed" : "solid"
+                },
+                position: rightPos[i]
+            });
+        });
+
+        attackers.forEach(({ attacker, matchups }) => {
+            matchups.forEach((m) => {
+                if (m.multiplier >= 2) {
+                    elements.push({
+                        data: {
+                            id: `hit-${attacker.id}-${m.defender.id}`,
+                            source: `atk-${attacker.id}`,
+                            target: `def-${m.defender.id}`,
+                            label: `${TYPE_NAMES[m.attackType]} ${formatMult(m.multiplier)}`,
+                            edgeKind: m.multiplier >= 4 ? "quad" : "double"
+                        }
+                    });
+                }
+                if (state.showRisk && m.incomingMultiplier >= 2) {
+                    elements.push({
+                        data: {
+                            id: `risk-${m.defender.id}-${attacker.id}`,
+                            source: `def-${m.defender.id}`,
+                            target: `atk-${attacker.id}`,
+                            label: `反打 ${formatMult(m.incomingMultiplier)}`,
+                            edgeKind: "risk"
+                        }
+                    });
+                }
+            });
+        });
+
+        const cy = cytoscape({
+            container: cyEl,
+            elements,
+            layout: { name: "preset", fit: true, padding: 36 },
+            minZoom: 0.55,
+            maxZoom: 2,
+            wheelSensitivity: 0.25,
+            style: [
+                {
+                    selector: "node",
+                    style: {
+                        label: "data(label)",
+                        color: "#171717",
+                        "font-size": 11,
+                        "font-weight": 700,
+                        "text-valign": "bottom",
+                        "text-margin-y": 5,
+                        "text-background-color": "#ffffff",
+                        "text-background-opacity": 0.88,
+                        "text-background-padding": "2px",
+                        "background-color": "#f5f5f5",
+                        "border-width": 2,
+                        "border-color": "#171717",
+                        "border-style": "data(borderStyle)",
+                        width: 48,
+                        height: 48,
+                        "background-fit": "contain",
+                        "background-image": state.simulateImgFail ? "none" : "data(sprite)"
+                    }
+                },
+                {
+                    selector: "edge",
+                    style: {
+                        width: 1.8,
+                        "curve-style": "bezier",
+                        "control-point-step-size": 32,
+                        "target-arrow-shape": "triangle",
+                        "arrow-scale": 0.95,
+                        "line-color": "#171717",
+                        "target-arrow-color": "#171717",
+                        opacity: 0.35,
+                        label: "",
+                        "font-size": 10,
+                        "font-weight": 700,
+                        color: "#171717",
+                        "text-background-color": "#ffffff",
+                        "text-background-opacity": 0.95,
+                        "text-background-padding": "2px",
+                        "text-border-width": 1,
+                        "text-border-color": "#a3a3a3"
+                    }
+                },
+                {
+                    selector: 'edge[edgeKind="quad"]',
+                    style: { width: 3.5 }
+                },
+                {
+                    selector: 'edge[edgeKind="risk"]',
+                    style: {
+                        "line-style": "dashed",
+                        "line-color": "#525252",
+                        "target-arrow-color": "#525252",
+                        "target-arrow-shape": "vee"
+                    }
+                },
+                {
+                    selector: ".dimmed",
+                    style: { opacity: 0.1 }
+                },
+                {
+                    selector: ".hl-node",
+                    style: { opacity: 1, "border-width": 3.5 }
+                },
+                {
+                    selector: ".hl-edge",
+                    style: { opacity: 1, label: "data(label)" }
+                }
+            ]
+        });
+
+        const applyFocus = (nodeId) => {
+            cy.elements().removeClass("dimmed hl-node hl-edge");
+            if (!nodeId) return;
+            const node = cy.getElementById(nodeId);
+            if (!node || node.length === 0) return;
+            const hood = node.closedNeighborhood();
+            cy.elements().not(hood).addClass("dimmed");
+            hood.nodes().addClass("hl-node");
+            node.connectedEdges().addClass("hl-edge");
+        };
+
+        if (state.lockedNodeId) {
+            applyFocus(state.lockedNodeId);
+        }
+
+        cy.on("tap", "node", (evt) => {
+            const id = evt.target.id();
+            state.lockedNodeId = state.lockedNodeId === id ? null : id;
+            applyFocus(state.lockedNodeId);
+            updateFocusUi(defenders.length);
+        });
+
+        cy.on("tap", (evt) => {
+            if (evt.target === cy && state.lockedNodeId) {
+                state.lockedNodeId = null;
+                applyFocus(null);
+                updateFocusUi(defenders.length);
+            }
+        });
+
+        cy.on("mouseover", "node", (evt) => {
+            if (!state.lockedNodeId) applyFocus(evt.target.id());
+        });
+
+        cy.on("mouseout", "node", () => {
+            if (!state.lockedNodeId) applyFocus(null);
+        });
+
+        state.cy = cy;
+    };
+
+    const renderDrawer = () => {
+        const backdrop = $("picker-backdrop");
+        backdrop.hidden = !state.drawerOpen;
+        if (!state.drawerOpen) return;
+
+        $("drawer-heading").textContent = `選擇道館守衛 (${state.defenderIds.length} / 6)`;
+        $("btn-clear-search").hidden = !state.searchQuery;
+
+        const q = state.searchQuery.trim().toLowerCase();
+        const filtered = !q
+            ? ROSTER
+            : ROSTER.filter((p) => {
+                  if (p.zhName.toLowerCase().includes(q) || p.id.includes(q)) return true;
+                  return p.types.some((t) => t.includes(q) || TYPE_NAMES[t].includes(q));
+              });
+
+        const grid = $("candidate-grid");
+        grid.innerHTML = "";
+
+        if (filtered.length === 0) {
+            grid.innerHTML = `<div class="empty-search">找不到符合「${state.searchQuery}」的寶可夢</div>`;
+            return;
+        }
+
+        filtered.forEach((p) => {
+            const active = state.defenderIds.includes(p.id);
+            const disabled = !active && state.defenderIds.length >= 6;
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = `candidate-card ${active ? "is-selected" : ""}`;
+            btn.disabled = disabled;
+            btn.innerHTML = `
+                ${makeSpriteHtml(p)}
+                <div class="candidate-meta">
+                    <div class="candidate-name">
+                        <span>${p.zhName}</span>
+                        <span>${active ? "✓" : "+"}</span>
+                    </div>
+                    <div class="candidate-types">${p.types.map((t) => TYPE_NAMES[t]).join(" / ")}</div>
+                </div>
+            `;
+            btn.addEventListener("click", () => {
+                toggleDefender(p.id);
+                renderDrawer();
+            });
+            grid.appendChild(btn);
+        });
+    };
+
+    const renderAll = () => {
+        const data = computeMatchupData();
+        renderSlots(data.defenders);
+
+        const showCornerLabels = state.viewState === "ready" && data.defenders.length > 0;
+        $("corner-left").hidden = !showCornerLabels;
+        $("corner-right").hidden = !showCornerLabels;
+
+        const alertEl = $("uncovered-alert");
+        if (state.viewState === "ready" && data.uncovered.length > 0) {
+            alertEl.hidden = false;
+            $("uncovered-text").textContent = `注意：目前推薦打手尚未覆蓋「${data.uncovered.map((d) => d.zhName).join("、")}」（畫布以虛線框標示）。`;
+        } else {
+            alertEl.hidden = true;
+        }
+
+        renderGraph(data);
+        updateFocusUi(data.defenders.length);
+        renderDrawer();
+    };
+
+    const toggleDefender = (id) => {
+        state.lockedNodeId = null;
+        state.viewState = "ready";
+        if (state.defenderIds.includes(id)) {
+            state.defenderIds = state.defenderIds.filter((x) => x !== id);
+        } else if (state.defenderIds.length < 6) {
+            state.defenderIds = [...state.defenderIds, id];
+        }
+        renderAll();
+    };
+
+    const openDrawer = () => {
+        state.drawerOpen = true;
+        renderDrawer();
+        $("drawer-search").focus();
+    };
+
+    const closeDrawer = () => {
+        state.drawerOpen = false;
+        renderDrawer();
+    };
+
+    // Event bindings
+    document.querySelectorAll("[data-vp]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            document.querySelectorAll("[data-vp]").forEach((b) => b.classList.remove("is-active"));
+            btn.classList.add("is-active");
+            const frame = $("app-frame");
+            frame.className = `app-frame ${btn.dataset.vp}`;
+            setTimeout(() => {
+                if (state.cy) {
+                    state.cy.resize();
+                    state.cy.fit(undefined, 30);
+                }
+            }, 160);
+        });
+    });
+
+    $("btn-open-drawer").addEventListener("click", openDrawer);
+    $("btn-empty-add").addEventListener("click", openDrawer);
+    $("btn-close-drawer").addEventListener("click", closeDrawer);
+    $("picker-backdrop").addEventListener("click", (e) => {
+        if (e.target === $("picker-backdrop")) closeDrawer();
+    });
+    window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && state.drawerOpen) closeDrawer();
+    });
+
+    $("drawer-search").addEventListener("input", (e) => {
+        state.searchQuery = e.target.value;
+        renderDrawer();
+    });
+    $("btn-clear-search").addEventListener("click", () => {
+        state.searchQuery = "";
+        $("drawer-search").value = "";
+        renderDrawer();
+    });
+
+    $("btn-clear").addEventListener("click", () => {
+        state.defenderIds = [];
+        state.lockedNodeId = null;
+        state.viewState = "ready";
+        renderAll();
+    });
+
+    $("btn-empty-sample").addEventListener("click", () => {
+        state.defenderIds = [...DEFAULT_IDS];
+        state.lockedNodeId = null;
+        state.viewState = "ready";
+        renderAll();
+    });
+
+    $("btn-retry").addEventListener("click", () => {
+        state.viewState = "ready";
+        renderAll();
+    });
+
+    $("chk-risk").addEventListener("change", (e) => {
+        state.showRisk = e.target.checked;
+        renderAll();
+    });
+
+    $("btn-fit").addEventListener("click", () => {
+        if (state.cy) state.cy.fit(undefined, 30);
+    });
+
+    $("btn-reset-focus").addEventListener("click", () => {
+        state.lockedNodeId = null;
+        renderAll();
+    });
+
+    // Test sandbox scenarios
+    document.querySelectorAll("[data-scenario]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const sc = btn.dataset.scenario;
+            state.lockedNodeId = null;
+            state.partialRisk = false;
+            state.simulateImgFail = false;
+
+            if (sc === "default") {
+                state.defenderIds = [...DEFAULT_IDS];
+                state.viewState = "ready";
+            } else if (sc === "empty") {
+                state.defenderIds = [];
+                state.viewState = "ready";
+            } else if (sc === "full") {
+                state.defenderIds = ["blissey", "dragonite", "metagross", "tyranitar", "gyarados", "togekiss"];
+                state.viewState = "ready";
+            } else if (sc === "loading") {
+                state.viewState = "loading";
+            } else if (sc === "error") {
+                state.viewState = "error";
+            } else if (sc === "partial") {
+                state.defenderIds = [...DEFAULT_IDS];
+                state.viewState = "ready";
+                state.partialRisk = true;
+            } else if (sc === "imgfail") {
+                state.defenderIds = [...DEFAULT_IDS];
+                state.viewState = "ready";
+                state.simulateImgFail = true;
+            }
+            renderAll();
+        });
+    });
+
+    renderAll();
+})();
+</script>
+</body>
+</html>

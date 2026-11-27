@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-26T17:30:00+08:00",
+  "title": "Design System: Pokémon Gym",
+  "extensions": {
+    "colorMeta": {
+      "obsidian-canvas": {
+        "role": "neutral",
+        "displayName": "Obsidian Canvas",
+        "canonical": "#0b0c10",
+        "tonalRamp": ["#05060a", "#0b0c10", "#11131b", "#1c1f2c", "#2b3042", "#475569", "#94a3b8", "#f8fafc"]
+      },
+      "apple-blue": {
+        "role": "primary",
+        "displayName": "Apple Tactical Blue",
+        "canonical": "#0a84ff",
+        "tonalRamp": ["#002b5c", "#00448f", "#0066d6", "#0a84ff", "#389bff", "#60a5fa", "#93c5fd", "#dbeafe"]
+      },
+      "counter-green": {
+        "role": "secondary",
+        "displayName": "Counter Emerald",
+        "canonical": "#30d158",
+        "tonalRamp": ["#0a3617", "#14532d", "#15803d", "#248a3d", "#30d158", "#4ade80", "#86efac", "#dcfce7"]
+      },
+      "risk-red": {
+        "role": "secondary",
+        "displayName": "Risk Crimson",
+        "canonical": "#ff453a",
+        "tonalRamp": ["#450a0a", "#7f1d1d", "#b91c1c", "#dc2626", "#ff453a", "#f87171", "#fca5a5", "#fee2e2"]
+      },
+      "uncovered-amber": {
+        "role": "secondary",
+        "displayName": "Uncovered Amber",
+        "canonical": "#ff9f0a",
+        "tonalRamp": ["#451a03", "#78350f", "#b45309", "#d97706", "#ff9f0a", "#fbbf24", "#fde68a", "#fef3c7"]
+      }
+    },
+    "typographyMeta": {
+      "headline": { "displayName": "Headline", "purpose": "HeadBar 主標題（Gym）。" },
+      "title": { "displayName": "Title", "purpose": "守衛槽區塊標題與抽屜標題。" },
+      "body": { "displayName": "Body", "purpose": "守衛名稱、控制列標籤、警示與導覽項目。" },
+      "label": { "displayName": "Label", "purpose": "畫布角落標籤、節點名稱與倍率標籤。" }
+    },
+    "shadows": [
+      {
+        "name": "glass-panel",
+        "value": "0 8px 24px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.36)",
+        "purpose": "守衛面板與畫布舞台的磨砂玻璃厚度與頂部高光邊。"
+      },
+      {
+        "name": "floating-dock",
+        "value": "0 12px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.36)",
+        "purpose": "底部懸浮玻璃 TabBar 與焦點重置膠囊。"
+      },
+      {
+        "name": "primary-cta-glow",
+        "value": "0 4px 14px rgba(0, 0, 0, 0.36), inset 0 1px 0 rgba(255, 255, 255, 0.45)",
+        "purpose": "主要 Apple Blue 圓形與膠囊按鈕。"
+      }
+    ],
+    "motion": [
+      {
+        "name": "ambient-orb-shift",
+        "value": "background 0.6s ease, opacity 0.4s ease",
+        "purpose": "守衛變動時平滑切換背景主屬性氛圍光。"
+      },
+      {
+        "name": "ios-switch-spring",
+        "value": "transform 0.2s cubic-bezier(0.32, 0.72, 0, 1)",
+        "purpose": "顯示反打開關滑動曲線。"
+      },
+      {
+        "name": "press-tactile",
+        "value": "transform 0.14s ease",
+        "purpose": "玻璃按鈕按壓微縮回饋。"
+      }
+    ],
+    "breakpoints": [
+      { "name": "mobile-compact", "value": "390px" },
+      { "name": "mobile-shell", "value": "576px" },
+      { "name": "wide", "value": "960px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Action Circle",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "守衛條右上角「新增守衛」圓形玻璃按鈕。",
+      "html": "<button class=\"ds-btn-circle\" aria-label=\"新增守衛\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\"><path d=\"M12 5v14M5 12h14\"/></svg></button>",
+      "css": ".ds-btn-circle { width: 30px; height: 30px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; background: linear-gradient(180deg, #0066d6, #0052b3); color: #f8fafc; border: 1px solid rgba(255, 255, 255, 0.34); box-shadow: 0 4px 14px rgba(0, 0, 0, 0.36), inset 0 1px 0 rgba(255, 255, 255, 0.45); cursor: pointer; transition: transform 0.14s ease, filter 0.16s ease; } .ds-btn-circle:hover { filter: brightness(1.08); } .ds-btn-circle:active { transform: scale(0.94); } .ds-btn-circle:focus-visible { outline: 2px solid #60a5fa; outline-offset: 2px; }"
+    },
+    {
+      "name": "Glass Secondary Button",
+      "kind": "button",
+      "refersTo": "button-glass",
+      "description": "次要操作與視角重置玻璃按鈕。",
+      "html": "<button class=\"ds-btn-glass\">載入常見道館範例</button>",
+      "css": ".ds-btn-glass { padding: 7px 14px; border-radius: 999px; font-size: 12px; font-weight: 600; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px) saturate(180%); color: #f8fafc; border: 1px solid rgba(255, 255, 255, 0.18); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32); cursor: pointer; transition: background 0.16s ease, transform 0.14s ease; } .ds-btn-glass:hover { background: rgba(255, 255, 255, 0.16); } .ds-btn-glass:active { transform: scale(0.96); } .ds-btn-glass:focus-visible { outline: 2px solid #60a5fa; outline-offset: 2px; }"
+    },
+    {
+      "name": "Defender Slot Card",
+      "kind": "card",
+      "refersTo": "slot-card",
+      "description": "6 格守衛條中的已選寶可夢玻璃槽位，含主屬性色點。",
+      "html": "<div class=\"ds-slot-card\"><span class=\"ds-slot-dot\"></span><span class=\"ds-slot-name\">快龍</span><button class=\"ds-slot-remove\" aria-label=\"移除快龍\"><svg width=\"10\" height=\"10\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linecap=\"round\"><path d=\"M18 6 6 18M6 6l12 12\"/></svg></button></div>",
+      "css": ".ds-slot-card { display: inline-flex; align-items: center; gap: 7px; padding: 6px 8px; border-radius: 14px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.14); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24); color: #f8fafc; font-size: 12px; font-weight: 600; } .ds-slot-dot { width: 7px; height: 7px; border-radius: 999px; background: #7038f8; box-shadow: 0 0 6px rgba(112, 56, 248, 0.7); } .ds-slot-remove { width: 18px; height: 18px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.16); color: rgba(248, 250, 252, 0.8); cursor: pointer; } .ds-slot-remove:hover { background: rgba(255, 69, 58, 0.28); color: #ffffff; }"
+    },
+    {
+      "name": "iOS Risk Toggle Pill",
+      "kind": "chip",
+      "refersTo": "glass-panel",
+      "description": "畫布右上角「顯示反打」iOS 膠囊切換開關。",
+      "html": "<label class=\"ds-toggle-pill\"><span>顯示反打</span><input type=\"checkbox\" checked><span class=\"ds-track\"><span class=\"ds-thumb\"></span></span></label>",
+      "css": ".ds-toggle-pill { position: relative; display: inline-flex; align-items: center; gap: 8px; padding: 4px 6px 4px 11px; border-radius: 999px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.16); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.26); color: #e2e8f0; font-size: 12px; font-weight: 600; cursor: pointer; } .ds-toggle-pill input { position: absolute; opacity: 0; width: 1px; height: 1px; } .ds-track { position: relative; width: 34px; height: 20px; border-radius: 999px; background: rgba(255, 255, 255, 0.22); transition: background 0.2s ease; } .ds-thumb { position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 999px; background: #fff; transition: transform 0.2s cubic-bezier(0.32, 0.72, 0, 1); } .ds-toggle-pill input:checked + .ds-track { background: #30d158; } .ds-toggle-pill input:checked + .ds-track .ds-thumb { transform: translateX(14px); }"
+    },
+    {
+      "name": "Search Pill Input",
+      "kind": "input",
+      "refersTo": "search-pill",
+      "description": "選角抽屜頂部的磨砂搜尋膠囊欄位。",
+      "html": "<div class=\"ds-search-pill\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\"><circle cx=\"11\" cy=\"11\" r=\"7\"/><path d=\"m20 20-3.5-3.5\"/></svg><input type=\"text\" placeholder=\"搜尋寶可夢名稱或屬性...\"></div>",
+      "css": ".ds-search-pill { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 999px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.16); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18); color: #f8fafc; } .ds-search-pill input { border: none; outline: none; background: transparent; color: #f8fafc; font-size: 13px; width: 100%; } .ds-search-pill input::placeholder { color: #94a3b8; } .ds-search-pill:focus-within { border-color: rgba(10, 132, 255, 0.75); }"
+    },
+    {
+      "name": "Floating Glass TabBar Dock",
+      "kind": "nav",
+      "refersTo": "floating-dock",
+      "description": "底部置中的 Apple Liquid Glass 懸浮膠囊導覽列。",
+      "html": "<nav class=\"ds-dock\"><span class=\"ds-dock-item is-active\">Gym</span><span class=\"ds-dock-item\">Pokedex</span><span class=\"ds-dock-item\">About</span></nav>",
+      "css": ".ds-dock { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; border-radius: 999px; background: rgba(28, 31, 44, 0.65); backdrop-filter: blur(26px) saturate(200%); border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.36); } .ds-dock-item { padding: 8px 12px; border-radius: 999px; text-align: center; font-size: 12px; font-weight: 600; color: rgba(226, 232, 240, 0.68); } .ds-dock-item.is-active { background: rgba(255, 255, 255, 0.16); color: #ffffff; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.38); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Tactile Liquid Glass Observatory",
+    "overview": "Pokémon Gym 採用貼近 Apple 最新 Liquid Glass（iOS 26 / visionOS）的深色通透質感：以深石墨黑為畫布基底，搭配會隨敵方守衛主屬性即時變化的低飽和氛圍光暈，讓上層高飽和磨砂玻璃面板自然折射出對應戰場色溫。\n\n整體介面刻意克制裝飾與文字雜訊，將視覺彩度集中保留給寶可夢官方全彩插圖、18 種屬性色票與二分連線圖的語意線條，確保玩家在行動端打道館前能以最短時間掃讀剋制關係與反打風險。",
+    "keyCharacteristics": [
+      "高飽和磨砂玻璃材質（`blur(24px) saturate(190%)`）搭配上緣微亮折射邊（specular top rim）。",
+      "隨選中守衛主屬性動態變化的背景光暈（`ambient-orb`，低透明度避免干擾前景可讀性）。",
+      "同心圓角層級（外框 `28px` → 玻璃面板 `20px` → 守衛槽位 `14px` → 膠囊控制項 `999px`）。",
+      "畫布內節點以「主屬性微光環」標示屬性身分，語意連線則嚴格分離為綠色剋制實線與紅色反打虛線。"
+    ],
+    "rules": [
+      { "name": "The Chromatic Separation Rule", "body": "18 種寶可夢屬性色票（來自 `src/data.js`）僅用於「守衛屬性色點」、「抽屜屬性標籤」與「畫布節點主屬性微光環」；剋制實線與反打虛線一律使用獨立語意綠與紅，禁止混用屬性色以免無法判讀攻防方向。", "section": "colors" },
+      { "name": "The Restrained Ambient Rule", "body": "動態屬性氛圍光暈（`ambient-orb`）透明度必須維持在 `0.20–0.28` 之間，僅提供玻璃背後的色溫層次，絕不能降低前景文字與連線的對比度。", "section": "colors" },
+      { "name": "The Tabular Numerals Rule", "body": "所有動態數字（如 `(4 / 6)`、`(2 / 4)`、`4x`、`2x`）必須套用 `font-variant-numeric: tabular-nums`，避免數字跳動影響掃讀。", "section": "typography" },
+      { "name": "The Specular Top Rim Rule", "body": "每一塊主要玻璃面板都必須有 `1px` 的上緣內高光（`inset 0 1px 0 rgba(255, 255, 255, 0.24–0.38)`），不得只靠單純透明度撐起層次。", "section": "elevation" }
+    ],
+    "dos": [
+      "Do 在主要玻璃容器維持 `backdrop-filter: blur(24px) saturate(190%)` 與上緣高光邊，確保通透層次。",
+      "Do 保持畫布內「推薦打手／敵方守衛」角落標籤與鎖定膠囊為輕量玻璃懸浮樣式，讓視線聚焦在連線圖本身。",
+      "Do 讓系統預設或無選擇時有優雅的冷光後備色，避免空白狀態畫面死黑。"
+    ],
+    "donts": [
+      "Don't 在畫布節點或邊線上加入過高不透明度的多色漸層文字或霓虹大光暈，會破壞 18 屬性與紅綠連線的判讀。",
+      "Don't 在卡片內再巢狀包多層高透明度玻璃卡片，或加回已被移除的外部圖例條與焦點解讀面板。",
+      "Don't 在 `390px` 窄螢幕下把守衛槽位縮到截斷圖片或讓觸控鈕小於可點擊尺寸。"
+    ]
+  }
+}
