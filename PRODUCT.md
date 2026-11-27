@@ -22,22 +22,28 @@ Pokémon GO 與寶可夢道館對戰玩家，主要在行動裝置（`390px–57
 
 - 行動優先的 Web 應用程式（既有容器基準 `max-w-screen-sm: 576px`，並支援 `390px` 窄螢幕與 `960px` 寬螢幕）。
 - 常見於戶外單手操作、快速掃讀對戰資訊的使用情境。
-- 資料來源為 PokéAPI 官方角色插圖與 Gen 6+ 18 屬性相剋矩陣。
+- 屬性相剋採 Gen 6+ 18 屬性矩陣；角色插圖網址取自 PokéAPI 官方 artwork。
+- 資料來源尚未決定：目前守衛名單為 mock 資料（`src/app/_mock/mock-roster.ts`），正式資料串接方式待評估（見 [docs/data-layer-guide.md](docs/data-layer-guide.md)）。
 
 ## Capabilities and Constraints
 
 - 無會員系統、無帳號登入、不儲存使用者個人隊伍資料。
 - 左欄打手為系統自動推薦（依多守衛覆蓋率與 4x/2x 權重排序），右欄為玩家自選的 1～6 隻道館守衛。
 - 支援點選／點擊節點鎖定焦點模式（隔離單一打手或守衛的連線與倍率標籤），點空白處或底部浮動膠囊即可恢復全覽。
-- 技術棧：React 18、Vite 4、Tailwind CSS 3、Cytoscape.js。
+- 應用包含三個分頁：Gym（主流程）、Pokedex（規劃中，目前為 Coming Soon 佔位）、About。
+- 守衛選擇記錄在 URL query，可分享與重新整理還原；畫布顯示偏好存於瀏覽器 localStorage；不含任何伺服器端使用者資料。
+- 技術棧：Next.js 16（App Router）、React 19、TypeScript、Tailwind CSS v4、shadcn/ui；二分連線圖為自製 SVG 繪製。
 
 ## Evidence on Hand
 
 - 線框規格：[docs/design/wireframes.md](docs/design/wireframes.md)
 - 低保真互動線框：[docs/design/prototype.html](docs/design/prototype.html)
 - 定案高保真 UI/UX 原型：[docs/design/uiux.html](docs/design/uiux.html)
-- 既有 18 屬性色票與資料常數：[src/data.js](src/data.js)
-- 既有 Gym 頁面模組：[src/pages/Gym/](src/pages/Gym/)
+- 18 屬性色票與中文名稱：[src/lib/pokemon-types.ts](src/lib/pokemon-types.ts)
+- 屬性相剋矩陣與配對引擎：[src/app/_lib/type-chart.ts](src/app/_lib/type-chart.ts)、[src/app/_lib/matchup-engine.ts](src/app/_lib/matchup-engine.ts)
+- Gym 頁面與元件：[src/app/](src/app/)（`_components/`、`_hooks/`、`_lib/`）
+- 資料層決策紀錄：[docs/data-layer-guide.md](docs/data-layer-guide.md)
+- 尚無真實守衛名單資料、使用者研究或成效數據；未來工作不得捏造。
 
 ## Product Principles
 
@@ -49,5 +55,5 @@ Pokémon GO 與寶可夢道館對戰玩家，主要在行動裝置（`390px–57
 ## Accessibility & Inclusion
 
 - 語意功能色（剋制綠、反打紅、未覆蓋琥珀）與 18 種寶可夢屬性色票明確區隔，避免色相衝突。
-- 非色彩雙重編碼：剋制實線（4x 加粗）vs 反打虛線（箭頭形狀區分 `triangle` / `vee`）、未覆蓋守衛以虛線框標示。
+- 非色彩雙重編碼：剋制實線（4x 加粗）vs 反打虛線（鎖定焦點時高亮邊線才顯示 chevron 箭頭）、未覆蓋守衛以虛線框標示。
 - 所有純圖示按鈕（新增守衛 `+`、重置視角）均提供 `aria-label` 與 `title`，並支援鍵盤 `:focus-visible` 焦點外框與 `prefers-reduced-motion` 減弱動態。
