@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus, X } from "lucide-react";
+import { BrushCleaning, Plus, X } from "lucide-react";
 import type { PokemonCandidate } from "@/app/_types/gym";
 import { GlassPanel } from "@/components/glass-panel";
 import { PokemonSprite } from "@/components/pokemon-sprite";
@@ -22,40 +22,26 @@ export function DefenderSlotBar({
   onAddClick,
 }: DefenderSlotBarProps) {
   const emptyCount = Math.max(0, maxSlots - defenders.length);
-  const isFull = defenders.length >= maxSlots;
 
   return (
     <GlassPanel as="section" material="blur" aria-label="敵方道館守衛">
       <div className="mb-2.5 flex items-center justify-between gap-2">
         <h2 className="text-[13px] font-bold tracking-[-0.01em] text-[var(--ink-primary)]">
-          敵方道館守衛 ({defenders.length} / {maxSlots})
+          道館防守方 ({defenders.length} / {maxSlots})
         </h2>
 
-        <div className="flex items-center gap-3">
-          {defenders.length > 0 ? (
-            <Button
-              type="button"
-              variant="glass-ghost"
-              size="sm"
-              className="min-h-9 px-2.5 text-[13px]"
-              onClick={onClear}
-            >
-              清空
-            </Button>
-          ) : null}
-
+        {defenders.length > 0 ? (
           <Button
             type="button"
-            variant="glass-primary"
+            variant="glass-ghost"
             size="glass-icon"
-            disabled={isFull}
-            onClick={onAddClick}
-            aria-label="新增守衛"
-            title={isFull ? "已達 6 隻守衛上限" : "新增守衛"}
+            onClick={onClear}
+            aria-label="清空"
+            title="清空"
           >
-            <Plus className="size-4" aria-hidden="true" />
+            <BrushCleaning className="size-4" aria-hidden="true" />
           </Button>
-        </div>
+        ) : null}
       </div>
 
       <div className="grid grid-cols-3 gap-2 lg:grid-cols-6">
@@ -93,9 +79,10 @@ export function DefenderSlotBar({
             key={`empty-slot-${index}`}
             type="button"
             onClick={onAddClick}
+            aria-label="新增守衛"
             className="glass-motion-safe flex min-h-[76px] items-center justify-center rounded-[var(--radius-slot)] border border-dashed border-[var(--glass-border-interactive)] bg-white/[0.03] px-2 text-[12px] font-semibold text-[var(--ink-muted-glass)] transition-colors hover:border-[var(--apple-blue)]/75 hover:bg-[var(--apple-blue)]/12 hover:text-blue-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400 sm:min-h-[68px]"
           >
-            + 空位
+            <Plus className="size-4" aria-hidden="true" />
           </button>
         ))}
       </div>

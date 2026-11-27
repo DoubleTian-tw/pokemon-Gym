@@ -1,13 +1,11 @@
 import { AmbientGlow } from "@/components/ambient-glow";
 import { GlassPanel } from "@/components/glass-panel";
-import { HeadBar } from "@/components/head-bar";
 
 export default function AboutPage() {
   return (
     <>
       <AmbientGlow />
-      <div className="space-y-3">
-        <HeadBar title="About" />
+      <div className="space-y-3 pt-3.5">
         <GlassPanel as="section" material="blur" className="space-y-2 p-5">
           <h2 className="text-sm font-bold text-[var(--ink-primary)]">
             關於 Pokémon Gym

@@ -1,20 +1,11 @@
 import { AmbientGlow } from "@/components/ambient-glow";
 import { GlassPanel } from "@/components/glass-panel";
-import { HeadBar } from "@/components/head-bar";
 
 export default function PokedexPage() {
   return (
     <>
       <AmbientGlow />
-      <div className="space-y-3">
-        <HeadBar
-          title="Pokedex"
-          rightSlot={
-            <span className="glass-tinted rounded-full px-2.5 py-1 text-[11px] font-semibold text-[var(--ink-muted-glass)]">
-              Coming Soon
-            </span>
-          }
-        />
+      <div className="space-y-3 pt-3.5">
         <GlassPanel as="section" material="blur" className="space-y-2 p-5">
           <h2 className="text-sm font-bold text-[var(--ink-primary)]">
             寶可夢圖鑑（規劃中）

@@ -3,28 +3,32 @@
 import { useGymWorkspace } from "@/app/_hooks/use-gym-workspace";
 import { AmbientGlow } from "@/components/ambient-glow";
 import { CanvasControls } from "./canvas-controls";
+import { CanvasOptionsDialog } from "./canvas-options-dialog";
 import { CounterGraphStage } from "./counter-graph-stage";
 import { DefenderPickerDialog } from "./defender-picker-dialog";
 import { DefenderSlotBar } from "./defender-slot-bar";
-import { UncoveredAlertStrip } from "./uncovered-alert-strip";
 
 export function GymWorkspace() {
   const {
     defenderIds,
     defenders,
-    uncoveredDefenders,
     filteredRoster,
     ambientColors,
     stage,
     drawerOpen,
     setDrawerOpen,
+    optionsOpen,
+    setOptionsOpen,
     searchQuery,
     setSearchQuery,
-    showRisk,
-    setShowRisk,
-    lockedNodeId,
-    setLockedNodeId,
-    toggleDefender,
+    preferences,
+    updatePreference,
+    resetPreferences,
+    resetVersion,
+    resetView,
+    lockedNodeIds,
+    selectNode,
+    replaceDefenders,
     removeDefender,
     loadSampleDefenders,
     clearDefenders,
@@ -43,20 +47,18 @@ export function GymWorkspace() {
           onAddClick={() => setDrawerOpen(true)}
         />
 
-        <UncoveredAlertStrip uncoveredDefenders={uncoveredDefenders} />
-
         <CanvasControls
-          showRisk={showRisk}
           disabled={stage.status !== "ready"}
-          onShowRiskChange={setShowRisk}
-          onResetView={() => setLockedNodeId(null)}
+          onOpenOptions={() => setOptionsOpen(true)}
+          onResetView={resetView}
         />
 
         <CounterGraphStage
           stage={stage}
-          showRisk={showRisk}
-          lockedNodeId={lockedNodeId}
-          onSelectNode={setLockedNodeId}
+          preferences={preferences}
+          resetVersion={resetVersion}
+          lockedNodeIds={lockedNodeIds}
+          onSelectNode={selectNode}
           onAddDefenderClick={() => setDrawerOpen(true)}
           onLoadSampleClick={loadSampleDefenders}
           onRetryClick={retry}
@@ -70,7 +72,18 @@ export function GymWorkspace() {
         selectedIds={defenderIds}
         searchQuery={searchQuery}
         onSearchQueryChange={setSearchQuery}
-        onToggleDefender={toggleDefender}
+        onConfirmSelection={(ids) => {
+          replaceDefenders(ids);
+          setDrawerOpen(false);
+        }}
+      />
+
+      <CanvasOptionsDialog
+        open={optionsOpen}
+        onOpenChange={setOptionsOpen}
+        preferences={preferences}
+        onUpdatePreference={updatePreference}
+        onResetPreferences={resetPreferences}
       />
     </>
   );
