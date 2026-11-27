@@ -332,7 +332,7 @@ interface CourseListViewModel {
 
 **用途：** [此頁面支援的使用者任務]
 
-**設計參考：** [Figma 或設計稿路徑，如 `../nomad-docs/04-design/...`，若無切版需求請標示不適用]
+**設計參考：** [Figma 或設計稿路徑，如 `docs/design/wireframes.md`，若無切版需求請標示不適用]
 
 **檔案位置：**
 

@@ -512,7 +512,7 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, State> {
 
 **永遠要做**
 
-- 改完跑完整驗證流程：`pnpm format → pnpm lint → pnpm build → pnpm dev`
+- 改完依 `package.json` 既有指令執行驗證（目前為 `pnpm exec tsc --noEmit → pnpm lint → pnpm build`，畫面變更另以 `pnpm dev` 確認；若後續新增 `format` / `test` script 再納入）
 - 使用 `pnpm`，勿用 `npm` 或 `yarn`
 
 **修改前先問**
@@ -526,7 +526,7 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, State> {
 - 直接 push `main`，一律先推 `dev` 分支
 - 在 `app/api/` 寫後端邏輯（純前端 repo）
 - 手動 `useMemo`/`useCallback`（React Compiler 已啟用，讓 compiler 處理）
-- 未確認前自行導入或固定「尚未定案」的架構選型（全域狀態管理、Auth 等）；已定案項目（API client=axios、server state=TanStack Query、型別=orval、表單=react-hook-form+zod、Toast=sonner、日期=date-fns）依 [`data-layer-guide.md`](data-layer-guide.md) 與 AGENTS.md 實作
+- 未確認前自行導入或固定「尚未定案」的架構選型（資料層 / API client / 全域狀態管理 / Auth 等皆尚未定案，見 [`data-layer-guide.md`](data-layer-guide.md)）
 
 ---
 

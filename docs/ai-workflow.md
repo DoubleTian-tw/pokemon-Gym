@@ -7,12 +7,12 @@
 先讀本節與[開發指南](./development-guidelines.md)。下方保留 Nomad 的工作流程與指令範例。涉及本 repo 的指令、工具與分支時，以本節為準。
 
 - 升級從 `dev` 衍生的 `feat/pokemon-gym-upgrade` 進行。從根目錄的 [todo.md](../todo.md) 找交付物與驗收條件，從 [Active Epic](./epics/_active.md) 進入唯一的 Epic 進度檔。待辦編號用於追蹤交付物。涉及完整 Change 流程的項目會連到對應的 Epic 拆解；執行 Epic 前，請先確認待辦列出的前置交付物。
-- 執行 `npm run sync:ai`，將 [`.ai/`](../.ai/README.md) 內的 agents、commands 和 skills 同步至 `.agents/` 與 `.claude/`。也可直接閱讀來源文件，以互動模式執行。
-- 將流程中的安裝、lint、建置與開發伺服器步驟對應至 `npm ci`、`npm run lint`、`npm run build` 和 `npm run dev`。本 repo 沒有格式化、單元測試或 E2E 指令。參照[測試指南](./testing-guidelines.md)記錄實際結果。
-- Nomad 的服務、跨儲存庫文件、GitLab MR、Vitest 和外部 Playwright 流程需另行設定。導入版本所保留的範例路徑用來說明結構。以本 repo 的實際程式碼和文件為依據。
+- 執行 `pnpm run sync:ai`，將 [`.ai/`](../.ai/README.md) 內的 agents、commands 和 skills 同步至 `.agents/` 與 `.claude/`。也可直接閱讀來源文件，以互動模式執行。
+- 將流程中的安裝、型別檢查、lint、建置與開發伺服器步驟對應至 `pnpm install --frozen-lockfile`、`pnpm exec tsc --noEmit`、`pnpm lint`、`pnpm build` 和 `pnpm dev`。本 repo 目前沒有格式化（`format`）、單元測試或 E2E 指令。參照[測試指南](./testing-guidelines.md)記錄實際結果。
+- 自動化測試（Vitest / Playwright）與 `format` 指令目前尚未設定，一律以本 repo 的 `package.json` 與實際程式碼及文件為依據。
 - Commit、push、合併、發布與本機工具同步依該次任務的授權範圍執行。遇到流程內的自動操作時，先核對授權和本 repo 的設定。PRD 交付物可先用 `draft-prd` 的獨立主題流程處理。
 
-來源為本機 `nomad/nomad-client` 的 Git 版本 `3cd6f92b9558c2949c0f425863596e118f7c7ab4`。移植其 `.ai/`、流程及文件指南。已補上本 repo 的指令、入口與驗收方式。
+本文件已補上 Pokémon Gym 的指令、入口與驗收方式，並作為本專案 AI 開發流程的操作基準。
 
 ## TL;DR
 
@@ -135,8 +135,8 @@
 ↓ Stage sd：sd-writer subagent 寫 SD（基於 SA + handoff）
 ↓ Stage implement：implementer subagent 產 code（在升級分支實作，按測試指南驗證）
 ↓ Stage review：reviewer 審查（含測試品質防作弊）→ implementer 修 → 循環（最多 3 輪）
-↓ Stage test：tester 獨立依 SA/SD 寫 Node Vitest 測試並實跑 `format:check/lint/build/test`（抓到實作 bug 進 test-fix loop，最多 2 輪；未實跑嚴禁標 done）
-  預設只驗證流程控制、狀態轉換、資料轉換、商業規則、權限與請求安全；文案、樣式與瀏覽器互動另交由以 `npm run dev` 啟動後在瀏覽器驗收
+↓ Stage test：tester 依 `package.json` 既有驗證指令實跑（目前為 `tsc --noEmit / lint / build`，待設定 `format / test` 後納入；未實跑嚴禁標 done）
+  預設只驗證流程控制、狀態轉換、資料轉換、商業規則、權限與請求安全；文案、樣式與瀏覽器互動另交由以 `pnpm dev` 啟動後在瀏覽器驗收
 ↓ Stage commit：依任務授權執行 commit 或 push
 
 你：/archive-change
@@ -260,7 +260,7 @@ Plan 模式只剩 2 個獨特用途：
 │  │                  / implementer / reviewer / tester / prd-writer）│
 │  └── commands/    （21 個對齊的 slash command）                     │
 └─────────────────────────────────────────────────────────────────────┘
-              ↓ npm run sync:ai
+              ↓ pnpm run sync:ai
 ┌─ Claude Code 執行位置（gitignore，工具特定）─────────────────────┐
 │  .claude/skills/、.claude/agents/、.claude/commands/             │
 │  .agents/skills/、.agents/agents/、.agents/commands/             │

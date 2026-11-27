@@ -32,6 +32,13 @@ dist-ssr
 
 # Serena local cache
 .serena/
+
+# Next.js
+/.next/
+/out/
+/.vercel
+next-env.d.ts
+*.tsbuildinfo
 *.suo
 *.ntvs*
 *.njsproj

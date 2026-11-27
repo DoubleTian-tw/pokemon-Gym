@@ -117,16 +117,7 @@ const value = use(SomeContext);
 
 ## 4. 格式化
 
-由 Prettier 統一處理，執行 `pnpm format` 即可，不需手動記憶規則。
-
-主要設定（`prettier.config.mjs`）：
-
-- 縮排：2 個空格
-- 引號：單引號
-- 分號：不加（Prettier 預設）
-- Trailing comma：`all`
-- Import 排序：`@trivago/prettier-plugin-sort-imports`
-- Tailwind class 排序：`prettier-plugin-tailwindcss`
+目前 `package.json` 尚未設定 Prettier 與 `pnpm format` script，程式碼須遵循既有檔案格式與 `pnpm lint`（ESLint）規範；若後續導入 Prettier，再依專案設定執行格式化。
 
 ---
 

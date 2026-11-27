@@ -86,15 +86,15 @@ git checkout -b feat/<change-slug>
 
 **UI 實作嚴格對齊**：若擁有設計圖，**必須**以此為唯一依歸，禁止自行發明樣式或間距。若 `impeccable detect` 檢查出瑕疵，必須優先修復。
 
-### Step 4：格式化、Lint、建置與既有回歸測試（AI 自動執行）
+### Step 4：型別檢查、Lint、建置與既有回歸測試（AI 自動執行）
 
-依序執行以下自動驗證指令：
+依 `package.json` 既有 scripts 執行以下自動驗證指令：
 
 ```bash
-pnpm format
+pnpm exec tsc --noEmit
 pnpm lint
 pnpm build
-pnpm test
+# 若 package.json 明確定義 format 或 test script，一併執行 pnpm format / pnpm test
 ```
 
 **若本次變更涉及 UI/UX 修改**，若本機有對應工具可再執行：
@@ -113,7 +113,7 @@ npx impeccable detect <path>
 重點包含：
 
 - 新建 / 修改 / 刪除的檔案清單（標記類型）
-- `pnpm format`、`pnpm lint`、`pnpm build`、`pnpm test` 實跑指令與結果（suites / cases pass 與 fail 數）
+- `pnpm exec tsc --noEmit`、`pnpm lint`、`pnpm build`（及 `package.json` 若有定義的 `format` / `test`）實跑指令與結果
 - 高風險區（給 reviewer 與 tester 重點檢查）
 - 已知未處理的 edge case
 - 若為 UI/UX 變更，列出待人工 `pnpm dev` 目視確認項目（以及是否需 `impeccable detect` 掃描）
@@ -136,6 +136,6 @@ npx impeccable detect <path>
 
 - 觸發情境（`implement` / `review-fix` / `test-fix`）
 - 修改檔案數
-- `pnpm format`、`pnpm lint`、`pnpm build`、`pnpm test` 實跑結果（以及 UI 變更時的 `impeccable detect`）
+- `pnpm exec tsc --noEmit`、`pnpm lint`、`pnpm build`（及若有定義的 `format` / `test`）實跑結果（以及 UI 變更時的 `impeccable detect`）
 - handoff 路徑
 - 若有 git 分支建立，回報分支名（讓 orchestrator 寫入 status.json）

@@ -21,7 +21,7 @@ model: opus
 ## 可用工具
 
 ### 安全性分析工具
-- **npm audit** - 檢查有弱點的相依性
+- **pnpm audit** - 檢查有弱點的相依性
 - **eslint-plugin-security** - 安全性問題的靜態分析
 - **git-secrets** - 防止提交密鑰
 - **trufflehog** - 在 git 歷史中找出密鑰
@@ -30,10 +30,10 @@ model: opus
 ### 分析指令
 ```bash
 # 檢查有弱點的相依性
-npm audit
+pnpm audit
 
 # 僅高嚴重性
-npm audit --audit-level=high
+pnpm audit --audit-level=high
 
 # 檢查檔案中的密鑰
 grep -r "api[_-]?key\|password\|secret\|token" --include="*.js" --include="*.ts" --include="*.json" .
@@ -53,7 +53,7 @@ git log -p | grep -i "password\|api_key\|secret"
 ### 1. 初始掃描階段
 ```
 a) 執行自動化安全性工具
-   - npm audit 用於相依性弱點
+   - pnpm audit 用於相依性弱點
    - eslint-plugin-security 用於程式碼問題
    - grep 用於寫死的密鑰
    - 檢查暴露的環境變數
@@ -114,7 +114,7 @@ b) 審查高風險區域
 
 9. 使用具有已知弱點的元件
    - 所有相依性是否最新？
-   - npm audit 是否乾淨？
+   - pnpm audit 是否乾淨？
    - 是否監控 CVE？
 
 10. 日誌和監控不足

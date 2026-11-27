@@ -20,7 +20,7 @@ $ARGUMENTS
 2. **定義目標形狀**：依 co-location 與單一職責規劃落點，無必要不硬拆抽象（重複 ≥ 3 次才抽）
 3. **先減後加**：刪死碼、收掉單一呼叫端薄包裝與廢棄殘檔
 4. **小步搬移**：每步重跑釘選測試維持綠燈，同波遷移並刪除舊介面
-5. **驗證與減負檢查**：確認 `pnpm format` / `pnpm lint` / `pnpm build` / `pnpm test` 全綠，Diff 確實降低閱讀負擔，並附 UI 驗收清單（若有）
+5. **驗證與減負檢查**：確認 `package.json` 既有自動驗證（`tsc --noEmit` / `lint` / `build` 及既有的 `format` / `test`）全綠，Diff 確實降低閱讀負擔，並附 UI 驗收清單（若有）
 
 ## 對應 Skill
 
