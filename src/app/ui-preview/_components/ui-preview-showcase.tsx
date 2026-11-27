@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Check, Plus, RotateCcw, Search, Sparkles, X } from "lucide-react";
 import { AmbientGlow } from "@/components/ambient-glow";
-import { AppShell } from "@/components/app-shell";
 import { GlassPanel } from "@/components/glass-panel";
 import { HeadBar } from "@/components/head-bar";
 import { PokemonSprite } from "@/components/pokemon-sprite";
@@ -102,7 +101,7 @@ export function UiPreviewShowcase() {
   };
 
   return (
-    <AppShell>
+    <>
       <AmbientGlow colors={activePreset.colors} />
 
       <div className="space-y-3">
@@ -346,6 +345,6 @@ export function UiPreviewShowcase() {
           </div>
         </GlassPanel>
       </div>
-    </AppShell>
+    </>
   );
 }

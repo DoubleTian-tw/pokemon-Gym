@@ -12,9 +12,5 @@ export default function UiPreviewPage() {
     notFound();
   }
 
-  return (
-    <div className="fixed inset-0 z-30 overflow-y-auto bg-[var(--obsidian-canvas)]">
-      <UiPreviewShowcase />
-    </div>
-  );
+  return <UiPreviewShowcase />;
 }
