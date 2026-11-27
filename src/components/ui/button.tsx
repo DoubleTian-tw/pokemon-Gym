@@ -36,8 +36,14 @@ const buttonVariants = cva(
         "icon-sm": "size-8",
         "icon-lg": "size-10",
         pill: "min-h-10 rounded-full px-4 py-2 text-[13px] font-semibold has-[>svg]:px-3.5",
+        "glass-icon-xs":
+          "size-6 rounded-full p-0 [&_svg:not([class*='size-'])]:size-3 [@media(pointer:coarse)]:size-8",
+        "glass-icon-sm":
+          "size-8 rounded-full p-0 [&_svg:not([class*='size-'])]:size-3.5 [@media(pointer:coarse)]:size-10",
         "glass-icon":
           "size-9 rounded-full p-0 [@media(pointer:coarse)]:size-11",
+        "glass-icon-lg":
+          "size-11 rounded-full p-0 [&_svg:not([class*='size-'])]:size-5 [@media(pointer:coarse)]:size-12",
       },
     },
     defaultVariants: {

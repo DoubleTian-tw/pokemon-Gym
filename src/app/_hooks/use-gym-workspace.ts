@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCanvasPreferences } from "@/app/_hooks/use-canvas-preferences";
 import {
   buildGymUrl,
   DEFENDER_QUERY_KEY,
@@ -48,9 +49,12 @@ export function useGymWorkspace() {
   const searchParams = useSearchParams();
 
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [optionsOpen, setOptionsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [showRisk, setShowRisk] = useState(true);
-  const [lockedNodeId, setLockedNodeId] = useState<string | null>(null);
+  const [resetVersion, setResetVersion] = useState(0);
+  const [lockedNodeIds, setLockedNodeIds] = useState<readonly string[]>([]);
+  const { preferences, updatePreference, resetPreferences } =
+    useCanvasPreferences();
 
   const defenderIds = parseDefenderIdsParam(
     searchParams.get(DEFENDER_QUERY_KEY),
@@ -67,7 +71,7 @@ export function useGymWorkspace() {
   const stage = resolveGymStage(devOverride, matchup);
 
   const replaceDefenders = (nextIds: readonly string[]) => {
-    setLockedNodeId(null);
+    setLockedNodeIds([]);
     const nextUrl = buildGymUrl(pathname, searchParams, nextIds, {
       clearDevState: true,
     });
@@ -94,7 +98,7 @@ export function useGymWorkspace() {
   };
 
   const clearDefenders = () => {
-    setLockedNodeId(null);
+    setLockedNodeIds([]);
     const nextUrl = buildGymUrl(pathname, searchParams, [], {
       clearDevState: true,
     });
@@ -108,6 +112,33 @@ export function useGymWorkspace() {
     router.replace(nextUrl, { scroll: false });
   };
 
+  const selectNode = (nodeId: string | null) => {
+    if (!nodeId) {
+      setLockedNodeIds([]);
+      return;
+    }
+    setLockedNodeIds((prev) => {
+      if (!preferences.allowMultiSelect) {
+        return prev.length === 1 && prev[0] === nodeId ? [] : [nodeId];
+      }
+      const prefix = nodeId.startsWith("atk:") ? "atk:" : "def:";
+      const sameSidePrev = prev.filter((id) => id.startsWith(prefix));
+      if (sameSidePrev.includes(nodeId)) {
+        return sameSidePrev.filter((id) => id !== nodeId);
+      }
+      return [...sameSidePrev, nodeId];
+    });
+  };
+
+  const resetView = () => {
+    setLockedNodeIds([]);
+    setResetVersion((prev) => prev + 1);
+  };
+
+  const effectiveLockedNodeIds = preferences.allowMultiSelect
+    ? lockedNodeIds
+    : lockedNodeIds.slice(-1);
+
   return {
     defenderIds,
     defenders: matchup.defenders,
@@ -118,13 +149,19 @@ export function useGymWorkspace() {
     stage,
     drawerOpen,
     setDrawerOpen,
+    optionsOpen,
+    setOptionsOpen,
     searchQuery,
     setSearchQuery,
-    showRisk,
-    setShowRisk,
-    lockedNodeId,
-    setLockedNodeId,
+    preferences,
+    updatePreference,
+    resetPreferences,
+    resetVersion,
+    resetView,
+    lockedNodeIds: effectiveLockedNodeIds,
+    selectNode,
     toggleDefender,
+    replaceDefenders,
     removeDefender,
     loadSampleDefenders,
     clearDefenders,
