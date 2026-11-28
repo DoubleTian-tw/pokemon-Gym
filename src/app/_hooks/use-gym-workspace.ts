@@ -16,13 +16,12 @@ import {
   computeGymMatchups,
   filterPokemonRoster,
 } from "@/app/_lib/matchup-engine";
+import type { GymMatchupResult, GymStageView } from "@/app/_types/gym";
 import {
   DEFAULT_SAMPLE_DEFENDER_IDS,
-  MOCK_ROSTER,
-} from "@/app/_mock/mock-roster";
-import type { GymMatchupResult, GymStageView } from "@/app/_types/gym";
-
-const VALID_ROSTER_IDS = new Set(MOCK_ROSTER.map((pokemon) => pokemon.id));
+  POKEMON_ROSTER,
+  POKEMON_ROSTER_ID_SET,
+} from "@/lib/pokemon-roster";
 
 function resolveGymStage(
   devOverride: "loading" | "error" | null,
@@ -58,17 +57,24 @@ export function useGymWorkspace() {
 
   const defenderIds = parseDefenderIdsParam(
     searchParams.get(DEFENDER_QUERY_KEY),
-    VALID_ROSTER_IDS,
+    POKEMON_ROSTER_ID_SET,
     MAX_DEFENDERS,
   );
   const devOverride = parseDevStageOverride(
     searchParams.get(DEV_STATE_QUERY_KEY),
   );
 
-  const matchup = computeGymMatchups(MOCK_ROSTER, defenderIds);
-  const filteredRoster = filterPokemonRoster(MOCK_ROSTER, searchQuery);
+  const matchup = computeGymMatchups(POKEMON_ROSTER, defenderIds);
+  const filteredRoster = filterPokemonRoster(POKEMON_ROSTER, searchQuery);
   const ambientColors = deriveAmbientColors(matchup.defenders);
   const stage = resolveGymStage(devOverride, matchup);
+
+  const handleDrawerOpenChange = (open: boolean) => {
+    setDrawerOpen(open);
+    if (!open) {
+      setSearchQuery("");
+    }
+  };
 
   const replaceDefenders = (nextIds: readonly string[]) => {
     setLockedNodeIds([]);
@@ -79,7 +85,7 @@ export function useGymWorkspace() {
   };
 
   const toggleDefender = (id: string) => {
-    if (!VALID_ROSTER_IDS.has(id)) return;
+    if (!POKEMON_ROSTER_ID_SET.has(id)) return;
     if (defenderIds.includes(id)) {
       replaceDefenders(defenderIds.filter((item) => item !== id));
       return;
@@ -148,7 +154,7 @@ export function useGymWorkspace() {
     ambientColors,
     stage,
     drawerOpen,
-    setDrawerOpen,
+    setDrawerOpen: handleDrawerOpenChange,
     optionsOpen,
     setOptionsOpen,
     searchQuery,
