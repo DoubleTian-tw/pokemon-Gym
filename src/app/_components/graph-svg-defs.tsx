@@ -11,7 +11,7 @@ export function GraphSvgDefs({ prefix }: { prefix: string }) {
   return (
     <defs>
       <linearGradient
-        id={`${prefix}-counter-4x-idle`}
+        id={`${prefix}-counter-double-idle`}
         gradientUnits="userSpaceOnUse"
         x1="56"
         y1="0"
@@ -30,7 +30,7 @@ export function GraphSvgDefs({ prefix }: { prefix: string }) {
         />
       </linearGradient>
       <linearGradient
-        id={`${prefix}-counter-4x-focus`}
+        id={`${prefix}-counter-double-focus`}
         gradientUnits="userSpaceOnUse"
         x1="56"
         y1="0"
@@ -49,7 +49,7 @@ export function GraphSvgDefs({ prefix }: { prefix: string }) {
         />
       </linearGradient>
       <linearGradient
-        id={`${prefix}-counter-2x-idle`}
+        id={`${prefix}-counter-effective-idle`}
         gradientUnits="userSpaceOnUse"
         x1="56"
         y1="0"
@@ -68,7 +68,7 @@ export function GraphSvgDefs({ prefix }: { prefix: string }) {
         />
       </linearGradient>
       <linearGradient
-        id={`${prefix}-counter-2x-focus`}
+        id={`${prefix}-counter-effective-focus`}
         gradientUnits="userSpaceOnUse"
         x1="56"
         y1="0"
@@ -110,7 +110,7 @@ export function GraphSvgDefs({ prefix }: { prefix: string }) {
       </linearGradient>
 
       <marker
-        id={`${prefix}-chevron-counter-4x`}
+        id={`${prefix}-chevron-counter-double`}
         viewBox="0 0 10 10"
         refX="7.5"
         refY="5"
@@ -128,7 +128,7 @@ export function GraphSvgDefs({ prefix }: { prefix: string }) {
         />
       </marker>
       <marker
-        id={`${prefix}-chevron-counter-2x`}
+        id={`${prefix}-chevron-counter-effective`}
         viewBox="0 0 10 10"
         refX="7.5"
         refY="5"

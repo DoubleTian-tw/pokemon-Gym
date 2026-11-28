@@ -63,12 +63,12 @@ export function GraphSvgLayer({
         {orderedEdges.map((edge) => {
           const { path } = pathFn(edge);
           const strokeWidth = edge.isHighlighted
-            ? edge.kind === "counter-4x"
+            ? edge.kind === "counter-double"
               ? 3.4
               : edge.kind === "risk"
                 ? 1.9
                 : 2.2
-            : edge.kind === "counter-4x"
+            : edge.kind === "counter-double"
               ? 2.5
               : edge.kind === "risk"
                 ? 1.35
