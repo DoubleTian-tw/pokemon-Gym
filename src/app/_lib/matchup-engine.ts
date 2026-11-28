@@ -1,5 +1,6 @@
 import type {
   CounterEdge,
+  EffectivenessLabel,
   GymMatchupResult,
   PokemonCandidate,
   RecommendedAttacker,
@@ -36,11 +37,19 @@ export function getBestStabAttack(
   return { attackType: bestType, multiplier: bestMult };
 }
 
-export function formatMultiplier(multiplier: number): string {
-  if (multiplier === 0) return "0x";
-  if (multiplier === 0.25) return "¼x";
-  if (multiplier === 0.5) return "½x";
-  return `${multiplier}x`;
+/**
+ * 依 Pokémon GO 倍率轉為 5 級中文效果文字，採區間比較避免 IEEE-754 浮點誤差（如 1.6 * 1.6 = 2.5600000000000005）。
+ */
+export function getEffectivenessLabel(multiplier: number): EffectivenessLabel {
+  if (multiplier >= 2.5) return "雙重絕佳";
+  if (multiplier >= 1.5) return "效果絕佳";
+  if (multiplier >= 0.9) return "效果普通";
+  if (multiplier >= 0.55) return "效果不太好";
+  return "效果極差";
+}
+
+export function formatMultiplier(multiplier: number): EffectivenessLabel {
+  return getEffectivenessLabel(multiplier);
 }
 
 export function filterPokemonRoster(
@@ -51,7 +60,11 @@ export function filterPokemonRoster(
   if (!q) return roster;
 
   return roster.filter((pokemon) => {
-    if (pokemon.zhName.toLowerCase().includes(q) || pokemon.id.includes(q)) {
+    if (
+      pokemon.zhName.toLowerCase().includes(q) ||
+      pokemon.enName.toLowerCase().includes(q) ||
+      pokemon.id.toLowerCase().includes(q)
+    ) {
       return true;
     }
     return pokemon.types.some(
@@ -99,14 +112,16 @@ export function computeGymMatchups(
       });
 
       const coveredDefenderIds = pairResults
-        .filter((item) => item.multiplier >= 2)
+        .filter((item) => item.multiplier >= 1.5)
         .map((item) => item.defender.id);
 
       const score = pairResults.reduce((acc, item) => {
-        if (item.multiplier >= 4) return acc + 3;
-        if (item.multiplier >= 2) return acc + 1.5;
-        if (item.incomingMultiplier >= 2) return acc - 0.5;
-        return acc;
+        let next = acc;
+        if (item.multiplier >= 2.5) next += 3;
+        else if (item.multiplier >= 1.5) next += 1.5;
+
+        if (item.incomingMultiplier >= 1.5) next -= 0.5;
+        return next;
       }, 0);
 
       return {
@@ -120,7 +135,9 @@ export function computeGymMatchups(
     .sort(
       (a, b) =>
         b.coveredDefenderIds.length - a.coveredDefenderIds.length ||
-        b.score - a.score,
+        b.score - a.score ||
+        b.attacker.baseAttack - a.attacker.baseAttack ||
+        b.attacker.maxCp - a.attacker.maxCp,
     )
     .slice(0, maxAttackers);
 
@@ -136,7 +153,7 @@ export function computeGymMatchups(
 
   for (const item of rankedAttackers) {
     for (const pair of item.pairResults) {
-      if (pair.multiplier >= 2) {
+      if (pair.multiplier >= 1.5) {
         coveredSet.add(pair.defender.id);
         counterEdges.push({
           attackerId: item.attacker.id,
@@ -145,7 +162,7 @@ export function computeGymMatchups(
           multiplier: pair.multiplier,
         });
       }
-      if (pair.incomingMultiplier >= 2) {
+      if (pair.incomingMultiplier >= 1.5) {
         riskEdges.push({
           defenderId: pair.defender.id,
           attackerId: item.attacker.id,

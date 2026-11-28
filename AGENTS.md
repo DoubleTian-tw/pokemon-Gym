@@ -4,6 +4,15 @@
 
 Pokémon Gym 是使用 Next.js App Router（React 19 + TypeScript + Tailwind CSS v4 + shadcn/ui）建置的應用程式，執行環境鎖定 Node.js `24.x` 與 `pnpm`。路由定義位於 `src/app/`，採 **Route Co-location** 原則將單頁專用檔案放在最深層路由底下的 `_components/`、`_hooks/`、`_lib/`、`_types/`、`_mock/`；確認被 2 個以上路由共用才升級搬到 `src/components/`、`src/hooks/`、`src/lib/` 或 `src/types/`。shadcn/ui 基礎元件位於 `src/components/ui/`，既有圖資位於 `src/images/`，公開靜態檔案位於 `public/`。
 
+## 業務領域與遊戲機制（Pokémon GO）
+
+本專案為 Pokémon GO 道館即時戰術輔助工具，開發與演算法設計時請遵循以下領域標準（完整規範參見 [`docs/domain/pokemon-go-mechanics.md`](docs/domain/pokemon-go-mechanics.md)）：
+
+- **道館守衛機制**：每座道館最多 1～6 隻守衛、同種不可重複、採先進先出（FIFO）依序進攻；守衛具幹勁（Motivation）與 CP 衰減機制。
+- **GO 屬性倍率（非原作主系列）**：GO 屬性相剋倍率為單剋 `1.6x`、雙剋 `2.56x`、單抗 `0.625x`、雙抗／原作免疫屬性 `0.390625x`、三抗 `0.244x`（無 `0x` 完全免疫）；同屬招式加成（STAB）為 `1.2x`。
+- **介面顯示規範**：畫面上相剋標籤一律採用 5 級中文文字（`雙重絕佳`、`效果絕佳`、`效果普通`、`效果不太好`、`效果極差`），嚴禁顯示原作主機遊戲的 `2x`/`4x` 或數字倍率。
+- **推薦核心邏輯**：推薦打手依多守衛覆蓋率優先排序，並誠實標註雙向相剋反打風險與未覆蓋守衛。
+
 ## 建置、測試與開發指令
 
 請在儲存庫根目錄使用 `pnpm` 執行以下指令（Node 版本由 `.nvmrc` 與 `package.json` `engines.node: "24.x"` 規範）：

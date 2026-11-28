@@ -1,12 +1,11 @@
 import type { PokemonTypeId } from "@/lib/pokemon-types";
+import type { PokemonCandidate } from "@/types/pokemon";
 
-export interface PokemonCandidate {
-  id: string;
-  dexId: number;
-  zhName: string;
-  types: readonly [PokemonTypeId] | readonly [PokemonTypeId, PokemonTypeId];
-  spriteUrl: string;
-}
+export type { PokemonCandidate };
+
+/** Pokémon GO 5 級中文相剋效果標籤 */
+export type EffectivenessLabel =
+  "雙重絕佳" | "效果絕佳" | "效果普通" | "效果不太好" | "效果極差";
 
 export interface CounterEdge {
   attackerId: string;
@@ -82,7 +81,8 @@ export interface GraphNodeViewModel {
 
 export interface GraphEdgeViewModel {
   edgeId: string;
-  kind: "counter-2x" | "counter-4x" | "risk";
+  /** 邊線語意：counter-double (>= 2.56)、counter-effective (>= 1.6)、risk (反打 >= 1.6) */
+  kind: "counter-effective" | "counter-double" | "risk";
   sourceId: string;
   targetId: string;
   sourceX: number;

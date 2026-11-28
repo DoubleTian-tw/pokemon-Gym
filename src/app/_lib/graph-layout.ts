@@ -65,7 +65,7 @@ export function computeGraphViewModel(
     const built = buildEdgeModel(
       {
         edgeId: `counter:${item.attackerId}:${item.defenderId}`,
-        kind: item.multiplier >= 4 ? "counter-4x" : "counter-2x",
+        kind: item.multiplier >= 2.5 ? "counter-double" : "counter-effective",
         sourceId: `atk:${item.attackerId}`,
         targetId: `def:${item.defenderId}`,
         controlOffsetY: riskPairSet.has(`${item.attackerId}:${item.defenderId}`)
