@@ -138,6 +138,13 @@ export default function GymPage() {
 
 ---
 
+## CI/CD 與自動化腳本規範
+
+- **GitHub Actions 指令引號安全**：在 Actions `run` 步驟呼叫 CLI（如 `gh pr create --body`）傳遞多行或動態文字時，一律使用單引號 `'...'` 或 heredoc（`<< 'EOF'`），嚴禁在外層雙引號內直接夾帶未轉義反引號，避免 Bash 將其解析為指令替換。
+- **Git 推送追蹤參照**：使用 `git push --force-with-lease origin "$BRANCH"` 前，必須先執行 `git fetch origin "$BRANCH" 2>/dev/null || true`，確保本地環境具備遠端分支的追蹤參照，避免因無追蹤參照報錯。
+
+---
+
 ## 邊界規則
 
 ### 永遠要做

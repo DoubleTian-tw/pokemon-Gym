@@ -34,7 +34,7 @@
   - 地區型態依序加上繁中前綴（`阿羅拉`／`伽勒爾`／`洗翠`／`帕底亞`），並對應 PokéAPI slug（`-alola`／`-galar`／`-hisui`／`-paldea`）。
   - 圖資 3 層降級：`official-artwork.front_default` → `home.front_default`（印出 warning）→ 原種 `dexId` `official-artwork`（印出 warning）。
 - **Lv50 `maxCp` 公式**：`max(10, floor(((atk + 15) * sqrt(def + 15) * sqrt(hp + 15) * 0.84029999^2) / 10))`。
-- **確定性排序與原子寫入**：依 `dexId` 升冪 → `form` 順序 → `id` 升冪排序，經 Schema 驗證通過後先寫暫存檔再原子覆寫；上游逾時、HTTP 錯誤或資料異常時以 `exit 1` 中止，**絕不覆寫既有可用靜態檔**。
+- **確定性排序與原子寫入**：依 `dexId` 升冪 → `form` 順序 → `id` 升冪排序，經 Schema 驗證通過後先寫暫存檔再原子更名覆寫；寫入或更名過程需以 `try...catch` 包覆，發生錯誤時必須清理 `.tmp` 暫存檔，上游逾時、HTTP 錯誤或資料異常時以 `exit 1` 中止，**絕不覆寫既有可用靜態檔**。
 - **格式檢查例外**：`src/data/pokemon-roster.json` 已加入 `.prettierignore`，避免標準 2 空格 JSON 排版與 Prettier 衝突。
 
 ### 3. 每週自動化排程（`.github/workflows/sync-pokemon.yml`）

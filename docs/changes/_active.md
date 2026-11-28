@@ -2,7 +2,9 @@
 
 ## 目前狀態
 
-**active_change_id**: 2026-11-28-pokemon-go-static-data-layer
-**started_at**: 2026-11-28T10:01:33+08:00
-**target_module**: data-layer
-**execution_mode**: selective
+**active_change_id**: (none)
+
+## 上一個歸檔的 change
+
+**archived_id**: 2026-11-28-pokemon-go-static-data-layer
+**archived_at**: 2026-11-28T16:04:45+08:00
