@@ -6,6 +6,7 @@ out
 node_modules
 public
 src/legacy-backup
+src/data/pokemon-roster.json
 pnpm-lock.yaml
 next-env.d.ts
 tsconfig.tsbuildinfo

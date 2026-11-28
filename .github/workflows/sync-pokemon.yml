@@ -1,0 +1,72 @@
+name: Sync Pokemon Roster
+
+on:
+  schedule:
+    # 每週一 03:00 UTC（台灣時間 11:00）自動同步一次
+    - cron: "0 3 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Sync Pokemon static roster
+        run: pnpm sync:pokemon
+
+      - name: Check roster diff
+        id: diff
+        run: |
+          if [ -n "$(git status --porcelain src/data/pokemon-roster.json)" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Verify build and checks
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          pnpm format:check
+          pnpm exec tsc --noEmit
+          pnpm lint
+          pnpm build
+
+      - name: Create or update sync PR
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH="chore/sync-pokemon-data"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$BRANCH"
+          git add src/data/pokemon-roster.json
+          git commit -m "chore/Sync weekly pokemon roster"
+          git fetch origin "$BRANCH" 2>/dev/null || true
+          git push --force-with-lease origin "$BRANCH"
+
+          if ! gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number' | grep -q .; then
+            gh pr create \
+              --base main \
+              --head "$BRANCH" \
+              --title "chore/Sync weekly pokemon roster" \
+              --body '自動同步 `pvpoke/pvpoke` 與 PokéAPI GraphQL v1beta2 靜態圖鑑資料（`src/data/pokemon-roster.json`）。'
+          fi

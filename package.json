@@ -13,7 +13,8 @@
     "lint": "eslint",
     "format": "prettier --write src next.config.ts eslint.config.mjs postcss.config.mjs",
     "format:check": "prettier --check src next.config.ts eslint.config.mjs postcss.config.mjs",
-    "sync:ai": "node scripts/sync-ai.mjs"
+    "sync:ai": "node scripts/sync-ai.mjs",
+    "sync:pokemon": "node scripts/sync-pokemon.mjs"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
